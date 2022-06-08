@@ -41,26 +41,23 @@ print(a)"""
 ############ Main game loop ##############
 
 while not Quit:
-	clock.tick(FPS)	
-	#Canvas.fill(BLACK)
+	clock.tick(FPS)
+
+	#key = pg.key.get_pressed()
 
 	for event in pg.event.get():
+		key = pg.key.get_pressed()
 		if event.type == pg.QUIT:
 			Quit = True
 		if event.type == pg.VIDEORESIZE:
 			pass
-	
-	key = pg.key.get_pressed()
-
-	for event in pg.event.get():
-		if event.type == pg.KEYDOWN:
-			print("Is it working at all???")
+		if event == pg.KEYDOWN:
+			print("KEYDOWN")
 			if key[config["key"]["left"]]:
-				print("Test")
-	#drawText(Font, 100, 100, "PYTHON")
+				print("key left")
+
 	Canvas.fill(BLACK)
 	GameMode()
-	#drawText(Font, 50, 50, "Tuxtale w/ Pygame/Python")
 	Window.blit(pg.transform.scale(Canvas, Window.get_size()), (0, 0))
 
 	GameMode()
