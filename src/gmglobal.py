@@ -59,3 +59,7 @@ config = {
 		"accept" : pg.K_RETURN
 	}
 }
+
+
+
+key = pg.key.get_pressed()

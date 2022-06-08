@@ -2,6 +2,7 @@ import pygame as pg
 pg.font.init()
 import math
 from .gmglobal import*
+from .controls import*
 
 class Map():
 	def __init__(self, _a):
@@ -84,48 +85,47 @@ class Tux(Actor):
 			return
 
 	def run(self):
-		key = pg.key.get_pressed()
 
-		if not key[config["key"]["right"]] and not key[config["key"]["left"]] and not self.autocon == True:
+		if not state["right"]["held"] or not state["left"]["held"]:
 			self.xspeed = 0
 			self.anim = self.standStillAnim
-
-		if not key[config["key"]["up"]] and not key[config["key"]["down"]] and not self.autocon == True:
+		
+		if not state["up"]["held"] or not state["down"]["held"]:
 			self.yspeed = 0
 			self.anim = self.standStillAnim
 
-		if key[config["key"]["right"]]:
+		if state["right"]["held"]:
 			self.xspeed = 1
 			self.anim = self.walkRight
 			self.standStillAnim = self.standRight
 		
-		if key[config["key"]["left"]]:
+		if state["left"]["held"]:
 			self.xspeed = -1
 			self.anim = self.walkLeft
 			self.standStillAnim = self.standLeft
-		
-		if key[config["key"]["up"]]:
+
+		if state["up"]["held"]:
 			self.yspeed = -1
 			self.anim = self.walkUp
 			self.standStillAnim = self.standUp
 		
-		if key[config["key"]["down"]]:
+		if state["down"]["held"]:
 			self.yspeed = 1
 			self.anim = self.walkDown
 			self.standStillAnim = self.standDown
 		
-		for event in pg.event.get():
-			if event.type == pg.KEYDOWN:
-				print("Is it working at all???")
-				if key[config["key"]["left"]]:
-					self.frameIndex = self.stepCount % 2
-					print("Test")
-				
+		if state["right"]["press"] or state["left"]["press"] or state["up"]["press"] or state["down"]["press"]:
+			#self.stepCount += 1
+			#print(self.stepCount)
+			if self.stepCount % 2 == 0:
+				self.frameIndex = 3
+			else:
+				self.frameIndex = 1
 
 		self.x += self.xspeed
 		self.y += self.yspeed
 
-		self.frameIndex += 0.05
+		self.frameIndex += 0.02
 		drawSprite(sprTux, self.frame[int(self.anim[0]) + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))], self.x, self.y)
 
 

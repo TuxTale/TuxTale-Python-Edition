@@ -6,7 +6,6 @@ from .controls import*
 
 def gmPlay():
 	runActors()
-	getcon("up", "press")
 
 def startPlay():
 	pass
