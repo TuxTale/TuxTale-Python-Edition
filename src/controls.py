@@ -47,8 +47,6 @@ def defControls():
 			state[i]["held"] = True
 		else:
 			state[i]["held"] = False
-	
-		print(state[i])
 
 			
 	

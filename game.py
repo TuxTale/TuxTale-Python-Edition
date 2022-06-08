@@ -44,7 +44,6 @@ while not Quit:
 	clock.tick(FPS)
 
 	for event in pg.event.get():
-		#key = pg.key.get_pressed()
 		if event.type == pg.QUIT:
 			Quit = True
 		if event.type == pg.VIDEORESIZE:
@@ -52,6 +51,8 @@ while not Quit:
 	
 	defControls()
 
+	if state["left"]["press"] == True:
+		print("game")
 
 	Canvas.fill(BLACK)
 	GameMode()

@@ -115,12 +115,8 @@ class Tux(Actor):
 			self.standStillAnim = self.standDown
 		
 		if state["right"]["press"] or state["left"]["press"] or state["up"]["press"] or state["down"]["press"]:
-			#self.stepCount += 1
-			#print(self.stepCount)
-			if self.stepCount % 2 == 0:
-				self.frameIndex = 3
-			else:
-				self.frameIndex = 1
+			print("actors")
+			#pass
 
 		self.x += self.xspeed
 		self.y += self.yspeed
