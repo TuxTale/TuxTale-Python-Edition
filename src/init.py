@@ -15,6 +15,4 @@ class gmGame():
 		self.camX  += self.gmPlayer.xspeed
 		self.camY += self.gmPlayer.yspeed
 
-		print(self.camX, self.camY)
-
 game = gmGame()

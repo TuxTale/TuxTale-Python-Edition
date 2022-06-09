@@ -23,7 +23,7 @@ pg.display.set_caption("Tuxtale [Python Edition]")
 
 Canvas = pg.Surface((DisplayW, DisplayH))
 Window = pg.display.set_mode((DisplayW, DisplayH), pg.RESIZABLE)
-FPS = 50
+FPS = 60
 clock = pg.time.Clock()
 GameMode = None
 Scale = 1

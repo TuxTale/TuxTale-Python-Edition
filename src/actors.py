@@ -5,6 +5,21 @@ from .gmglobal import*
 from .controls import*
 from .init import*
 
+class Physactor():
+	def __init__(self, _x, _y):
+		self.x = _x
+		self.y = _y
+		self.w = 0
+		self.h = 0
+		self.xprev = _x
+		self.yprev = _y
+
+
+	def collision(self, _x, _y):
+		for i in gmMap.actor:
+			if abs(_x - i.x) < self.w + i.w and abs(_y - i.y) < self.h + i.h:
+				return True
+
 class Map():
 	def __init__(self, _a):
 		self.actlast = 0
@@ -19,6 +34,8 @@ class Actor():
 	def __init__(self, _x, _y, _arr = None):
 		self.x = _x
 		self.y = _y
+		self.h = 0
+		self.w = 0
 		self.arr = _arr
 		self.anim = None
 		self.frame = None
@@ -40,15 +57,22 @@ class Actor():
 			for j in range(0, int(sprW/16)):
 				self.frame.append((j*16, i*16, 16, 16))
 	
+	def collision(self, _x, _y):
+		for i in gmMap.actor:
+			if i._typeof() == "Block":
+				if abs(_x - i.x) < self.w + i.w and abs(_y - i.y) < self.h + i.h:
+					
+					return True
+
 	def run(self):
 		pass
 
 	def destructor():
 		pass
 
-	def _typeof():
+	def _typeof(self):
 		return "Actor"
-	
+
 def runActors():
 	for i in gmMap.actor:
 		i.run()
@@ -65,11 +89,16 @@ class Block(Actor):
 		super().__init__(_x, _y, _arr = None)
 		self.x = _x
 		self.y = _y
+		self.w = 8
+		self.h = 8
 		self.arr = _arr
 		self.loadSprite(sprBlock)
 	
 	def run(self):
 		drawSprite(sprBlock, self.frame[0], self.x - game.camX, self.y - game.camY)
+	
+	def _typeof(self):
+		return "Block"
 
 		
 class Tux(Actor):
@@ -77,8 +106,8 @@ class Tux(Actor):
 		super().__init__(_x, _y, _arr = None)
 		self.x = _x
 		self.y = _y
-		self.w = 16
-		self.h = 16
+		self.w = 8
+		self.h = 8
 		self.arr = _arr
 		self.frame = []
 		self.walkRight = [0.0, 3.0]
@@ -138,10 +167,19 @@ class Tux(Actor):
 				self.frameIndex = 3
 			#pass
 
+		if self.collision(self.x + self.xspeed, self.y):
+			self.xspeed = 0
+			print("xspeed = 0")
+		
+		if self.collision(self.x, self.y + self.yspeed):
+			self.yspeed = 0
+			print("yspeed = 0")
+
+
 		self.x += self.xspeed
 		self.y += self.yspeed
 
-		self.frameIndex += 0.13
+		self.frameIndex += 0.14
 		drawSprite(sprTux, self.frame[int(self.anim[0]) + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))], self.x - game.camX, self.y - game.camY)
 
 

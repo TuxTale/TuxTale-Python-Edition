@@ -7,10 +7,10 @@ from src.gmplay import*
 from src.controls import*
 import json
 
-newActor(Actor, 200, 200)
-newActor(Actor, 200, 200)
 newActor(Tux, DisplayW/2 - 16, DisplayH/2 - 16)
 newActor(Block, 200, 200)
+for i in range(0, 1000):
+	newActor(Block, i * 16, 200)
 
 game.GameMode = gmPlay
 
@@ -34,6 +34,8 @@ while not Quit:
 	for event in pg.event.get():
 		if event.type == pg.QUIT:
 			Quit = True
+
+	#print(clock.get_fps())
 
 	Canvas.fill(BLACK)
 	defControls()
