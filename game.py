@@ -57,6 +57,4 @@ while not Quit:
 	Canvas.fill(BLACK)
 	GameMode()
 	Window.blit(pg.transform.scale(Canvas, Window.get_size()), (0, 0))
-
-	GameMode()
 	pg.display.update()
