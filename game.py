@@ -9,34 +9,16 @@ import json
 
 newActor(Actor, 200, 200)
 newActor(Actor, 200, 200)
-newActor(Tux, 100, 100)
+newActor(Tux, DisplayW/2 - 16, DisplayH/2 - 16)
+newActor(Block, 200, 200)
 
-GameMode = gmPlay
+game.GameMode = gmPlay
 
 ############### Testing ###############
 
-"""config = {}
+jsonWrite('config.json', config)
 
-config['up'] = '0'
-config['down'] = '1'
-
-def toJson(path, data):
-	with open(path, 'w') as fp:
-		json.dump(data, fp)
-
-def rebindKeys(keys):
-	toJson('config.json', config)
-
-toJson('config.json', config)
-
-f = open('config.json', "r")
-
-Data = f.read()
-f.close()
-
-a = json.loads(Data)
-
-print(a)"""
+jsonRead('config.json')
 
 ############ Main game loop ##############
 
@@ -48,9 +30,14 @@ while not Quit:
 			Quit = True
 		if event.type == pg.VIDEORESIZE:
 			pass
+	
+	for event in pg.event.get():
+		if event.type == pg.QUIT:
+			Quit = True
 
 	Canvas.fill(BLACK)
 	defControls()
-	GameMode()
+	game.GameMode()
+	game.run()
 	Window.blit(pg.transform.scale(Canvas, Window.get_size()), (0, 0))
 	pg.display.update()

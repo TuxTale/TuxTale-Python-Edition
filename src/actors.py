@@ -3,6 +3,7 @@ pg.font.init()
 import math
 from .gmglobal import*
 from .controls import*
+from .init import*
 
 class Map():
 	def __init__(self, _a):
@@ -59,11 +60,25 @@ def newActor(_type, _x, _y, _arr = None):
 	##gmMap.actor[gmMap.actlast] = na
 	gmMap.actlast += 1
 
+class Block(Actor):
+	def __init__(self, _x, _y, _arr = None):
+		super().__init__(_x, _y, _arr = None)
+		self.x = _x
+		self.y = _y
+		self.arr = _arr
+		self.loadSprite(sprBlock)
+	
+	def run(self):
+		drawSprite(sprBlock, self.frame[0], self.x - game.camX, self.y - game.camY)
+
+		
 class Tux(Actor):
 	def __init__(self, _x, _y, _arr = None):
 		super().__init__(_x, _y, _arr = None)
 		self.x = _x
 		self.y = _y
+		self.w = 16
+		self.h = 16
 		self.arr = _arr
 		self.frame = []
 		self.walkRight = [0.0, 3.0]
@@ -81,40 +96,41 @@ class Tux(Actor):
 		self.autocon = False
 		self.stepCount = 0
 		self.loadSprite(sprTux)
+		game.gmPlayer = self
 		if not _arr:
 			return
 
 	def run(self):
 
-		if not state["right"]["held"] or not state["left"]["held"]:
+		if not getcon("right", "held") or not getcon("left", "held"):
 			self.xspeed = 0
 			self.anim = self.standStillAnim
 		
-		if not state["up"]["held"] or not state["down"]["held"]:
+		if not getcon("up", "held") or not getcon("down", "held"):
 			self.yspeed = 0
 			self.anim = self.standStillAnim
 
-		if state["right"]["held"]:
+		if getcon("right", "held"):
 			self.xspeed = 1
 			self.anim = self.walkRight
 			self.standStillAnim = self.standRight
 		
-		if state["left"]["held"]:
+		if getcon("left", "held"):
 			self.xspeed = -1
 			self.anim = self.walkLeft
 			self.standStillAnim = self.standLeft
 
-		if state["up"]["held"]:
+		if getcon("up", "held"):
 			self.yspeed = -1
 			self.anim = self.walkUp
 			self.standStillAnim = self.standUp
 		
-		if state["down"]["held"]:
+		if getcon("down", "held"):
 			self.yspeed = 1
 			self.anim = self.walkDown
 			self.standStillAnim = self.standDown
 		
-		if state["right"]["press"] or state["left"]["press"] or state["up"]["press"] or state["down"]["press"]:
+		if getcon("right", "press") or getcon("left", "press") or getcon("up", "press") or getcon("down", "press"):
 			self.stepCount += 1
 			if self.stepCount % 2 == 0:
 				self.frameIndex = 1
@@ -125,8 +141,8 @@ class Tux(Actor):
 		self.x += self.xspeed
 		self.y += self.yspeed
 
-		self.frameIndex += 0.02
-		drawSprite(sprTux, self.frame[int(self.anim[0]) + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))], self.x, self.y)
+		self.frameIndex += 0.13
+		drawSprite(sprTux, self.frame[int(self.anim[0]) + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))], self.x - game.camX, self.y - game.camY)
 
 
 

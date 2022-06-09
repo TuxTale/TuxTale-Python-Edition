@@ -1,26 +1,13 @@
 import pygame as pg
 pg.font.init()
 import math
+import json
+import os
 
 ############ Sprite Sheets #############
 
-sprTux = pg.image.load("res/gfx/Tux/taletuxCL.png")
-
 def drawSprite(_spr, _frame, _x, _y):
 	Canvas.blit(_spr, (_x, _y), _frame)
-
-"""def loadSprite(_spr):
-	sprSize = _spr.get_size()
-	sprW = int(sprSize[0])
-	sprH = int(sprSize[1])
-
-	for i in range(0, int(sprH/16)):
-		for j in range(0, int(sprW/16)):
-			frame.append((j*16, i*16, 16, 16))"""
-
-############# Sprite Sheets #############
-
-sprTux = pg.image.load("res/gfx/Tux/taletuxCL.png")
 
 ################ Colors #################
 
@@ -47,6 +34,16 @@ def drawText(_font, _x, _y, text):
 	text = _font.render(text, 0.5, RED)
 	Canvas.blit(text, (_x, _y))
 
+def jsonWrite(path, data):
+	with open(path, 'w') as fp:
+		json.dump(data, fp)
+	
+def jsonRead(path):
+	f = open('config.json', "r")
+	Data = f.read()
+	f.close()
+	return json.loads(Data)
+
 #################### Configurations ######################
 
 config = {
@@ -60,6 +57,21 @@ config = {
 	}
 }
 
+######################## Game Data ########################
+
+gmData = dict(
+	map = None,
+	posX = 64,
+	posY = 64,
+	camX = 0,
+	camY = 0,
+	dialogResponses = {}
+)
+
+############# Sprite Sheets #############
+
+sprTux = pg.image.load("res/gfx/Tux/taletuxCL.png").convert()
+sprBlock = pg.image.load("res/gfx/tiles/block.png").convert()
 
 
-key = pg.key.get_pressed()
+
