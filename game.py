@@ -5,12 +5,14 @@ from src.gmglobal import*
 from src.actors import*
 from src.gmplay import*
 from src.controls import*
+from src.init import*
 import json
 
 newActor(Tux, DisplayW/2 - 16, DisplayH/2 - 16)
-newActor(Block, 200, 200)
-for i in range(0, 1000):
+for i in range(0, 10):
 	newActor(Block, i * 16, 200)
+for i in range(0, 10):
+	newActor(Block, i*16, 232)
 
 game.GameMode = gmPlay
 
@@ -36,9 +38,9 @@ while not Quit:
 			Quit = True
 
 	#print(clock.get_fps())
-
+	
 	Canvas.fill(BLACK)
-	defControls()
+	#defControls()
 	game.GameMode()
 	game.run()
 	Window.blit(pg.transform.scale(Canvas, Window.get_size()), (0, 0))

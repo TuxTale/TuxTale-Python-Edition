@@ -11,8 +11,8 @@ class gmGame():
 		self.uh = 500
 	
 	def run(self):
-		
-		self.camX  += self.gmPlayer.xspeed
-		self.camY += self.gmPlayer.yspeed
+		self.camX  = self.gmPlayer.shape.x - (DisplayW/2)
+		self.camY = self.gmPlayer.shape.y - (DisplayH/2)
+		#pass
 
 game = gmGame()
