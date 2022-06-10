@@ -36,11 +36,8 @@ while not Quit:
 	for event in pg.event.get():
 		if event.type == pg.QUIT:
 			Quit = True
-
-	#print(clock.get_fps())
 	
 	Canvas.fill(BLACK)
-	#defControls()
 	game.GameMode()
 	game.run()
 	Window.blit(pg.transform.scale(Canvas, Window.get_size()), (0, 0))

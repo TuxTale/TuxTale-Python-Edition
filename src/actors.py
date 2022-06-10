@@ -16,19 +16,8 @@ class Physactor():
 		self.yprev = _y
 
 
-	def collision(self, _x, _y):
-		for i in gmMap.actor:
-			if abs(_x - i.x) < self.w + i.w and abs(_y - i.y) < self.h + i.h:
-				return True
-
-class Map():
-	def __init__(self, _a):
-		self.actlast = 0
-		self.actor = []
-		self.actor_empty = {}
-		self.a = _a
-
-gmMap = Map(5)
+	def run(self):
+		pass
 
 class Actor():
 	id = 0
@@ -37,6 +26,8 @@ class Actor():
 		self.y = _y
 		self.h = 1
 		self.w = 1
+		self.xspeed = 0
+		self.yspeed = 0
 		self.arr = _arr
 		self.anim = None
 		self.frame = None
@@ -49,9 +40,10 @@ class Actor():
 		if(not self.arr):
 			return
 		if self.arr.len() == 1:
-			pass
+			self.spriteSheet = self.arr[0]
 	
 	def loadSprite(self, _spr):
+		self.frame = []
 		sprSize = _spr.get_size()
 		sprW = int(sprSize[0])
 		sprH = int(sprSize[1])
@@ -84,9 +76,21 @@ class Actor():
 								self.shape.bottom = i.shape.top
 								self.yspeed = 0
 							
+							
+								self.anim = self.standStillAnim
+								return
+							
+								
+								
+							
 							if self.yspeed < 0:
 								self.shape.top = i.shape.bottom
 								self.yspeed = 0
+								self.anim = self.standStillAnim
+								return
+								
+								
+								
 		
 		return True
 			
@@ -108,7 +112,6 @@ def newActor(_type, _x, _y, _arr = None):
 	na = _type(_x, _y, _arr)
 	na.id = gmMap.actlast
 	gmMap.actor.append(na)
-	##gmMap.actor[gmMap.actlast] = na
 	gmMap.actlast += 1
 
 class Block(Actor):
@@ -123,15 +126,23 @@ class Block(Actor):
 		self.loadSprite(sprBlock)
 		self.solid = True
 		self.color = (200, 200, 200)
+		if(not self.arr):
+			return
+		if self.arr.len() == 1:
+			self.spriteSheet = self.arr[0]
+			self.loadSprite(self.spriteSheet)
 	
 	def run(self):
 		self.shape.x = self.x
 		self.shape.y = self.y
-		#drawSprite(sprBlock, self.frame[0], self.x - game.camX, self.y - game.camY)
-		pg.draw.rect(Canvas, self.color, (self.shape.x -  game.camX, self.shape.y - game.camY, self.shape.w, self.shape.h), 0)
+		drawSprite(sprBlock, self.frame[0], self.x - game.camX, self.y - game.camY)
+		#pg.draw.rect(Canvas, self.color, (self.shape.x -  game.camX, self.shape.y - game.camY, self.shape.w, self.shape.h), 0)
 	
 	def _typeof(self):
 		return "Block"
+	
+	def debug(self):
+		pg.draw.rect(Canvas, self.color, (self.shape.x -  game.camX, self.shape.y - game.camY, self.shape.w, self.shape.h), 0)
 
 		
 class Tux(Actor):
@@ -156,6 +167,7 @@ class Tux(Actor):
 		self.xspeed = 0
 		self.yspeed = 0
 		self.autocon = False
+		self.idle = False
 		self.stepCount = 0
 		self.shape = pg.Rect(self.x, self.y, self.h, self.w)
 		self.loadSprite(sprTux)
@@ -174,22 +186,22 @@ class Tux(Actor):
 			self.yspeed = 0
 
 		if getcon("right", "held"):
-			self.xspeed = 5
+			self.xspeed = 1
 			self.anim = self.walkRight
 			self.standStillAnim = self.standRight
 		
 		if getcon("left", "held"):
-			self.xspeed = -5
+			self.xspeed = -1
 			self.anim = self.walkLeft
 			self.standStillAnim = self.standLeft
 
 		if getcon("up", "held"):
-			self.yspeed = -5
+			self.yspeed = -1
 			self.anim = self.walkUp
 			self.standStillAnim = self.standUp
 		
 		if getcon("down", "held"):
-			self.yspeed = 5
+			self.yspeed = 1
 			self.anim = self.walkDown
 			self.standStillAnim = self.standDown
 		
@@ -199,34 +211,28 @@ class Tux(Actor):
 				self.frameIndex = 1
 			else:
 				self.frameIndex = 3
-			#pass
 
-		
-		"""if self.xspeed > 0 and self.collision() == True:
-			self.xspeed = 0
-		
-		if self.yspeed > 0 and self.collision() == True:
-			self.yspeed = 0"""
-		
-		self.shape.x += self.xspeed
-		self.x += self.xspeed
-		self.collision("horizontal")
-		#game.camX = self.shape.x - (DisplayW/2)
-		self.shape.y += self.yspeed
-		self.y += self.yspeed
 		self.collision("vertical")
-		#game.camX = self.shape.x - (DisplayW/2)
-		#game.camY = self.shape.y - (DisplayH/2)
-		
+
+		print(self.yspeed) #Why does it print 1 when it hits a wall and sets self.yspeed to 0???
 
 		if self.xspeed == 0 and self.yspeed == 0:
 			self.anim = self.standStillAnim
 
-		print(self.yspeed)
+		drawSprite(sprTux, self.frame[int(self.anim[0]) + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))], self.shape.x - game.camX, self.shape.y - game.camY)
+
+		self.shape.x += self.xspeed
+		self.x += self.xspeed
+		self.collision("horizontal")
+		self.shape.y += self.yspeed
+		self.y += self.yspeed
+		self.collision("vertical")
 
 		self.frameIndex += 0.14
-		#drawSprite(sprTux, self.frame[int(self.anim[0]) + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))], self.shape.x - game.camX, self.shape.y - game.camY)
+	
+	def debug(self):
 		pg.draw.rect(Canvas, self.color, (self.shape.x -  game.camX, self.shape.y - game.camY, self.shape.w, self.shape.h), 0)
+
 
 
 

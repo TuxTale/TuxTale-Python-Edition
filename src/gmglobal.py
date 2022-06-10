@@ -18,7 +18,7 @@ BLACK = (0, 0, 0)
 
 Quit = False
 DisplayW, DisplayH = 400, 240
-Font = pg.font.SysFont("comicsans", 20)
+Font = pg.font.SysFont("comicsans", 40)
 pg.display.set_caption("Tuxtale [Python Edition]")
 
 Canvas = pg.Surface((DisplayW, DisplayH))
@@ -31,7 +31,7 @@ Scale = 1
 ########## Additional functions ##########
 
 def drawText(_font, _x, _y, text):
-	text = _font.render(text, 0.5, RED)
+	text = _font.render(text, 1, RED)
 	Canvas.blit(text, (_x, _y))
 
 def jsonWrite(path, data):

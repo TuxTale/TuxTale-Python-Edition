@@ -9,10 +9,25 @@ class gmGame():
 		self.gmPlayer = None
 		self.uw = 500
 		self.uh = 500
+		self.debugMode = False
 	
 	def run(self):
-		self.camX  = self.gmPlayer.shape.x - (DisplayW/2)
-		self.camY = self.gmPlayer.shape.y - (DisplayH/2)
-		#pass
+		self.camX  = self.gmPlayer.shape.x - (DisplayW/2) + self.gmPlayer.w/2
+		self.camY = self.gmPlayer.shape.y - (DisplayH/2) + self.gmPlayer.h/2
+
+		if self.debugMode == True:
+			for i in gmMap.actor:
+				i.debug()
+
+			drawText(Font, 20, 20, str(round(clock.get_fps(), 1)))
+
+class Map():
+	def __init__(self, _a):
+		self.actlast = 0
+		self.actor = []
+		self.actor_empty = {}
+		self.a = _a
 
 game = gmGame()
+
+gmMap = Map(5)
