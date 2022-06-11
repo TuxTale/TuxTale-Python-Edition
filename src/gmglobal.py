@@ -72,7 +72,7 @@ gmData = dict(
 
 sprTux = pg.image.load("res/gfx/Tux/taletuxCL.png").convert()
 sprBlock = pg.image.load("res/gfx/tiles/block.png").convert()
-sprMarbel = pg.image.load("res/gfx/tiles/blue_marbel 2.5d_18.png").convert()
+sprMarbel = pg.image.load("res/gfx/tiles/blue_marbel 2.5d_v1.0.png").convert()
 
 
 

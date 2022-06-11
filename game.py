@@ -9,23 +9,25 @@ from src.init import*
 import json
 
 newActor(Tux, DisplayW/2 - 16, DisplayH/2 - 16)
-for i in range(0, 10):
+"""for i in range(0, 10):
 	newActor(Block, i * 16, 200)
 for i in range(0, 10):
 	newActor(Block, i*16, 232)
 for i in range(0, 10):
-	newActor(Block, 200, 16*i)
+	newActor(Block, 200, 16*i)"""
 
-for i in range(0, 18):
-	if i < 9:
-		newActor(Block, i%3 * 16, i//3 * 16, [sprMarbel, [i], False])
-	else:
-		newActor(Block, i%3 * 16, i//3 * 16, [sprMarbel, [i], True])
+for a, i in enumerate(map_dict):
+	for b, j in enumerate(i):
+		if j in solidTiles:
+			newActor(Block, 16*b, 16*a, [sprMarbel, [j], True])
+		else:
+			newActor(Block, 16*b, 16*a, [sprMarbel, [j], False])
+		
 
 #newActor(Block, 20, 20, [sprMarbel, [0]])
 
-newActor(HorizontallyMovingBlock, 0, 150)
-newActor(VerticallyMovingBlock, 100, 100)
+#newActor(HorizontallyMovingBlock, 0, 150)
+#newActor(VerticallyMovingBlock, 100, 100)
 	
 game.GameMode = gmPlay
 
