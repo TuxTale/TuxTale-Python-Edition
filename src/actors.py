@@ -241,7 +241,7 @@ class Block(Actor):
 				self.spriteSheet = self.arr[0]
 				self.loadSprite(self.arr[0])
 			if len(self.arr) >= 2:
-				self.anim = [self.arr[1]]
+				self.anim = self.arr[1]
 	
 	def run(self):
 		self.shape.x = self.x

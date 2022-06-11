@@ -9,7 +9,7 @@ class gmGame():
 		self.gmPlayer = None
 		self.uw = 500
 		self.uh = 500
-		self.debugMode = False
+		self.debugMode = True
 	
 	def run(self):
 		if self.debugMode == True:

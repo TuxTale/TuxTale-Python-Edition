@@ -14,7 +14,7 @@ for i in range(0, 10):
 for i in range(0, 10):
 	newActor(Block, i*16, 232)
 
-newActor(Block, 20, 20, [sprMarbel, 0])
+newActor(Block, 20, 20, [sprMarbel, [0]])
 
 newActor(HorizontallyMovingBlock, 0, 150)
 newActor(VerticallyMovingBlock, 100, 100)
