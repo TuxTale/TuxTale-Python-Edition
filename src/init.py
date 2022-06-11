@@ -12,9 +12,6 @@ class gmGame():
 		self.debugMode = False
 	
 	def run(self):
-		self.camX  = self.gmPlayer.shape.x - (DisplayW/2) + self.gmPlayer.w/2
-		self.camY = self.gmPlayer.shape.y - (DisplayH/2) + self.gmPlayer.h/2
-
 		if self.debugMode == True:
 			for i in gmMap.actor:
 				i.debug()
