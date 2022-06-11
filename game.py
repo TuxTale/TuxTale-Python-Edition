@@ -24,6 +24,8 @@ jsonRead('config.json')
 
 ############ Main game loop ##############
 
+
+
 while not Quit:
 	clock.tick(FPS)
 

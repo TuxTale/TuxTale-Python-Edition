@@ -53,46 +53,24 @@ class Actor():
 				self.frame.append((j*16, i*16, 16, 16))
 	
 	def collision(self, _direction):
-		if _direction == "horizontal":
-			for i in gmMap.actor:
-				if i._typeof() == "Block":
-					if i.shape.colliderect(self.shape):
-						if i.solid == True:
+		for i in gmMap.actor:
+			if i._typeof() == "Block":
+				if i.shape.colliderect(self.shape):
+					if i.solid == True:
+						if _direction == "horizontal":
 							if self.xspeed > 0:
 								self.shape.right = i.shape.left
-								self.xspeed = 0
-								print("welp")
 							
 							if self.xspeed < 0:
 								self.shape.left = i.shape.right
-								self.xspeed = 0
-		
-		if _direction == "vertical":
-			for i in gmMap.actor:
-				if i._typeof() == "Block":
-					if i.shape.colliderect(self.shape):
-						if i.solid == True:
+						
+						if _direction == "vertical":
 							if self.yspeed > 0:
 								self.shape.bottom = i.shape.top
-								self.yspeed = 0
-							
-							
-								self.anim = self.standStillAnim
-								return
-							
-								
-								
-							
+
 							if self.yspeed < 0:
 								self.shape.top = i.shape.bottom
-								self.yspeed = 0
-								self.anim = self.standStillAnim
-								return
-								
-								
-								
-		
-		return True
+
 			
 
 	def run(self):
@@ -211,10 +189,6 @@ class Tux(Actor):
 				self.frameIndex = 1
 			else:
 				self.frameIndex = 3
-
-		self.collision("vertical")
-
-		print(self.yspeed) #Why does it print 1 when it hits a wall and sets self.yspeed to 0???
 
 		if self.xspeed == 0 and self.yspeed == 0:
 			self.anim = self.standStillAnim
