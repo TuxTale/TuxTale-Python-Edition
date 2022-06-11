@@ -133,7 +133,12 @@ def runActors():
 
 def renderActors():
 	for i in gmMap.actor:
-		i.render()
+		if i._typeof() == "Block":
+			i.render()
+	
+	for i in gmMap.actor:
+		if i._typeof() == "Tux":
+			i.render()
 		
 def newActor(_type, _x, _y, _arr = None):
 	na = _type(_x, _y, _arr)
@@ -242,6 +247,8 @@ class Block(Actor):
 				self.loadSprite(self.arr[0])
 			if len(self.arr) >= 2:
 				self.anim = self.arr[1]
+			if len(self.arr) >= 3:
+				self.solid = self.arr[2]
 	
 	def run(self):
 		self.shape.x = self.x
@@ -366,6 +373,9 @@ class Tux(Actor):
 	
 	def debug(self):
 		pg.draw.rect(Canvas, self.color, (self.shape.x -  game.camX, self.shape.y - game.camY, self.shape.w, self.shape.h), 0)
+	
+	def _typeof(self):
+		return "Tux"
 
 
 
