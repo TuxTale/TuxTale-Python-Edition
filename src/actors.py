@@ -40,12 +40,12 @@ class Actor():
 		self.frame = []
 		# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		# Are we sure pg.Rect takes height as the 3rd parameter and width as the 4th parameter?
-		self.shape = pg.Rect(self.x, self.y, self.h, self.w)
+		self.shape = pg.Rect(self.x, self.y, self.w, self.h)
 		self.solid = False
-		if(not self.arr):
-			return
-		if self.arr.len() == 1:
-			self.spriteSheet = self.arr[0]
+		if self.arr != None:
+			
+			if len(self.arr) == 1:
+				self.spriteSheet = self.arr[0]
 	
 	def loadSprite(self, _spr):
 		self.frame = []
@@ -227,22 +227,30 @@ class Block(Actor):
 		self.w = 16
 		self.h = 16
 		self.arr = _arr
-		self.shape = pg.Rect(self.x, self.y, self.h, self.w)
+		self.shape = pg.Rect(self.x, self.y, self.w, self.h)
 		self.loadSprite(sprBlock)
 		self.solid = True
 		self.color = (200, 200, 200)
-		if(not self.arr):
-			return
-		if self.arr.len() == 1:
-			self.spriteSheet = self.arr[0]
-			self.loadSprite(self.spriteSheet)
+		self.anim = [0.0, 0.0]
+		self.solid = True
+		self.spriteSheet = sprBlock
+		if self.arr != None:
+			print(self.arr)
+			
+			if len(self.arr) >= 1:
+				self.spriteSheet = self.arr[0]
+				self.loadSprite(self.arr[0])
+			if len(self.arr) >= 2:
+				self.anim = [self.arr[1]]
 	
 	def run(self):
 		self.shape.x = self.x
 		self.shape.y = self.y
+		self.frameIndex += 0.14
+		#print(self.spriteSheet)
 	
 	def render(self):
-		drawSprite(sprBlock, self.frame[0], self.x - game.camX, self.y - game.camY)
+		drawSprite(self.spriteSheet, self.frame[int(self.anim[0]) + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))], self.x - game.camX, self.y - game.camY)
 		#pg.draw.rect(Canvas, self.color, (self.shape.x -  game.camX, self.shape.y - game.camY, self.shape.w, self.shape.h), 0)
 		
 	def _typeof(self):
