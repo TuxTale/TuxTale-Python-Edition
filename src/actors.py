@@ -38,6 +38,8 @@ class Actor():
 		self.frameIndex = 0
 		self.id = Actor.id
 		self.frame = []
+		# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		# Are we sure pg.Rect takes height as the 3rd parameter and width as the 4th parameter?
 		self.shape = pg.Rect(self.x, self.y, self.h, self.w)
 		self.solid = False
 		if(not self.arr):
@@ -88,6 +90,43 @@ class Actor():
 	def _typeof(self):
 		return "Actor"
 
+def collisionCheck(rectangle):
+	for i in gmMap.actor:
+		if i._typeof() == "Block":
+			if i.shape.colliderect(rectangle):
+				if i.solid == True:
+					# If a collision happens, we can resolve the collision by moving in one of
+					# 4 possible directions (and moving until there is no longer any overlap).
+					# The desired direction we want to go is whichever one requires us to move
+					# the fewest number of pixels.				
+					
+					# amount of pixels we need to move leftward to avoid overlap
+					distanceToLeft = rectangle.right - i.shape.left
+					
+					# amount of pixels we need to move rightward to avoid overlap
+					distanceToRight = i.shape.right - rectangle.left
+					
+					if distanceToLeft < distanceToRight:
+						distanceToMoveX = -distanceToLeft
+					else:
+						distanceToMoveX = distanceToRight
+					
+					distanceToTop = rectangle.bottom - i.shape.top
+					
+					distanceToBottom = i.shape.bottom - rectangle.top
+					
+					if distanceToTop < distanceToBottom:
+						distanceToMoveY = -distanceToTop
+					else:
+						distanceToMoveY = distanceToBottom
+							
+					if abs(distanceToMoveX) < abs(distanceToMoveY):
+						return { 'hasCollided': True, 'newRectangle': pg.Rect(rectangle.x + distanceToMoveX, rectangle.y, rectangle.w, rectangle.h) }
+					else:
+						return { 'hasCollided': True, 'newRectangle': pg.Rect(rectangle.x, rectangle.y + distanceToMoveY, rectangle.w, rectangle.h) }
+					
+	return { 'hasCollided': False }
+					
 def runActors():
 	for i in gmMap.actor:
 		i.run()
@@ -102,8 +141,46 @@ def newActor(_type, _x, _y, _arr = None):
 	gmMap.actor.append(na)
 	gmMap.actlast += 1
 
-# Moving block
-class MovingBlock(Actor):
+class VerticallyMovingBlock(Actor):
+	def __init__(self, _x, _y, _arr = None):
+		super().__init__(_x, _y, _arr = None)
+		self.originalY = _y
+		self.x = _x
+		self.y = _y
+		self.w = 16
+		self.h = 16
+		self.arr = _arr
+		self.shape = pg.Rect(self.x, self.y, self.h, self.w)
+		self.loadSprite(sprBlock)
+		self.solid = True
+		self.color = (200, 200, 200)
+		self.frameCount = 0
+		if(not self.arr):
+			return
+		if self.arr.len() == 1:
+			self.spriteSheet = self.arr[0]
+			self.loadSprite(self.spriteSheet)
+	
+	def run(self):
+		self.frameCount += 1
+	
+		self.y = self.originalY + math.sin(self.frameCount / 25) * 32
+	
+		self.shape.x = self.x
+		self.shape.y = self.y
+	
+	def render(self):
+		drawSprite(sprBlock, self.frame[0], self.x - game.camX, self.y - game.camY)
+		#pg.draw.rect(Canvas, self.color, (self.shape.x -  game.camX, self.shape.y - game.camY, self.shape.w, self.shape.h), 0)
+		
+	def _typeof(self):
+		return "Block"
+	
+	def debug(self):
+		pg.draw.rect(Canvas, self.color, (self.shape.x -  game.camX, self.shape.y - game.camY, self.shape.w, self.shape.h), 0)
+
+		
+class HorizontallyMovingBlock(Actor):
 	def __init__(self, _x, _y, _arr = None):
 		super().__init__(_x, _y, _arr = None)
 		self.originalX = _x
@@ -242,16 +319,37 @@ class Tux(Actor):
 			else:
 				self.frameIndex = 3
 
-		if self.xspeed == 0 and self.yspeed == 0:
+		# hasSuccessfullyMoved is true only if Tux managed to move in a desired direction
+		# without bumping into a wall.
+		# 
+		# So if a vertical wall is to the immediate right of Tux, and Tux is moving rightward,
+		# Tux hasn't successfully moved.
+		#
+		# In contrast, if Tux is moving both up and to the right, then Tux has successfully moved
+		# even though the wall is impeding Tux's rightward movement (since Tux is still moving upward).
+		hasSuccessfullyMoved = False
+				
+		# Attempt to move in the x-axis by xspeed (note xspeed may be 0)
+		collisionCheckResult = collisionCheck(pg.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h))
+		if collisionCheckResult["hasCollided"]:				
+			self.shape = collisionCheckResult["newRectangle"]
+		else:
+			self.shape.x += self.xspeed
+			self.x += self.xspeed
+			hasSuccessfullyMoved = hasSuccessfullyMoved or (self.xspeed != 0)
+
+		# Attempt to move in the y-axis by yspeed
+		collisionCheckResult = collisionCheck(pg.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h))
+		if collisionCheckResult["hasCollided"]:				
+			self.shape = collisionCheckResult["newRectangle"]
+		else:
+			self.shape.y += self.yspeed
+			self.y += self.yspeed
+			hasSuccessfullyMoved = hasSuccessfullyMoved or (self.yspeed != 0)
+			
+		if not hasSuccessfullyMoved or (self.xspeed == 0 and self.yspeed == 0):
 			self.anim = self.standStillAnim
 
-
-		self.shape.x += self.xspeed
-		self.x += self.xspeed
-		self.collision("horizontal")
-		self.shape.y += self.yspeed
-		self.y += self.yspeed
-		self.collision("vertical")
 
 		self.frameIndex += 0.14
 	
