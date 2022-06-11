@@ -122,8 +122,10 @@ def collisionCheck(rectangle):
 							
 					if abs(distanceToMoveX) < abs(distanceToMoveY):
 						return { 'hasCollided': True, 'newRectangle': pg.Rect(rectangle.x + distanceToMoveX, rectangle.y, rectangle.w, rectangle.h) }
-					else:
+					if abs(distanceToMoveX) > abs(distanceToMoveY):
 						return { 'hasCollided': True, 'newRectangle': pg.Rect(rectangle.x, rectangle.y + distanceToMoveY, rectangle.w, rectangle.h) }
+					if abs(distanceToMoveX) > abs(distanceToMoveY):
+						return { 'hasCollided': True, 'newRectangle': pg.Rect(rectangle.x + distanceToMoveX, rectangle.y + distanceToMoveY, rectangle.w, rectangle.h) }
 					
 	return { 'hasCollided': False }
 					
@@ -361,7 +363,7 @@ class Tux(Actor):
 			self.shape.y += self.yspeed
 			self.y += self.yspeed
 			hasSuccessfullyMoved = hasSuccessfullyMoved or (self.yspeed != 0)
-			
+		
 		if not hasSuccessfullyMoved or (self.xspeed == 0 and self.yspeed == 0):
 			self.anim = self.standStillAnim
 
