@@ -18,6 +18,9 @@ class Physactor():
 
 	def run(self):
 		pass
+	
+	def render(self):
+		pass
 
 class Actor():
 	id = 0
@@ -74,6 +77,9 @@ class Actor():
 			
 
 	def run(self):
+		pass
+	
+	def render(self):
 		pg.draw.rect(Canvas, (255, 255, 255), (self.shape.x -  game.camX, self.shape.y - game.camY, self.shape.w, self.shape.h))
 
 	def destructor():
@@ -86,6 +92,10 @@ def runActors():
 	for i in gmMap.actor:
 		i.run()
 
+def renderActors():
+	for i in gmMap.actor:
+		i.render()
+		
 def newActor(_type, _x, _y, _arr = None):
 	na = _type(_x, _y, _arr)
 	na.id = gmMap.actlast
@@ -113,9 +123,11 @@ class Block(Actor):
 	def run(self):
 		self.shape.x = self.x
 		self.shape.y = self.y
+	
+	def render(self):
 		drawSprite(sprBlock, self.frame[0], self.x - game.camX, self.y - game.camY)
 		#pg.draw.rect(Canvas, self.color, (self.shape.x -  game.camX, self.shape.y - game.camY, self.shape.w, self.shape.h), 0)
-	
+		
 	def _typeof(self):
 		return "Block"
 	
@@ -193,7 +205,6 @@ class Tux(Actor):
 		if self.xspeed == 0 and self.yspeed == 0:
 			self.anim = self.standStillAnim
 
-		drawSprite(sprTux, self.frame[int(self.anim[0]) + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))], self.shape.x - game.camX, self.shape.y - game.camY)
 
 		self.shape.x += self.xspeed
 		self.x += self.xspeed
@@ -203,6 +214,9 @@ class Tux(Actor):
 		self.collision("vertical")
 
 		self.frameIndex += 0.14
+	
+	def render(self):
+		drawSprite(sprTux, self.frame[int(self.anim[0]) + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))], self.shape.x - game.camX, self.shape.y - game.camY)
 	
 	def debug(self):
 		pg.draw.rect(Canvas, self.color, (self.shape.x -  game.camX, self.shape.y - game.camY, self.shape.w, self.shape.h), 0)
