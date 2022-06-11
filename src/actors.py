@@ -102,6 +102,46 @@ def newActor(_type, _x, _y, _arr = None):
 	gmMap.actor.append(na)
 	gmMap.actlast += 1
 
+# Moving block
+class MovingBlock(Actor):
+	def __init__(self, _x, _y, _arr = None):
+		super().__init__(_x, _y, _arr = None)
+		self.originalX = _x
+		self.x = _x
+		self.y = _y
+		self.w = 16
+		self.h = 16
+		self.arr = _arr
+		self.shape = pg.Rect(self.x, self.y, self.h, self.w)
+		self.loadSprite(sprBlock)
+		self.solid = True
+		self.color = (200, 200, 200)
+		self.frameCount = 0
+		if(not self.arr):
+			return
+		if self.arr.len() == 1:
+			self.spriteSheet = self.arr[0]
+			self.loadSprite(self.spriteSheet)
+	
+	def run(self):
+		self.frameCount += 1
+	
+		self.x = self.originalX + math.sin(self.frameCount / 25) * 32
+	
+		self.shape.x = self.x
+		self.shape.y = self.y
+	
+	def render(self):
+		drawSprite(sprBlock, self.frame[0], self.x - game.camX, self.y - game.camY)
+		#pg.draw.rect(Canvas, self.color, (self.shape.x -  game.camX, self.shape.y - game.camY, self.shape.w, self.shape.h), 0)
+		
+	def _typeof(self):
+		return "Block"
+	
+	def debug(self):
+		pg.draw.rect(Canvas, self.color, (self.shape.x -  game.camX, self.shape.y - game.camY, self.shape.w, self.shape.h), 0)
+
+	
 class Block(Actor):
 	def __init__(self, _x, _y, _arr = None):
 		super().__init__(_x, _y, _arr = None)

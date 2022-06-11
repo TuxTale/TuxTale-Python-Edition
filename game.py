@@ -14,6 +14,8 @@ for i in range(0, 10):
 for i in range(0, 10):
 	newActor(Block, i*16, 232)
 
+newActor(MovingBlock, 0, 150)
+	
 game.GameMode = gmPlay
 
 ############### Testing ###############
