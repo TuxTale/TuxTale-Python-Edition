@@ -19,9 +19,9 @@ for i in range(0, 10):
 for a, i in enumerate(map_dict):
 	for b, j in enumerate(i):
 		if j in solidTiles:
-			newActor(Block, 16*b, 16*a, [sprMarbel, [j], True])
+			newActor(Block, 16*b, 16*a)
 		else:
-			newActor(Block, 16*b, 16*a, [sprMarbel, [j], False])
+			newActor(Block, 16*b, 16*a)
 		
 
 #newActor(Block, 20, 20, [sprMarbel, [0]])

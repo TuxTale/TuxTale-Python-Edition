@@ -309,7 +309,7 @@ class Block(Actor):
 		self.h = 16
 		self.arr = _arr
 		self.shape = pg.Rect(self.x, self.y, self.w, self.h)
-		self.loadSprite(sprBlock)
+		#self.loadSprite(sprBlock)
 		self.solid = True
 		self.color = (100, 100, 100)
 		self.anim = [0.0, 0.0]
@@ -326,7 +326,7 @@ class Block(Actor):
 			if len(self.arr) >= 3:
 				self.solid = self.arr[2]
 				if self.solid == False:
-					self.color = (200, 200, 200)
+					self.color = (200, 200, 200, 90)
 	
 	def run(self):
 		self.shape.x = self.x
@@ -335,7 +335,8 @@ class Block(Actor):
 		#print(self.spriteSheet)
 	
 	def render(self):
-		drawSprite(self.spriteSheet, self.frame[int(self.anim[0]) + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))], self.x - game.camX, self.y - game.camY)
+		if self.arr:
+			drawSprite(self.spriteSheet, self.frame[int(self.anim[0]) + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))], self.x - game.camX, self.y - game.camY)
 		#pg.draw.rect(Canvas, self.color, (self.shape.x -  game.camX, self.shape.y - game.camY, self.shape.w, self.shape.h), 0)
 		
 	def _typeof(self):
