@@ -39,7 +39,7 @@ def jsonWrite(path, data):
 		json.dump(data, fp)
 	
 def jsonRead(path):
-	f = open('config.json', "r")
+	f = open(path, "r")
 	Data = f.read()
 	f.close()
 	return json.loads(Data)

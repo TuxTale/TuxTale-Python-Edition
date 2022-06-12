@@ -9,14 +9,23 @@ class gmGame():
 		self.gmPlayer = None
 		self.uw = 500
 		self.uh = 500
-		self.debugMode = False
+		self.debugMode = True
+
+	def loadSprite(self, _spr):
+		self.frame = []
+		sprSize = _spr.get_size()
+		sprW = int(sprSize[0])
+		sprH = int(sprSize[1])
+
+		for i in range(0, int(sprH/16)):
+			for j in range(0, int(sprW/16)):
+				self.frame.append((j*16, i*16, 16, 16))
+		
+		return self.frame
 	
 	def run(self):
-		if self.debugMode == True:
-			for i in gmMap.actor:
-				i.debug()
-
-			drawText(Font, 20, 20, str(round(clock.get_fps(), 1)))
+		
+		drawText(Font, 20, 20, str(round(clock.get_fps(), 1)))
 
 class Map():
 	def __init__(self, _a):
@@ -24,6 +33,8 @@ class Map():
 		self.actor = []
 		self.actor_empty = {}
 		self.a = _a
+
+
 
 game = gmGame()
 

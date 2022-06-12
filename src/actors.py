@@ -6,6 +6,43 @@ from .controls import*
 from .init import*
 import sys
 
+class gMap():
+	def __init__(self, _map):
+		self.mapdata = jsonRead(_map)
+		
+		#pg.image.load(self.mapdata["tilesets"][0]["image"]).convert()
+	
+	def drawTiles(self):
+		#dataIterator = 0
+
+		for i in self.mapdata["layers"]:
+			if i["type"] == "tilelayer":
+				dataIterator = 0
+				for y in range(0, i["height"]):
+					for x in range(0, i["width"]):
+						tileID = i["data"][dataIterator]
+						#print(dataIterator)
+						if tileID > 0:
+							tileset = self.getTileset(tileID)
+							frame = game.loadSprite(tileset[0])
+							#print(frame)
+							newActor(Sprite, x * 16, y * 16, [tileset[0], tileID - tileset[1]])
+							#drawSprite(tileset[0], frame[tileID - tileset[1]], x * 16 - game.camX, y * 16 - game.camY)
+						dataIterator += 1
+	
+	def getTileset(self, tileGID):
+		for i in range(0, len(self.mapdata["tilesets"])):
+			tilesetGID = self.mapdata["tilesets"][i]["firstgid"]
+			tilesetTileCount = self.mapdata["tilesets"][i]["tilecount"]
+			if tileGID >= tilesetGID and tileGID < tilesetTileCount + tilesetGID:
+				image = self.mapdata["tilesets"][i]["image"]
+				#image.replace('..', 'res')
+				return [pg.image.load(image.replace('..', 'res')).convert(), tilesetGID]
+			
+			return [None, 0]
+
+p = gMap("res/map/test_for_PGE.json")
+
 class Physactor():
 	def __init__(self, _x, _y):
 		self.x = _x
@@ -75,6 +112,9 @@ class Actor():
 
 							if self.yspeed < 0:
 								self.shape.top = i.shape.bottom
+		
+	def debug(self):
+		pass
 
 			
 
@@ -89,6 +129,30 @@ class Actor():
 
 	def _typeof(self):
 		return "Actor"
+
+class Sprite(Actor):
+	def __init__(self, _x, _y, _arr = None):
+		super().__init__(_x, _y, _arr = None)
+		self.x = _x
+		self.y = _y
+		self.w = 16
+		self.h = 16
+		self.arr = _arr
+		self.frame = []
+		self.index = None
+		if self.arr != None:
+			
+			if len(self.arr) >= 1:
+				self.spriteSheet = self.arr[0]
+				self.loadSprite(self.spriteSheet)
+			if len(self.arr) >= 2:
+				self.index = self.arr[1]
+
+	def render(self):
+		drawSprite(self.spriteSheet, self.frame[self.index], self.x - game.camX, self.y - game.camY)
+	
+	def _typeof(self):
+		return "Sprite"
 
 def collisionCheck(rectangle):
 	for i in gmMap.actor:
@@ -135,12 +199,22 @@ def runActors():
 
 def renderActors():
 	for i in gmMap.actor:
+		if i._typeof() == "Sprite":
+			i.render()
+			if game.debugMode == True:
+				i.debug()
+
+	for i in gmMap.actor:
 		if i._typeof() == "Block":
 			i.render()
+			if game.debugMode == True:
+				i.debug()
 	
 	for i in gmMap.actor:
 		if i._typeof() == "Tux":
 			i.render()
+			if game.debugMode == True:
+				i.debug()
 		
 def newActor(_type, _x, _y, _arr = None):
 	na = _type(_x, _y, _arr)
@@ -237,12 +311,12 @@ class Block(Actor):
 		self.shape = pg.Rect(self.x, self.y, self.w, self.h)
 		self.loadSprite(sprBlock)
 		self.solid = True
-		self.color = (200, 200, 200)
+		self.color = (100, 100, 100)
 		self.anim = [0.0, 0.0]
 		self.solid = True
 		self.spriteSheet = sprBlock
 		if self.arr != None:
-			print(self.arr)
+	
 			
 			if len(self.arr) >= 1:
 				self.spriteSheet = self.arr[0]
@@ -251,6 +325,8 @@ class Block(Actor):
 				self.anim = self.arr[1]
 			if len(self.arr) >= 3:
 				self.solid = self.arr[2]
+				if self.solid == False:
+					self.color = (200, 200, 200)
 	
 	def run(self):
 		self.shape.x = self.x

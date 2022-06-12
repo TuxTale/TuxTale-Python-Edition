@@ -13,7 +13,7 @@ def gmPlay():
 		#   For instance, new actors may be created (maybe spawned by something else or some event)
 		#   Each actor must update its current state based on what's going on
 		#   Some actors might "die" (be killed or despawn) and be removed from the game
-	
+
 		runActors()
 		
 		# 2) CAMERA PHASE

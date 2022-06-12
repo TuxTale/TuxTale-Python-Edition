@@ -31,11 +31,8 @@ for a, i in enumerate(map_dict):
 	
 game.GameMode = gmPlay
 
+p.drawTiles()
 ############### Testing ###############
-
-jsonWrite('config.json', config)
-
-jsonRead('config.json')
 
 ############ Main game loop ##############
 
@@ -56,6 +53,7 @@ while not Quit:
 	
 	Canvas.fill(BLACK)
 	game.GameMode()
+	#p.drawTiles()
 	game.run()
 	Window.blit(pg.transform.scale(Canvas, Window.get_size()), (0, 0))
 	pg.display.update()
