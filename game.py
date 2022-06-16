@@ -1,59 +1,42 @@
-import pygame as pg
-pg.font.init()
-import math
-from src.gmglobal import*
-from src.actors import*
-from src.gmplay import*
-from src.controls import*
-from src.init import*
-import json
+from src.actors import *
+from src.init import *
 
-newActor(Tux, DisplayW/2 - 16, DisplayH/2 - 16)
-"""for i in range(0, 10):
-	newActor(Block, i * 16, 200)
-for i in range(0, 10):
-	newActor(Block, i*16, 232)
-for i in range(0, 10):
-	newActor(Block, 200, 16*i)"""
+# newActor(Block, 20, 20, [sprMarbel, [0]])
 
-for a, i in enumerate(map_dict):
-	for b, j in enumerate(i):
-		if j in solidTiles:
-			newActor(Block, 16*b, 16*a)
-		else:
-			newActor(Block, 16*b, 16*a)
-		
+# newActor(HorizontallyMovingBlock, 0, 150)
+# newActor(VerticallyMovingBlock, 100, 100)
 
-#newActor(Block, 20, 20, [sprMarbel, [0]])
-
-#newActor(HorizontallyMovingBlock, 0, 150)
-#newActor(VerticallyMovingBlock, 100, 100)
-	
 game.GameMode = gmPlay
-
+p = gMap("res/map/test_for_PGE 2.json")
 p.drawTiles()
+
+newActor(Tux, 160, 160, None, "actorlayer")
+# newActor(Soul, 150, 150, None, "actorlayer")
+# newActor(Bullet, 140, 140, [(0.5, 0)], "actorlayer")
+# newActor(Bullet, 140, 140, [(-0.5, 0)], "actorlayer")
+
+game.camX = DisplayW / 2 - 16
+game.camY = DisplayH / 2 - 16
+
+newActor(Slime, 300, 200, None, "actorlayer")
+
+# newActor(Slime, 500, 400, None, "actorlayer")
+
 ############### Testing ###############
 
 ############ Main game loop ##############
 
 
+while running:
+    clock.tick(FPS)
 
-while not Quit:
-	clock.tick(FPS)
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            running = False
 
-	for event in pg.event.get():
-		if event.type == pg.QUIT:
-			Quit = True
-		if event.type == pg.VIDEORESIZE:
-			pass
-	
-	for event in pg.event.get():
-		if event.type == pg.QUIT:
-			Quit = True
-	
-	Canvas.fill(BLACK)
-	game.GameMode()
-	#p.drawTiles()
-	game.run()
-	Window.blit(pg.transform.scale(Canvas, Window.get_size()), (0, 0))
-	pg.display.update()
+    window.fill(BLACK)
+    game.GameMode()
+    game.run()
+
+    pg.display.update()
+
