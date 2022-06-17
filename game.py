@@ -7,7 +7,7 @@ from src.init import *
 # newActor(VerticallyMovingBlock, 100, 100)
 
 game.GameMode = gmPlay
-p = gMap("res/map/test_for_PGE 2.json")
+p = gMap("res/map/test_for_PGE.json")
 p.drawTiles()
 
 newActor(Tux, 160, 160, None, "actorlayer")
@@ -31,6 +31,7 @@ while running:
     clock.tick(FPS)
 
     for event in pg.event.get():
+        keyboard.handle_event(event)
         if event.type == pg.QUIT:
             running = False
 

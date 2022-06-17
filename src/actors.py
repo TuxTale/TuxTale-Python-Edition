@@ -342,6 +342,10 @@ class Slime(Actor):
             ),
         )
 
+
+    def get_distance_direction(self, _player):
+        pass
+
     def run(self):
         self.frameIndex += 0.1
         self.dist = math.sqrt(
@@ -695,37 +699,37 @@ class Tux(Actor):
 
     def run(self):
 
-        if not getcon("right", "held") or not getcon("left", "held"):
+        if not keyboard.is_held(pg.K_RIGHT) or not keyboard.is_held(pg.K_LEFT):
             self.xspeed = 0
 
-        if not getcon("up", "held") or not getcon("down", "held"):
+        if not keyboard.is_held(pg.K_UP) or not keyboard.is_held(pg.K_DOWN):
             self.yspeed = 0
 
-        if getcon("right", "held"):
+        if keyboard.is_held(pg.K_RIGHT):
             self.xspeed = 1
             self.anim = self.walkRight
             self.standStillAnim = self.standRight
 
-        if getcon("left", "held"):
+        if keyboard.is_held(pg.K_LEFT):
             self.xspeed = -1
             self.anim = self.walkLeft
             self.standStillAnim = self.standLeft
 
-        if getcon("up", "held"):
+        if keyboard.is_held(pg.K_UP):
             self.yspeed = -1
             self.anim = self.walkUp
             self.standStillAnim = self.standUp
 
-        if getcon("down", "held"):
+        if keyboard.is_held(pg.K_DOWN):
             self.yspeed = 1
             self.anim = self.walkDown
             self.standStillAnim = self.standDown
 
         if (
-                getcon("right", "press")
-                or getcon("left", "press")
-                or getcon("up", "press")
-                or getcon("down", "press")
+                keyboard.is_pressed(pg.K_RIGHT)
+                or keyboard.is_pressed(pg.K_LEFT)
+                or keyboard.is_pressed(pg.K_UP)
+                or keyboard.is_pressed(pg.K_DOWN)
         ):
             self.stepCount += 1
             if self.stepCount % 2 == 0:
