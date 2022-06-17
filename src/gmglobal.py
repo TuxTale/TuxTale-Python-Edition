@@ -66,6 +66,13 @@ config = {
     }
 }
 
+RIGHT = config["key"]["right"]
+LEFT = config["key"]["left"]
+UP = config["key"]["up"]
+DOWN = config["key"]["down"]
+PAUSE = config["key"]["pause"]
+ACCEPT = config["key"]["accept"]
+
 ######################## Game Data ########################
 
 gmData = dict(map=None, posX=64, posY=64, camX=0, camY=0, dialogResponses={})

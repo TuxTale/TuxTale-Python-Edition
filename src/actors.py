@@ -699,37 +699,37 @@ class Tux(Actor):
 
     def run(self):
 
-        if not keyboard.is_held(pg.K_RIGHT) or not keyboard.is_held(pg.K_LEFT):
+        if not keyboard.is_held(RIGHT) or not keyboard.is_held(LEFT):
             self.xspeed = 0
 
-        if not keyboard.is_held(pg.K_UP) or not keyboard.is_held(pg.K_DOWN):
+        if not keyboard.is_held(UP) or not keyboard.is_held(DOWN):
             self.yspeed = 0
 
-        if keyboard.is_held(pg.K_RIGHT):
+        if keyboard.is_held(RIGHT):
             self.xspeed = 1
             self.anim = self.walkRight
             self.standStillAnim = self.standRight
 
-        if keyboard.is_held(pg.K_LEFT):
+        if keyboard.is_held(LEFT):
             self.xspeed = -1
             self.anim = self.walkLeft
             self.standStillAnim = self.standLeft
 
-        if keyboard.is_held(pg.K_UP):
+        if keyboard.is_held(UP):
             self.yspeed = -1
             self.anim = self.walkUp
             self.standStillAnim = self.standUp
 
-        if keyboard.is_held(pg.K_DOWN):
+        if keyboard.is_held(DOWN):
             self.yspeed = 1
             self.anim = self.walkDown
             self.standStillAnim = self.standDown
 
         if (
-                keyboard.is_pressed(pg.K_RIGHT)
-                or keyboard.is_pressed(pg.K_LEFT)
-                or keyboard.is_pressed(pg.K_UP)
-                or keyboard.is_pressed(pg.K_DOWN)
+                keyboard.is_pressed(RIGHT)
+                or keyboard.is_pressed(LEFT)
+                or keyboard.is_pressed(UP)
+                or keyboard.is_pressed(DOWN)
         ):
             self.stepCount += 1
             if self.stepCount % 2 == 0:
