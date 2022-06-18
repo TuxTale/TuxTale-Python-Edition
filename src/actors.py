@@ -127,9 +127,9 @@ class gMap:
                             # frame = game.loadSprite(tileset[0])
                             # Spawn different things depending on the layer?
                             if (
-                                    i["name"] == "BG"
-                                    or i["name"] == "FG"
-                                    or i["name"] == "MG"
+                                i["name"] == "BG"
+                                or i["name"] == "FG"
+                                or i["name"] == "MG"
                             ):
                                 newActor(
                                     Sprite,
@@ -342,7 +342,6 @@ class Slime(Actor):
             ),
         )
 
-
     def get_distance_direction(self, _player):
         pass
 
@@ -381,7 +380,7 @@ class Slime(Actor):
             self.frame[
                 int(self.anim[0])
                 + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))
-                ],
+            ],
             self.x - game.camX - self.offsx,
             self.y - game.camY - self.offsy,
         )
@@ -726,10 +725,10 @@ class Tux(Actor):
             self.standStillAnim = self.standDown
 
         if (
-                keyboard.is_pressed(RIGHT)
-                or keyboard.is_pressed(LEFT)
-                or keyboard.is_pressed(UP)
-                or keyboard.is_pressed(DOWN)
+            keyboard.is_pressed(RIGHT)
+            or keyboard.is_pressed(LEFT)
+            or keyboard.is_pressed(UP)
+            or keyboard.is_pressed(DOWN)
         ):
             self.stepCount += 1
             if self.stepCount % 2 == 0:
@@ -784,7 +783,7 @@ class Tux(Actor):
             self.frame[
                 int(self.anim[0])
                 + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))
-                ],
+            ],
             self.shape.x - game.camX,
             self.shape.y - game.camY,
         )
@@ -835,22 +834,22 @@ class Soul(Actor):
 
     def run(self):
 
-        if not getcon("right", "held") or not getcon("left", "held"):
+        if not get_control("right", "held") or not get_control("left", "held"):
             self.xspeed = 0
 
-        if not getcon("up", "held") or not getcon("down", "held"):
+        if not get_control("up", "held") or not get_control("down", "held"):
             self.yspeed = 0
 
-        if getcon("right", "held"):
+        if get_control("right", "held"):
             self.xspeed = 1
 
-        if getcon("left", "held"):
+        if get_control("left", "held"):
             self.xspeed = -1
 
-        if getcon("up", "held"):
+        if get_control("up", "held"):
             self.yspeed = -1
 
-        if getcon("down", "held"):
+        if get_control("down", "held"):
             self.yspeed = 1
 
         # hasSuccessfullyMoved is true only if Tux managed to move in a desired direction
@@ -906,7 +905,7 @@ class Soul(Actor):
             self.frame[
                 int(self.anim[0])
                 + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))
-                ],
+            ],
             self.shape.x - game.camX,
             self.shape.y - game.camY,
         )
@@ -984,7 +983,7 @@ class Bullet(Actor):
             self.frame[
                 int(self.anim[0])
                 + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))
-                ],
+            ],
             self.x - game.camX,
             self.y - game.camY,
         )
