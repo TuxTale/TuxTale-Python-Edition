@@ -57,7 +57,7 @@ class Attack:
     def run(self):
         self.timer += 1
         for i in animation["events"]:
-            if timer >= i["start"] and timer < i["stop"]:
+            if self.timer >= i["start"] and self.timer < i["stop"]:
                 autocon = i["autocon"]
                 anim = i["anim"]
                 spawn = i["spawn"]
@@ -67,7 +67,7 @@ class Attack:
                     x = entity["x"]
                     y = entity["y"]
                     arr = entity["arr"]
-                    # newActor(object, x, y)
+                    # new_actor(object, x, y)
                     c = object(x, y, arr)
                     c.foo()
 

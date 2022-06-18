@@ -30,27 +30,23 @@ pg.display.set_caption("Tuxtale [Python Edition]")
 window = pg.display.set_mode((DisplayW, DisplayH), pg.RESIZABLE | pg.SCALED)
 FPS = 60
 clock = pg.time.Clock()
-GameMode = None
+game_mode = None
 
 
 ########## Additional functions ##########
 
 
-def drawText(_font, _x, _y, text):
+def draw_text(_font, _x, _y, text):
     text = _font.render(text, 1, RED)
     window.blit(text, (_x, _y))
 
 
-def jsonWrite(path, data):
-    with open(path, "w") as fp:
-        json.dump(data, fp)
+def json_write(path, data):
+    json.dump(data, open(path, "w"))
 
 
-def jsonRead(path):
-    f = open(path, "r")
-    Data = f.read()
-    f.close()
-    return json.loads(Data)
+def json_read(path):
+    return json.loads(open(path, "r").read())
 
 
 #################### Configurations ######################
@@ -68,13 +64,13 @@ config = {
 
 ######################## Game Data ########################
 
-gmData = dict(map=None, posX=64, posY=64, camX=0, camY=0, dialogResponses={})
+gmData = dict(map=None, posX=64, posY=64, cam_x=0, cam_y=0, dialogResponses={})
 
 ############# Sprite Sheets #############
 
-sprTux = pg.image.load("res/gfx/Tux/taletuxCL.png").convert_alpha()
-sprBlock = pg.image.load("res/gfx/tiles/block.png").convert_alpha()
-sprMarbel = pg.image.load("res/gfx/tiles/blue_marbel 2.5d_v1.0.png").convert_alpha()
-sprSlime = pg.image.load("res/gfx/tiles/slimes sheet.png").convert_alpha()
-sprSoul = pg.image.load("res/gfx/Soul/soul.png").convert_alpha()
-sprBullet = pg.image.load("res/gfx/Soul/bullet.png").convert_alpha()
+sprite_tux = pg.image.load("res/gfx/Tux/taletuxCL.png").convert_alpha()
+sprite_block = pg.image.load("res/gfx/tiles/block.png").convert_alpha()
+sprite_marbel = pg.image.load("res/gfx/tiles/blue_marbel 2.5d_v1.0.png").convert_alpha()
+sprite_slime = pg.image.load("res/gfx/tiles/slimes sheet.png").convert_alpha()
+sprite_soul = pg.image.load("res/gfx/Soul/soul.png").convert_alpha()
+sprite_bullet = pg.image.load("res/gfx/Soul/bullet.png").convert_alpha()

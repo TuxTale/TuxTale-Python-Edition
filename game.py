@@ -1,26 +1,17 @@
 from src.actors import *
 from src.init import *
 
-# newActor(Block, 20, 20, [sprMarbel, [0]])
 
-# newActor(HorizontallyMovingBlock, 0, 150)
-# newActor(VerticallyMovingBlock, 100, 100)
-
-game.GameMode = gmPlay
+game.game_mode = gmPlay
 p = gMap("res/map/test_for_PGE 2.json")
-p.drawTiles()
+p.draw_tiles()
 
-newActor(Tux, 160, 160, None, "actorlayer")
-# newActor(Soul, 150, 150, None, "actorlayer")
-# newActor(Bullet, 140, 140, [(0.5, 0)], "actorlayer")
-# newActor(Bullet, 140, 140, [(-0.5, 0)], "actorlayer")
+new_actor(Tux, 160, 160, None, "actorlayer")
 
-game.camX = DisplayW / 2 - 16
-game.camY = DisplayH / 2 - 16
+game.cam_x = DisplayW / 2 - 16
+game.cam_y = DisplayH / 2 - 16
 
-newActor(Slime, 300, 200, None, "actorlayer")
-
-# newActor(Slime, 500, 400, None, "actorlayer")
+new_actor(Slime, 300, 200, None, "actorlayer")
 
 ############### Testing ###############
 
@@ -35,7 +26,7 @@ while running:
             running = False
 
     window.fill(BLACK)
-    game.GameMode()
+    game.game_mode()
     game.run()
 
     pg.display.update()
