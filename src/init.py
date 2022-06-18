@@ -1,30 +1,30 @@
 from .gmglobal import *
 
 
-class gmGame:
+class Game:
     def __init__(self):
-        self.GameMode = None
-        self.camX = 0
-        self.camY = 0
+        self.game_mode = None
+        self.cam_x = 0
+        self.cam_y = 0
         self.map = None
-        self.gmPlayer = None
+        self.gm_player = None
         self.uw = 500
         self.uh = 500
         self.debugMode = False
-        self.actor = {"None": []}
+        self.actor = dict()
         self.unusedActors = {}
         self.attacks = []
         self.health = 100
         self.hurtTimer = 0
-
-    def loadSprite(self, _spr):
         self.frame = []
-        sprSize = _spr.get_size()
-        sprW = int(sprSize[0])
-        sprH = int(sprSize[1])
 
-        for i in range(0, int(sprH / 16)):
-            for j in range(0, int(sprW / 16)):
+    def load_sprite(self, _spr):
+        sprite_size = _spr.get_size()
+        sprite_w = int(sprite_size[0])
+        sprite_h = int(sprite_size[1])
+
+        for i in range(0, int(sprite_h / 16)):
+            for j in range(0, int(sprite_w / 16)):
                 self.frame.append((j * 16, i * 16, 16, 16))
 
         return self.frame
@@ -32,7 +32,7 @@ class gmGame:
     def run(self):
         if self.hurtTimer > 0:
             self.hurtTimer -= 1
-        drawText(Font, 20, 20, str(round(clock.get_fps(), 1)))
+        draw_text(Font, 20, 20, str(round(clock.get_fps(), 1)))
 
 
 class Map:
@@ -43,11 +43,11 @@ class Map:
         self.a = _a
 
 
-game = gmGame()
+game = Game()
 
-gmMap = Map(5)
+gmMap = Map(1)
 
-solidTiles = [
+solid_tiles = [
     18,
     19,
     21,
@@ -86,18 +86,18 @@ map_dict = [
 ]
 
 
-def newActor(_type, _x, _y, _arr=None, _layer="None"):
+def new_actor(_type, _x, _y, _arr=None, _layer="None"):
     na = _type(_x, _y, _arr)
     na.id = gmMap.actlast
     game.actor[_layer].append(na)
     gmMap.actlast += 1
 
 
-def runActors():
+def run_actors():
     for i in game.actor.values():
         for j in i:
             j.render()
-            if game.debugMode == True:
+            if game.debugMode:
                 j.debug()
             j.run()
             # j.render()
