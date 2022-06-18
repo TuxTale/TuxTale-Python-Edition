@@ -856,13 +856,13 @@ class Soul(Actor):
 
 
 class Bullet(Actor):
-    def __init__(self, _x, _y, _arr=None):
-        super().__init__(_x, _y, _arr=None)
-        self.x = _x
-        self.y = _y
+    def __init__(self, x, y, arr=None):
+        super().__init__(x, y, arr)
+        self.x = x
+        self.y = y
         self.w = 4
         self.h = 4
-        self.arr = _arr
+        self.arr = arr
         self.frame = []
         self.anim = [0]
         self.xspeed = 0
@@ -872,10 +872,9 @@ class Bullet(Actor):
         self.direction = 0
         self.shape = pg.Rect(self.x, self.y, self.h, self.w)
         self.load_sprite(sprite_bullet, 4, 4)
-        if self.arr != None:
+        if self.arr is not None:
             self.xspeed = self.arr[0][0]
             self.yspeed = self.arr[0][1]
-        # print(self.frame)
 
     def debug(self):
         pg.draw.rect(
