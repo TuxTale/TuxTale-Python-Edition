@@ -349,9 +349,9 @@ class Slime(Actor):
         if game.game_player.shape.colliderect(self.shape):
             start_battle()
 
-        self.xspeed, self.yspeed = (
+        self.xspeed, self.yspeed = ((
                     pg.math.Vector2(game.game_player.shape.topleft) - pg.math.Vector2(self.shape.topleft)
-        ).normalize().xy
+        ).normalize() * 0.5).xy
 
         # Attempt to move in the x-axis by xspeed
         if collision_check(pg.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
