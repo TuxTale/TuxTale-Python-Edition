@@ -67,7 +67,7 @@ class Attack:
                     x = entity["x"]
                     y = entity["y"]
                     arr = entity["arr"]
-                    # newActor(object, x, y)
+                    # new_actor(object, x, y)
                     c = object(x, y, arr)
                     c.foo()
 

@@ -1,7 +1,7 @@
 from .init import *
 
 
-def gmPlay():
+def game_play():
     if game:
         # 1) UPDATE PHASE
         #
@@ -10,7 +10,7 @@ def gmPlay():
         #   Each actor must update its current state based on what's going on
         #   Some actors might "die" (be killed or despawn) and be removed from the game
 
-        runActors()
+        run_actors()
 
         # 2) CAMERA PHASE
         #
@@ -26,8 +26,8 @@ def gmPlay():
         # of the camera.
         # Visual effects such as screen-shake may also cause the camera's position to change.
 
-        game.camX = game.gmPlayer.shape.x - (DisplayW / 2) + game.gmPlayer.w / 2
-        game.camY = game.gmPlayer.shape.y - (DisplayH / 2) + game.gmPlayer.h / 2
+        game.cam_x = game.game_player.shape.x - (display_w / 2) + game.game_player.w / 2
+        game.cam_y = game.game_player.shape.y - (display_H / 2) + game.game_player.h / 2
 
         # 3) RENDER PHASE
         #
@@ -47,25 +47,25 @@ def gmPlay():
         # (Note that the order in which objects are rendered does not necessarily need to be the same order
         # in which we invoke the run() method.)
 
-        # renderActors()
+        # render_actors()
 
 
-def startBattle():
+def start_battle():
     game.unusedActors = game.actor
     game.actor = {"solid": [], "BG": [], "MG": [], "actorlayer": [], "FG": []}
 
 
-def battleMode():
+def battle_mode():
     pass
 
 
-def startPlay():
+def start_play():
     pass
 
 
-def saveGame():
+def save_game():
     pass
 
 
-def quitGame():
+def quit_game():
     pass

@@ -4,7 +4,7 @@ from .controls import *
 from .init import *
 
 
-def gmPlay():
+def game_play():
     if game:
         # 1) UPDATE PHASE
         #
@@ -13,7 +13,7 @@ def gmPlay():
         #   Each actor must update its current state based on what's going on
         #   Some actors might "die" (be killed or despawn) and be removed from the game
 
-        runActors()
+        run_actors()
 
         # 2) CAMERA PHASE
         #
@@ -29,8 +29,8 @@ def gmPlay():
         # of the camera.
         # Visual effects such as screen-shake may also cause the camera's position to change.
 
-        game.camX = game.gmPlayer.shape.x - (DisplayW / 2) + game.gmPlayer.w / 2
-        game.camY = game.gmPlayer.shape.y - (DisplayH / 2) + game.gmPlayer.h / 2
+        game.cam_x = game.game_player.shape.x - (display_w / 2) + game.game_player.w / 2
+        game.cam_y = game.game_player.shape.y - (display_H / 2) + game.game_player.h / 2
 
         # 3) RENDER PHASE
         #
@@ -50,10 +50,10 @@ def gmPlay():
         # (Note that the order in which objects are rendered does not necessarily need to be the same order
         # in which we invoke the run() method.)
 
-        # renderActors()
+        # render_actors()
 
 
-def startBattle():
+def start_battle():
     game.unusedActors = game.actor
     game.actor = {
         "solid": [],
@@ -63,98 +63,98 @@ def startBattle():
         "FG": [],
         "attacks": [],
     }
-    game.camX = DisplayW / 2 + game.gmPlayer.w / 2
-    game.camY = DisplayH / 2 + game.gmPlayer.h / 2
-    game.GameMode = battleMode
-    newActor(Soul, DisplayW / 2, DisplayH / 2, None, "actorlayer")
+    game.cam_x = display_w / 2 + game.game_player.w / 2
+    game.cam_y = display_H / 2 + game.game_player.h / 2
+    game.game_mode = battle_mode
+    new_actor(Soul, display_w / 2, display_H / 2, None, "actorlayer")
     c = Attack(Slime)
     game.attacks.append(c)
-    c.constructAttack(0, 100, 0, 20, 60, 10, 10, (2, -0.5))
-    c.constructAttack(400, 100, 0, 20, 60, 10, 10, (-2, -0.5))
-    c.constructAttack(0, 100, 0, 20, 120, 10, 10, (2, -0.5))
-    c.constructAttack(400, 100, 0, 20, 120, 10, 10, (-2, -0.5))
-    c.constructAttack(0, 100, 0, 20, 180, 10, 10, (2, -0.5))
-    c.constructAttack(400, 100, 0, 20, 180, 10, 10, (-2, -0.5))
+    c.construct_attack(0, 100, 0, 20, 60, 10, 10, (2, -0.5))
+    c.construct_attack(400, 100, 0, 20, 60, 10, 10, (-2, -0.5))
+    c.construct_attack(0, 100, 0, 20, 120, 10, 10, (2, -0.5))
+    c.construct_attack(400, 100, 0, 20, 120, 10, 10, (-2, -0.5))
+    c.construct_attack(0, 100, 0, 20, 180, 10, 10, (2, -0.5))
+    c.construct_attack(400, 100, 0, 20, 180, 10, 10, (-2, -0.5))
     """for i in range(0, 50):
-        c.constructAttack(math.sin(i*10), 100, 0, 20, 180, 10, 10, (math.sin(i), -math.sin(i)))"""
-    # c.constructCircleAttack(game.gmPlayer.x, game.gmPlayer.y, 100, 60, 0, 200, (0, 0))
+        c.construct_attack(math.sin(i*10), 100, 0, 20, 180, 10, 10, (math.sin(i), -math.sin(i)))"""
+    # c.construct_circle_attack(game.game_player.x, game.game_player.y, 100, 60, 0, 200, (0, 0))
 
 
-def battleMode():
-    runActors()
-    # print(game.camX)
-    # print(game.camY)
-    game.camX = 0
-    game.camY = 0
+def battle_mode():
+    run_actors()
+    # print(game.cam_x)
+    # print(game.cam_y)
+    game.cam_x = 0
+    game.cam_y = 0
     for i in game.attacks:
         i.run()
-    # game.camX  = game.gmPlayer.shape.x - (DisplayW/2) + game.gmPlayer.w/2
-    # game.camY = game.gmPlayer.shape.y - (DisplayH/2) + game.gmPlayer.h/2
+    # game.cam_x  = game.game_player.shape.x - (display_w/2) + game.game_player.w/2
+    # game.cam_y = game.game_player.shape.y - (display_H/2) + game.game_player.h/2
 
 
-def startPlay():
+def start_play():
     pass
 
 
-def saveGame():
+def save_game():
     pass
 
 
-def quitGame():
+def quit_game():
     pass
 
 
 class gMap:
     def __init__(self, _map):
-        self.mapdata = jsonRead(_map)
+        self.mapdata = json_read(_map)
 
         # pg.image.load(self.mapdata["tilesets"][0]["image"]).convert()
 
-    def drawTiles(self):
-        # dataIterator = 0
+    def draw_tiles(self):
+        # data_iterator = 0
 
         for i in self.mapdata["layers"]:
             # print(i["name"])
             game.actor[i["name"]] = []
             if i["type"] == "tilelayer":
-                dataIterator = 0
+                data_iterator = 0
                 for y in range(0, i["height"]):
                     for x in range(0, i["width"]):
-                        tileID = i["data"][dataIterator]
-                        # print(dataIterator)
-                        if tileID > 0:
-                            tileset = self.getTileset(tileID)
-                            # frame = game.loadSprite(tileset[0])
+                        tile_id = i["data"][data_iterator]
+                        # print(data_iterator)
+                        if tile_id > 0:
+                            tileset = self.get_tileset(tile_id)
+                            # frame = game.load_sprite(tileset[0])
                             # Spawn different things depending on the layer?
                             if (
                                 i["name"] == "BG"
                                 or i["name"] == "FG"
                                 or i["name"] == "MG"
                             ):
-                                newActor(
+                                new_actor(
                                     Sprite,
                                     x * 16,
                                     y * 16,
-                                    [tileset[0], tileID - tileset[1]],
+                                    [tileset[0], tile_id - tileset[1]],
                                     i["name"],
                                 )
                             if i["name"] == "solid":
-                                newActor(
+                                new_actor(
                                     Block,
                                     x * 16,
                                     y * 16,
-                                    [tileID - tileset[1]],
+                                    [tile_id - tileset[1]],
                                     i["name"],
                                 )
                                 # print(tileset[1])
-                            # drawSprite(tileset[0], frame[tileID - tileset[1]], x * 16 - game.camX, y * 16 - game.camY)
-                        dataIterator += 1
+                            # draw_sprite(tileset[0], frame[tile_id - tileset[1]], x * 16 - game.cam_x, y * 16 - game.cam_y)
+                        data_iterator += 1
 
             # if i["name"] == "solid": #Integrate this with the change made above
             #     for j in i["objects"]:
-            #         newActor(Block, j["x"], j["y"] - 16, None, i["name"])
+            #         new_actor(Block, j["x"], j["y"] - 16, None, i["name"])
 
-    def getTileset(self, tileGID):
+    def get_tileset(self, tileGID):
         # print(tileGID)
         for i in range(0, len(self.mapdata["tilesets"])):
             tilesetGID = self.mapdata["tilesets"][i]["firstgid"]
@@ -206,7 +206,7 @@ class Actor:
         self.frame = None
         self.shape = None
         self.color = (100, 149, 237)
-        self.frameIndex = 0
+        self.frame_index = 0
         self.id = Actor.id
         self.frame = []
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -218,7 +218,7 @@ class Actor:
             if len(self.arr) == 1:
                 self.spriteSheet = self.arr[0]
 
-    def loadSprite(self, _spr, _w=16, _h=16, _offs=(0, 0)):
+    def load_sprite(self, _spr, _w=16, _h=16, _offs=(0, 0)):
         self.frame = []
         sprSize = _spr.get_size()
         sprW = int(sprSize[0])
@@ -236,10 +236,10 @@ class Actor:
                 self.frame.append((j * _w, i * _h, _w, _h))
 
     def collision(self, _direction):
-        for i in gmMap.actor:
-            if i._typeof() == "Block":
+        for i in game_map.actor:
+            if i.typeof() == "Block":
                 if i.shape.colliderect(self.shape):
-                    if i.solid == True:
+                    if i.solid:
                         if _direction == "horizontal":
                             if self.xspeed > 0:
                                 self.shape.right = i.shape.left
@@ -259,8 +259,8 @@ class Actor:
             window,
             self.color,
             (
-                self.shape.x - game.camX,
-                self.shape.y - game.camY,
+                self.shape.x - game.cam_x,
+                self.shape.y - game.cam_y,
                 self.shape.w,
                 self.shape.h,
             ),
@@ -271,12 +271,12 @@ class Actor:
 
     def render(self):
         pass
-        # pg.draw.rect(window, (255, 255, 255), (self.shape.x -  game.camX, self.shape.y - game.camY, self.shape.w, self.shape.h))
+        # pg.draw.rect(window, (255, 255, 255), (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h))
 
     def destructor(self):
         pass
 
-    def _typeof(self):
+    def typeof(self):
         return "Actor"
 
 
@@ -290,24 +290,23 @@ class Sprite(Actor):
         self.arr = _arr
         self.frame = []
         self.index = None
-        if self.arr != None:
-
+        if self.arr is not None:
             if len(self.arr) >= 1:
                 self.spriteSheet = self.arr[0]
-                self.loadSprite(self.spriteSheet)
+                self.load_sprite(self.spriteSheet)
             if len(self.arr) >= 2:
                 self.index = self.arr[1]
 
     def render(self):
-        drawSprite(
+        draw_sprite(
             self.spriteSheet,
             self.frame[self.index],
-            self.x - game.camX,
-            self.y - game.camY,
+            self.x - game.cam_x,
+            self.y - game.cam_y,
         )
-        # window.blit(self.spriteSheet, (self.x - game.camX, self.y - game.camY), self.frame[self.index])
+        # window.blit(self.spriteSheet, (self.x - game.cam_x, self.y - game.cam_y), self.frame[self.index])
 
-    def _typeof(self):
+    def typeof(self):
         return "Sprite"
 
 
@@ -327,7 +326,7 @@ class Slime(Actor):
         self.direction = 0
         self.anim = self.jiggleAnim
         self.shape = pg.Rect(self.x, self.y, self.h, self.w)
-        self.loadSprite(sprSlime, 32, 32, "centered")
+        self.load_sprite(sprite_slime, 32, 32, "centered")
         # print(self.frame)
 
     def debug(self):
@@ -335,35 +334,32 @@ class Slime(Actor):
             window,
             RED,
             (
-                self.shape.x - game.camX,
-                self.shape.y - game.camY,
+                self.shape.x - game.cam_x,
+                self.shape.y - game.cam_y,
                 self.shape.w,
                 self.shape.h,
             ),
         )
 
-    def get_distance_direction(self, _player):
-        pass
-
     def run(self):
-        self.frameIndex += 0.1
+        self.frame_index += 0.1
         self.dist = math.sqrt(
-            (self.x - game.gmPlayer.x) ** 2 + (self.y - game.gmPlayer.y) ** 2
+            (self.x - game.game_player.x) ** 2 + (self.y - game.game_player.y) ** 2
         )
 
-        if game.gmPlayer.shape.colliderect(self.shape):
-            startBattle()
+        if game.game_player.shape.colliderect(self.shape):
+            start_battle()
 
-        """if self.y-game.gmPlayer.y != 0:
-            self.tangent = (self.x-game.gmPlayer.x)/(self.y-game.gmPlayer.y)
+        """if self.y-game.game_player.y != 0:
+            self.tangent = (self.x-game.game_player.x)/(self.y-game.game_player.y)
 
-        if (self.x-game.gmPlayer.x)/(abs(self.x-game.gmPlayer.x)) != 0:
-            self.xspeed = 0.5 * (self.x-game.gmPlayer.x)/(abs(self.x-game.gmPlayer.x))
+        if (self.x-game.game_player.x)/(abs(self.x-game.game_player.x)) != 0:
+            self.xspeed = 0.5 * (self.x-game.game_player.x)/(abs(self.x-game.game_player.x))
         else:
             self.xspeed = 0
         
-        if (self.y-game.gmPlayer.y)/(abs(self.y-game.gmPlayer.y)) != 0:
-            self.yspeed = 0.5 * self.tangent * (self.y-game.gmPlayer.y)/(abs(self.y-game.gmPlayer.y))
+        if (self.y-game.game_player.y)/(abs(self.y-game.game_player.y)) != 0:
+            self.yspeed = 0.5 * self.tangent * (self.y-game.game_player.y)/(abs(self.y-game.game_player.y))
         else:
             self.yspeed = 0"""
 
@@ -375,25 +371,25 @@ class Slime(Actor):
 
     def render(self):
         # pass
-        drawSprite(
-            sprSlime,
+        draw_sprite(
+            sprite_slime,
             self.frame[
                 int(self.anim[0])
-                + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))
+                + math.floor(self.frame_index % (self.anim[-1] - self.anim[0] + 1))
             ],
-            self.x - game.camX - self.offsx,
-            self.y - game.camY - self.offsy,
+            self.x - game.cam_x - self.offsx,
+            self.y - game.cam_y - self.offsy,
         )
 
-    def _typeof(self):
+    def typeof(self):
         return "Slime"
 
 
-def collisionCheck(rectangle):
+def collision_check(rectangle):
     for i in game.actor["solid"]:
 
         if i.shape.colliderect(rectangle):
-            if i.solid == True:
+            if i.solid:
                 # If a collision happens, we can resolve the collision by moving in one of
                 # 4 possible directions (and moving until there is no longer any overlap).
                 # The desired direction we want to go is whichever one requires us to move
@@ -453,7 +449,7 @@ def collisionCheck(rectangle):
     return {"hasCollided": False}
 
 
-"""def runActors():
+"""def run_actors():
     for i in game.actor.values():
         for j in i:
             j.render()
@@ -463,48 +459,48 @@ def collisionCheck(rectangle):
             #j.render()"""
 
 
-def renderActors():
+def render_actors():
     for i in game.actor.values():
         for j in i:
             j.render()
 
-    """for i in gmMap.actor:
-        if i._typeof() == "Sprite":
+    """for i in game_map.actor:
+        if i.typeof() == "Sprite":
             i.render()
             if game.debugMode == True:
                 i.debug()
 
-    for i in gmMap.actor:
-        if i._typeof() == "Block":
+    for i in game_map.actor:
+        if i.typeof() == "Block":
             i.render()
             if game.debugMode == True:
                 i.debug()
     
-    for i in gmMap.actor:
-        if i._typeof() == "Tux":
+    for i in game_map.actor:
+        if i.typeof() == "Tux":
             i.render()
             if game.debugMode == True:
                 i.debug()
     
-    for i in gmMap.actor:
-        if i._typeof() == "Slime":
+    for i in game_map.actor:
+        if i.typeof() == "Slime":
             i.render()
             if game.debugMode == True:
                 i.debug()"""
 
 
-"""def newActor(_type, _x, _y, _arr = None, _layer = "None"):
+"""def new_actor(_type, _x, _y, _arr = None, _layer = "None"):
     na = _type(_x, _y, _arr)
-    na.id = gmMap.actlast
+    na.id = game_map.actlast
     game.actor[_layer].append(na)
-    gmMap.actlast += 1"""
+    game_map.actlast += 1"""
 
 
 class VerticallyMovingBlock(Actor):
     def __init__(self, _x, _y, _arr=None):
         super().__init__(_x, _y, _arr=None)
         self.originalY = _y
-        self.loadSprite(sprBlock)
+        self.load_sprite(sprite_block)
         self.solid = True
         self.color = (200, 200, 200)
         self.frameCount = 0
@@ -512,7 +508,7 @@ class VerticallyMovingBlock(Actor):
             return
         if self.arr.len() == 1:
             self.spriteSheet = self.arr[0]
-            self.loadSprite(self.spriteSheet)
+            self.load_sprite(self.spriteSheet)
 
     def run(self):
         self.frameCount += 1
@@ -523,10 +519,10 @@ class VerticallyMovingBlock(Actor):
         self.shape.y = self.y
 
     def render(self):
-        drawSprite(sprBlock, self.frame[0], self.x - game.camX, self.y - game.camY)
-        # pg.draw.rect(window, self.color, (self.shape.x -  game.camX, self.shape.y - game.camY, self.shape.w, self.shape.h), 0)
+        draw_sprite(sprite_block, self.frame[0], self.x - game.cam_x, self.y - game.cam_y)
+        # pg.draw.rect(window, self.color, (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h), 0)
 
-    def _typeof(self):
+    def typeof(self):
         return "Block"
 
     def debug(self):
@@ -534,8 +530,8 @@ class VerticallyMovingBlock(Actor):
             window,
             self.color,
             (
-                self.shape.x - game.camX,
-                self.shape.y - game.camY,
+                self.shape.x - game.cam_x,
+                self.shape.y - game.cam_y,
                 self.shape.w,
                 self.shape.h,
             ),
@@ -553,7 +549,7 @@ class HorizontallyMovingBlock(Actor):
         self.h = 16
         self.arr = _arr
         self.shape = pg.Rect(self.x, self.y, self.h, self.w)
-        self.loadSprite(sprBlock)
+        self.load_sprite(sprite_block)
         self.solid = True
         self.color = (200, 200, 200)
         self.frameCount = 0
@@ -561,7 +557,7 @@ class HorizontallyMovingBlock(Actor):
             return
         if self.arr.len() == 1:
             self.spriteSheet = self.arr[0]
-            self.loadSprite(self.spriteSheet)
+            self.load_sprite(self.spriteSheet)
 
     def run(self):
         self.frameCount += 1
@@ -572,10 +568,10 @@ class HorizontallyMovingBlock(Actor):
         self.shape.y = self.y
 
     def render(self):
-        drawSprite(sprBlock, self.frame[0], self.x - game.camX, self.y - game.camY)
-        # pg.draw.rect(window, self.color, (self.shape.x -  game.camX, self.shape.y - game.camY, self.shape.w, self.shape.h), 0)
+        draw_sprite(sprite_block, self.frame[0], self.x - game.cam_x, self.y - game.cam_y)
+        # pg.draw.rect(window, self.color, (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h), 0)
 
-    def _typeof(self):
+    def typeof(self):
         return "Block"
 
     def debug(self):
@@ -583,8 +579,8 @@ class HorizontallyMovingBlock(Actor):
             window,
             self.color,
             (
-                self.shape.x - game.camX,
-                self.shape.y - game.camY,
+                self.shape.x - game.cam_x,
+                self.shape.y - game.cam_y,
                 self.shape.w,
                 self.shape.h,
             ),
@@ -593,19 +589,19 @@ class HorizontallyMovingBlock(Actor):
 
 
 class Block(Actor):
-    def __init__(self, _x, _y, _arr=None):
-        super().__init__(_x, _y, _arr=None)
-        self.solidOffsx = 0
-        self.solidOffsy = 0
+    def __init__(self, x, y, arr=None):
+        super().__init__(x, y, arr)
+        self.solid_offs_x = 0
+        self.solid_offs_y = 0
         self.shape = pg.Rect(self.x, self.y, self.w, self.h)
-        # self.loadSprite(sprBlock)
+        # self.load_sprite(sprite_block)
         self.solid = True
         self.color = (100, 100, 100)
         self.anim = [0.0, 0.0]
         self.solid = True
         self.sort = 0
-        self.spriteSheet = sprBlock
-        if self.arr != None:
+        self.spriteSheet = sprite_block
+        if self.arr is not None:
 
             if len(self.arr) >= 1:
                 self.sort = self.arr[0]
@@ -616,42 +612,42 @@ class Block(Actor):
                     self.shape.w = 16
                     self.shape.h = 8
                 if self.sort == 2:
-                    self.solidOffsx = 0
-                    self.solidOffsy = 8
+                    self.solid_offs_x = 0
+                    self.solid_offs_y = 8
                     self.shape.w = 16
                     self.shape.h = 8
                 if self.sort == 3:
-                    self.solidOffsx = 0
-                    self.solidOffsy = 0
+                    self.solid_offs_x = 0
+                    self.solid_offs_y = 0
                     self.shape.w = 8
                     self.shape.h = 16
                 if self.sort == 4:
-                    self.solidOffsx = 8
-                    self.solidOffsy = 0
+                    self.solid_offs_x = 8
+                    self.solid_offs_y = 0
                     self.shape.w = 8
                     self.shape.h = 16
                 # self.spriteSheet = self.arr[0]
-                # self.loadSprite(self.arr[0])
+                # self.load_sprite(self.arr[0])
             if len(self.arr) >= 2:
                 self.sort = self.arr[1]
             if len(self.arr) >= 3:
                 self.solid = self.arr[2]
-                if self.solid == False:
+                if not self.solid:
                     self.color = (200, 200, 200, 90)
 
     def run(self):
-        self.shape.x = self.x + self.solidOffsx
-        self.shape.y = self.y + self.solidOffsy
-        self.frameIndex += 0.14
+        self.shape.x = self.x + self.solid_offs_x
+        self.shape.y = self.y + self.solid_offs_y
+        self.frame_index += 0.14
         # print(self.spriteSheet)
 
     def render(self):
         pass
         # if self.arr:
-        # drawSprite(self.spriteSheet, self.frame[int(self.anim[0]) + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))], self.x - game.camX, self.y - game.camY)
-        # pg.draw.rect(window, self.color, (self.shape.x -  game.camX, self.shape.y - game.camY, self.shape.w, self.shape.h), 0)
+        # draw_sprite(self.spriteSheet, self.frame[int(self.anim[0]) + math.floor(self.frame_index % (self.anim[-1] - self.anim[0] + 1))], self.x - game.cam_x, self.y - game.cam_y)
+        # pg.draw.rect(window, self.color, (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h), 0)
 
-    def _typeof(self):
+    def typeof(self):
         return "Block"
 
     def debug(self):
@@ -659,8 +655,8 @@ class Block(Actor):
             window,
             self.color,
             (
-                self.shape.x - game.camX,
-                self.shape.y - game.camY,
+                self.shape.x - game.cam_x,
+                self.shape.y - game.cam_y,
                 self.shape.w,
                 self.shape.h,
             ),
@@ -669,31 +665,31 @@ class Block(Actor):
 
 
 class Tux(Actor):
-    def __init__(self, _x, _y, _arr=None):
-        super().__init__(_x, _y, _arr=None)
+    def __init__(self, x, y, arr=None):
+        super().__init__(x, y, arr)
         self.frame = []
-        self.walkRight = [0.0, 3.0]
-        self.walkUp = [4.0, 7.0]
-        self.walkDown = [8.0, 11.0]
-        self.walkLeft = [12.0, 15.0]
-        self.standRight = [0]
-        self.standLeft = [12]
-        self.standUp = [4]
-        self.standDown = [8]
-        self.anim = self.walkRight
-        self.standStillAnim = self.standRight
+        self.walk_right = [0.0, 3.0]
+        self.walk_up = [4.0, 7.0]
+        self.walk_down = [8.0, 11.0]
+        self.walk_left = [12.0, 15.0]
+        self.stand_right = [0]
+        self.stand_left = [12]
+        self.stand_up = [4]
+        self.stand_down = [8]
+        self.anim = self.walk_right
+        self.stand_still = self.stand_right
         self.xspeed = 0
         self.yspeed = 0
         self.autocon = False
         self.idle = False
-        self.stepCount = 0
+        self.step_count = 0
         self.shape = pg.Rect(self.x, self.y, self.h, self.w)
-        self.loadSprite(sprTux)
+        self.load_sprite(sprite_tux)
         self.solid = False
         self.color = (0, 255, 0)
-        game.gmPlayer = self
-        print(game.gmPlayer)
-        if not _arr:
+        game.game_player = self
+        print(game.game_player)
+        if not arr:
             return
 
     def run(self):
@@ -706,23 +702,23 @@ class Tux(Actor):
 
         if keyboard.is_held(RIGHT):
             self.xspeed = 1
-            self.anim = self.walkRight
-            self.standStillAnim = self.standRight
+            self.anim = self.walk_right
+            self.stand_still = self.stand_right
 
         if keyboard.is_held(LEFT):
             self.xspeed = -1
-            self.anim = self.walkLeft
-            self.standStillAnim = self.standLeft
+            self.anim = self.walk_left
+            self.stand_still = self.stand_left
 
         if keyboard.is_held(UP):
             self.yspeed = -1
-            self.anim = self.walkUp
-            self.standStillAnim = self.standUp
+            self.anim = self.walk_up
+            self.stand_still = self.stand_up
 
         if keyboard.is_held(DOWN):
             self.yspeed = 1
-            self.anim = self.walkDown
-            self.standStillAnim = self.standDown
+            self.anim = self.walk_down
+            self.stand_still = self.stand_down
 
         if (
             keyboard.is_pressed(RIGHT)
@@ -730,11 +726,11 @@ class Tux(Actor):
             or keyboard.is_pressed(UP)
             or keyboard.is_pressed(DOWN)
         ):
-            self.stepCount += 1
-            if self.stepCount % 2 == 0:
-                self.frameIndex = 1
+            self.step_count += 1
+            if self.step_count % 2 == 0:
+                self.frame_index = 1
             else:
-                self.frameIndex = 3
+                self.frame_index = 3
 
         # hasSuccessfullyMoved is true only if Tux managed to move in a desired direction
         # without bumping into a wall.
@@ -747,7 +743,7 @@ class Tux(Actor):
         hasSuccessfullyMoved = False
 
         # Attempt to move in the x-axis by xspeed (note xspeed may be 0)
-        collisionCheckResult = collisionCheck(
+        collisionCheckResult = collision_check(
             pg.Rect(
                 self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h
             )
@@ -760,7 +756,7 @@ class Tux(Actor):
             hasSuccessfullyMoved = hasSuccessfullyMoved or (self.xspeed != 0)
 
         # Attempt to move in the y-axis by yspeed
-        collisionCheckResult = collisionCheck(
+        collisionCheckResult = collision_check(
             pg.Rect(
                 self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h
             )
@@ -773,19 +769,19 @@ class Tux(Actor):
             hasSuccessfullyMoved = hasSuccessfullyMoved or (self.yspeed != 0)
 
         if not hasSuccessfullyMoved or (self.xspeed == 0 and self.yspeed == 0):
-            self.anim = self.standStillAnim
+            self.anim = self.stand_still
 
-        self.frameIndex += 0.14
+        self.frame_index += 0.14
 
     def render(self):
-        drawSprite(
-            sprTux,
+        draw_sprite(
+            sprite_tux,
             self.frame[
                 int(self.anim[0])
-                + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))
+                + math.floor(self.frame_index % (self.anim[-1] - self.anim[0] + 1))
             ],
-            self.shape.x - game.camX,
-            self.shape.y - game.camY,
+            self.shape.x - game.cam_x,
+            self.shape.y - game.cam_y,
         )
 
     def debug(self):
@@ -793,15 +789,15 @@ class Tux(Actor):
             window,
             self.color,
             (
-                self.shape.x - game.camX,
-                self.shape.y - game.camY,
+                self.shape.x - game.cam_x,
+                self.shape.y - game.cam_y,
                 self.shape.w,
                 self.shape.h,
             ),
             0,
         )
 
-    def _typeof(self):
+    def typeof(self):
         return "Tux"
 
 
@@ -821,14 +817,14 @@ class Soul(Actor):
         self.yspeed = 0
         self.autocon = False
         self.idle = False
-        self.stepCount = 0
+        self.step_count = 0
         self.shape = pg.Rect(self.x, self.y, self.h, self.w)
-        self.loadSprite(sprSoul, 8, 8)
+        self.load_sprite(sprite_soul, 8, 8)
         print(self.frame)
         self.solid = False
         self.color = (0, 255, 0)
-        game.gmPlayer = self
-        print(game.gmPlayer)
+        game.game_player = self
+        print(game.game_player)
         if not _arr:
             return
 
@@ -863,7 +859,7 @@ class Soul(Actor):
         hasSuccessfullyMoved = False
 
         # Attempt to move in the x-axis by xspeed (note xspeed may be 0)
-        collisionCheckResult = collisionCheck(
+        collisionCheckResult = collision_check(
             pg.Rect(
                 self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h
             )
@@ -876,7 +872,7 @@ class Soul(Actor):
             hasSuccessfullyMoved = hasSuccessfullyMoved or (self.xspeed != 0)
 
         # Attempt to move in the y-axis by yspeed
-        collisionCheckResult = collisionCheck(
+        collisionCheckResult = collision_check(
             pg.Rect(
                 self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h
             )
@@ -890,24 +886,24 @@ class Soul(Actor):
 
         if not hasSuccessfullyMoved or (self.xspeed == 0 and self.yspeed == 0):
             pass
-            # self.anim = self.standStillAnim
+            # self.anim = self.stand_still
 
         if game.hurtTimer > 0:
             self.anim = self.invisible
         else:
             self.anim = self.visible
 
-        self.frameIndex += 0.14
+        self.frame_index += 0.14
 
     def render(self):
-        drawSprite(
-            sprSoul,
+        draw_sprite(
+            sprite_soul,
             self.frame[
                 int(self.anim[0])
-                + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))
+                + math.floor(self.frame_index % (self.anim[-1] - self.anim[0] + 1))
             ],
-            self.shape.x - game.camX,
-            self.shape.y - game.camY,
+            self.shape.x - game.cam_x,
+            self.shape.y - game.cam_y,
         )
 
     def debug(self):
@@ -915,15 +911,15 @@ class Soul(Actor):
             window,
             self.color,
             (
-                self.shape.x - game.camX,
-                self.shape.y - game.camY,
+                self.shape.x - game.cam_x,
+                self.shape.y - game.cam_y,
                 self.shape.w,
                 self.shape.h,
             ),
             0,
         )
 
-    def _typeof(self):
+    def typeof(self):
         return "Soul"
 
 
@@ -943,8 +939,8 @@ class Bullet(Actor):
         self.dist = 0
         self.direction = 0
         self.shape = pg.Rect(self.x, self.y, self.h, self.w)
-        self.loadSprite(sprBullet, 4, 4)
-        if self.arr != None:
+        self.load_sprite(sprite_bullet, 4, 4)
+        if self.arr is not None:
             self.xspeed = self.arr[0][0]
             self.yspeed = self.arr[0][1]
         # print(self.frame)
@@ -954,17 +950,17 @@ class Bullet(Actor):
             window,
             RED,
             (
-                self.shape.x - game.camX,
-                self.shape.y - game.camY,
+                self.shape.x - game.cam_x,
+                self.shape.y - game.cam_y,
                 self.shape.w,
                 self.shape.h,
             ),
         )
 
     def run(self):
-        self.frameIndex += 0.1
+        self.frame_index += 0.1
 
-        if game.gmPlayer.shape.colliderect(self.shape):
+        if game.game_player.shape.colliderect(self.shape):
             # print("hurt")
             if game.hurtTimer == 0:
                 game.health -= 1
@@ -978,17 +974,17 @@ class Bullet(Actor):
 
     def render(self):
         # pass
-        drawSprite(
-            sprBullet,
+        draw_sprite(
+            sprite_bullet,
             self.frame[
                 int(self.anim[0])
-                + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))
+                + math.floor(self.frame_index % (self.anim[-1] - self.anim[0] + 1))
             ],
-            self.x - game.camX,
-            self.y - game.camY,
+            self.x - game.cam_x,
+            self.y - game.cam_y,
         )
 
-    def _typeof(self):
+    def typeof(self):
         return "Bullet"
 
 
@@ -1003,20 +999,15 @@ class Attack:
     def run(self):
         self.timer += 1
         for i in animation["events"]:
-            if self.timer >= i["start"] and self.timer < i["stop"]:
+            if i["start"] <= self.timer < i["stop"]:
                 spawn = i["spawn"]
                 for j in range(0, len(spawn)):
                     entity = spawn[j]["entity"]
-                    object = entity["object"]
-                    x = entity["x"]
-                    y = entity["y"]
-                    arr = entity["arr"]
-                    newActor(object, x, y, arr, "actorlayer")
+                    new_actor(entity["object"], entity["x"], entity["y"], entity["arr"], "actorlayer")
 
-    def constructAttack(self, _x, _y, _xspace, _yspace, _start, _wait, _number, _speed):
-
+    def construct_attack(self, _x, _y, _xspace, _yspace, _start, _wait, _number, _speed):
         for i in range(0, _number):
-            dict = {
+            dic = {
                 "start": _start + i * _wait,
                 "stop": _start + i * _wait + 1,
                 "function": 0,
@@ -1032,25 +1023,24 @@ class Attack:
                 ],
             }
 
-            animation["events"].append(dict)
+            animation["events"].append(dic)
 
-    def constructCircleAttack(self, _x, _y, _r, _start, _wait, _number, _speed):
-        for i in range(0, _number):
-            dv = 2 * math.pi / _number
-            dict = {
-                "start": _start + i * _wait,
-                "stop": _start + i * _wait + 1,
+    def construct_circle_attack(self, x, y, r, start, wait, number, speed):
+        for i in range(0, number):
+            dv = 2 * math.pi / number
+            dic = {
+                "start": start + i * wait,
+                "stop": start + i * wait + 1,
                 "function": 0,
                 "spawn": [
                     {
                         "entity": {
                             "object": Bullet,
-                            "x": _x + math.cos(dv * i) * _r,
-                            "y": _y + math.sin(dv * i) * _r,
-                            "arr": [(_speed[0], _speed[1])],
+                            "x": x + math.cos(dv * i) * r,
+                            "y": y + math.sin(dv * i) * r,
+                            "arr": [(speed[0], speed[1])],
                         },
                     }
                 ],
             }
-
-            animation["events"].append(dict)
+            animation["events"].append(dic)

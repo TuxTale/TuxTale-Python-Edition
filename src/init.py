@@ -1,13 +1,13 @@
 from .gmglobal import *
 
 
-class gmGame:
+class Game:
     def __init__(self):
-        self.GameMode = None
-        self.camX = 0
-        self.camY = 0
+        self.game_mode = None
+        self.cam_x = 0
+        self.cam_y = 0
         self.map = None
-        self.gmPlayer = None
+        self.game_player = None
         self.uw = 500
         self.uh = 500
         self.debugMode = False
@@ -17,7 +17,7 @@ class gmGame:
         self.health = 100
         self.hurtTimer = 0
 
-    def loadSprite(self, _spr):
+    def load_sprite(self, _spr):
         self.frame = []
         sprSize = _spr.get_size()
         sprW = int(sprSize[0])
@@ -32,7 +32,7 @@ class gmGame:
     def run(self):
         if self.hurtTimer > 0:
             self.hurtTimer -= 1
-        drawText(Font, 20, 20, str(round(clock.get_fps(), 1)))
+        draw_text(Font, 20, 20, str(round(clock.get_fps(), 1)))
 
 
 class Map:
@@ -43,11 +43,11 @@ class Map:
         self.a = _a
 
 
-game = gmGame()
+game = Game()
 
-gmMap = Map(5)
+game_map = Map(5)
 
-solidTiles = [
+solid_tiles = [
     18,
     19,
     21,
@@ -86,14 +86,14 @@ map_dict = [
 ]
 
 
-def newActor(_type, _x, _y, _arr=None, _layer="None"):
+def new_actor(_type, _x, _y, _arr=None, _layer="None"):
     na = _type(_x, _y, _arr)
-    na.id = gmMap.actlast
+    na.id = game_map.actlast
     game.actor[_layer].append(na)
-    gmMap.actlast += 1
+    game_map.actlast += 1
 
 
-def runActors():
+def run_actors():
     for i in game.actor.values():
         for j in i:
             j.render()
