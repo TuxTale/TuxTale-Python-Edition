@@ -353,18 +353,18 @@ class Slime(Actor):
                     pg.math.Vector2(game.game_player.shape.topleft) - pg.math.Vector2(self.shape.topleft)
         ).normalize().xy
 
-        # Attempt to move in the x-axis by xspeed (note xspeed may be 0)
-        if not collision_check(pg.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
-            self.x += self.xspeed
-        else:
+        # Attempt to move in the x-axis by xspeed
+        if collision_check(pg.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
             self.xspeed = 0
-
-        if not collision_check(pg.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h)):
-            self.y += self.yspeed
         else:
+            self.x += self.xspeed
+            self.shape.topleft = self.x, self.y
+        # Attempt to move in the y-axis by yspeed
+        if collision_check(pg.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h)):
             self.yspeed = 0
-
-        self.shape.topleft = self.x, self.y
+        else:
+            self.y += self.yspeed
+            self.shape.topleft = self.x, self.y
 
         self.frame_index += 0.1
 
@@ -625,18 +625,18 @@ class Tux(Actor):
             else:
                 self.frame_index = 3
 
-        # Attempt to move in the x-axis by xspeed (note xspeed may be 0)
-        if not collision_check(pg.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
-            self.x += self.xspeed
-        else:
+        # Attempt to move in the x-axis by xspeed
+        if collision_check(pg.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
             self.xspeed = 0
-
-        if not collision_check(pg.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h)):
-            self.y += self.yspeed
         else:
+            self.x += self.xspeed
+            self.shape.topleft = self.x, self.y
+        # Attempt to move in the y-axis by yspeed
+        if collision_check(pg.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h)):
             self.yspeed = 0
-
-        self.shape.topleft = self.x, self.y
+        else:
+            self.y += self.yspeed
+            self.shape.topleft = self.x, self.y
 
         self.frame_index += 0.1
 
@@ -720,18 +720,18 @@ class Soul(Actor):
         if get_control("down", "held"):
             self.yspeed = 1
 
-        # Attempt to move in the x-axis by xspeed (note xspeed may be 0)
-        if not collision_check(pg.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
-            self.x += self.xspeed
-        else:
+        # Attempt to move in the x-axis by xspeed
+        if collision_check(pg.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
             self.xspeed = 0
-
-        if not collision_check(pg.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h)):
-            self.y += self.yspeed
         else:
+            self.x += self.xspeed
+            self.shape.topleft = self.x, self.y
+        # Attempt to move in the y-axis by yspeed
+        if collision_check(pg.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h)):
             self.yspeed = 0
-
-        self.shape.topleft = self.x, self.y
+        else:
+            self.y += self.yspeed
+            self.shape.topleft = self.x, self.y
 
         if game.hurtTimer > 0:
             self.anim = self.invisible
