@@ -30,4 +30,3 @@ while running:
     game.run()
 
     pg.display.update()
-

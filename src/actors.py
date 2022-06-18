@@ -1,6 +1,4 @@
 import math
-from itertools import cycle
-
 
 
 from .controls import *
