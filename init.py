@@ -1,5 +1,4 @@
-from .gmglobal import *
-
+from gmglobal import *
 
 class Game:
     def __init__(self):
@@ -32,8 +31,8 @@ class Game:
     def run(self):
         if self.hurtTimer > 0:
             self.hurtTimer -= 1
+        
         draw_text(Font, 20, 20, str(round(clock.get_fps(), 1)))
-
 
 class Map:
     def __init__(self, _a):
@@ -41,7 +40,6 @@ class Map:
         self.actor = []
         self.actor_empty = {}
         self.a = _a
-
 
 game = Game()
 
@@ -85,19 +83,18 @@ map_dict = [
     [35, 36, 36, 36, 36, 37, 6, 6, 6, 6, 6, 6, 6, 6],
 ]
 
-
 def new_actor(_type, _x, _y, _arr=None, _layer="None"):
     na = _type(_x, _y, _arr)
     na.id = gmMap.actlast
     game.actor[_layer].append(na)
     gmMap.actlast += 1
 
-
 def run_actors():
     for i in game.actor.values():
         for j in i:
             j.render()
+
             if game.debugMode:
                 j.debug()
+            
             j.run()
-            # j.render()

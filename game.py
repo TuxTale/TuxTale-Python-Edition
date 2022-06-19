@@ -1,5 +1,5 @@
-from src.actors import *
-from src.init import *
+from actors import *
+from init import *
 
 
 game.game_mode = gmPlay
@@ -21,12 +21,12 @@ new_actor(Slime, 300, 200, None, "actorlayer")
 while running:
     clock.tick(FPS)
 
-    for event in pg.event.get():
-        if event.type == pg.QUIT:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
             running = False
 
     window.fill(BLACK)
     game.game_mode()
     game.run()
 
-    pg.display.update()
+    pygame.display.update()

@@ -1,9 +1,6 @@
+from controls import *
+from init import *
 import math
-
-
-from .controls import *
-from .init import *
-
 
 def gmPlay():
     if game:
@@ -64,33 +61,32 @@ def startBattle():
         "FG": [],
         "attacks": [],
     }
+    
     game.cam_x = DisplayW / 2 + game.gm_player.w / 2
     game.cam_y = DisplayH / 2 + game.gm_player.h / 2
     game.game_mode = battleMode
+
     new_actor(Soul, DisplayW / 2, DisplayH / 2, None, "actorlayer")
+
     c = Attack(Slime)
     game.attacks.append(c)
+
     c.constructAttack(0, 100, 0, 20, 60, 10, 10, (2, -0.5))
     c.constructAttack(400, 100, 0, 20, 60, 10, 10, (-2, -0.5))
     c.constructAttack(0, 100, 0, 20, 120, 10, 10, (2, -0.5))
     c.constructAttack(400, 100, 0, 20, 120, 10, 10, (-2, -0.5))
     c.constructAttack(0, 100, 0, 20, 180, 10, 10, (2, -0.5))
     c.constructAttack(400, 100, 0, 20, 180, 10, 10, (-2, -0.5))
-    """for i in range(0, 50):
-        c.constructAttack(math.sin(i*10), 100, 0, 20, 180, 10, 10, (math.sin(i), -math.sin(i)))"""
-    # c.constructCircleAttack(game.gm_player.x, game.gm_player.y, 100, 60, 0, 200, (0, 0))
 
 
 def battleMode():
     run_actors()
-    # print(game.cam_x)
-    # print(game.cam_y)
+
     game.cam_x = 0
     game.cam_y = 0
+
     for i in game.attacks:
         i.run()
-    # game.cam_x  = game.gm_player.shape.x - (DisplayW/2) + game.gm_player.w/2
-    # game.cam_y = game.gm_player.shape.y - (DisplayH/2) + game.gm_player.h/2
 
 
 def startPlay():
@@ -111,23 +107,18 @@ class gMap:
 
     def draw_tiles(self):
         for i in self.mapdata["layers"]:
-            # print(i["name"])
             game.actor[i["name"]] = []
+
             if i["type"] == "tilelayer":
                 dataIterator = 0
+
                 for y in range(0, i["height"]):
                     for x in range(0, i["width"]):
                         tileID = i["data"][dataIterator]
-                        # print(dataIterator)
+
                         if tileID > 0:
                             tileset = self.getTileset(tileID)
-                            # frame = game.load_sprite(tileset[0])
-                            # Spawn different things depending on the layer?
-                            if (
-                                    i["name"] == "BG"
-                                    or i["name"] == "FG"
-                                    or i["name"] == "MG"
-                            ):
+                            if i["name"] == "BG"or i["name"] == "FG"or i["name"] == "MG":
                                 new_actor(
                                     Sprite,
                                     x * 16,
@@ -135,6 +126,7 @@ class gMap:
                                     [tileset[0], tileID - tileset[1]],
                                     i["name"],
                                 )
+                            
                             if i["name"] == "solid":
                                 new_actor(
                                     Block,
@@ -143,24 +135,17 @@ class gMap:
                                     [tileID - tileset[1]],
                                     i["name"],
                                 )
-                                # print(tileset[1])
-                            # drawSprite(tileset[0], frame[tileID - tileset[1]], x * 16 - game.cam_x, y * 16 - game.cam_y)
                         dataIterator += 1
 
-            # if i["name"] == "solid": #Integrate this with the change made above
-            #     for j in i["objects"]:
-            #         new_actor(Block, j["x"], j["y"] - 16, None, i["name"])
-
     def getTileset(self, tileGID):
-
         for i in range(0, len(self.mapdata["tilesets"])):
             tilesetGID = self.mapdata["tilesets"][i]["firstgid"]
-            # print(i) #only prints 0, when it should print 1, 2 as well
             tilesetTileCount = self.mapdata["tilesets"][i]["tilecount"]
+
             if tilesetGID <= tileGID < tilesetTileCount + tilesetGID:
                 image = self.mapdata["tilesets"][i]["image"]
-                return [pg.image.load(image.replace("..", "res")).convert(), tilesetGID]
-
+                return [pygame.image.load(image.replace("..", "res")).convert(), tilesetGID]
+        
         return [None, 0]
 
 
@@ -200,7 +185,7 @@ class Actor:
         self.frameIndex = 0
         self.id = Actor.id
         self.frame = []
-        self.shape = pg.Rect(self.x, self.y, self.w, self.h)
+        self.shape = pygame.Rect(self.x, self.y, self.w, self.h)
         self.solid = False
         if self.arr is not None:
             if len(self.arr) == 1:
@@ -243,7 +228,7 @@ class Actor:
                                 self.shape.top = i.shape.bottom
 
     def debug(self):
-        pg.draw.rect(
+        pygame.draw.rect(
             window,
             self.color,
             (
@@ -311,12 +296,12 @@ class Slime(Actor):
         self.jiggleAnim = [0, 3]
         self.direction = 0
         self.anim = self.jiggleAnim
-        self.shape = pg.Rect(self.x, self.y, self.h, self.w)
+        self.shape = pygame.Rect(self.x, self.y, self.h, self.w)
         self.load_sprite(sprite_slime, 32, 32, "centered")
         # print(self.frame)
 
     def debug(self):
-        pg.draw.rect(
+        pygame.draw.rect(
             window,
             RED,
             (
@@ -331,7 +316,7 @@ class Slime(Actor):
         if game.gm_player.shape.colliderect(self.shape):
             startBattle()
 
-        direction = (pg.math.Vector2(game.gm_player.shape.topleft) - pg.math.Vector2(self.shape.topleft)).normalize()
+        direction = (pygame.math.Vector2(game.gm_player.shape.topleft) - pygame.math.Vector2(self.shape.topleft)).normalize()
         self.x += direction.x * 0.5
         self.y += direction.y * 0.5
         self.shape.topleft = self.x, self.y
@@ -387,7 +372,7 @@ def collisionCheck(rectangle):
                 if abs(distanceToMoveX) < abs(distanceToMoveY):
                     return {
                         "hasCollided": True,
-                        "newRectangle": pg.Rect(
+                        "newRectangle": pygame.Rect(
                             rectangle.x + distanceToMoveX,
                             rectangle.y,
                             rectangle.w,
@@ -397,7 +382,7 @@ def collisionCheck(rectangle):
                 if abs(distanceToMoveX) > abs(distanceToMoveY):
                     return {
                         "hasCollided": True,
-                        "newRectangle": pg.Rect(
+                        "newRectangle": pygame.Rect(
                             rectangle.x,
                             rectangle.y + distanceToMoveY,
                             rectangle.w,
@@ -407,7 +392,7 @@ def collisionCheck(rectangle):
                 if abs(distanceToMoveX) > abs(distanceToMoveY):
                     return {
                         "hasCollided": True,
-                        "newRectangle": pg.Rect(
+                        "newRectangle": pygame.Rect(
                             rectangle.x + distanceToMoveX,
                             rectangle.y + distanceToMoveY,
                             rectangle.w,
@@ -462,7 +447,7 @@ class VerticallyMovingBlock(Actor):
         return "Block"
 
     def debug(self):
-        pg.draw.rect(
+        pygame.draw.rect(
             window,
             self.color,
             (
@@ -484,7 +469,7 @@ class HorizontallyMovingBlock(Actor):
         self.w = 16
         self.h = 16
         self.arr = arr
-        self.shape = pg.Rect(self.x, self.y, self.h, self.w)
+        self.shape = pygame.Rect(self.x, self.y, self.h, self.w)
         self.load_sprite(sprite_block)
         self.solid = True
         self.color = (200, 200, 200)
@@ -510,7 +495,7 @@ class HorizontallyMovingBlock(Actor):
         return "Block"
 
     def debug(self):
-        pg.draw.rect(
+        pygame.draw.rect(
             window,
             self.color,
             (
@@ -528,7 +513,7 @@ class Block(Actor):
         super().__init__(x, y, arr)
         self.solidOffsx = 0
         self.solidOffsy = 0
-        self.shape = pg.Rect(self.x, self.y, self.w, self.h)
+        self.shape = pygame.Rect(self.x, self.y, self.w, self.h)
         # self.load_sprite(sprite_block)
         self.solid = True
         self.color = (100, 100, 100)
@@ -577,13 +562,13 @@ class Block(Actor):
         pass
         # if self.arr:
         # drawSprite(self.sprite_sheet, self.frame[int(self.anim[0]) + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))], self.x - game.cam_x, self.y - game.cam_y)
-        # pg.draw.rect(window, self.color, (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h), 0)
+        # pygame.draw.rect(window, self.color, (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h), 0)
 
     def _typeof(self):
         return "Block"
 
     def debug(self):
-        pg.draw.rect(
+        pygame.draw.rect(
             window,
             self.color,
             (
@@ -615,7 +600,7 @@ class Tux(Actor):
         self.autocon = False
         self.idle = False
         self.stepCount = 0
-        self.shape = pg.Rect(self.x, self.y, self.h, self.w)
+        self.shape = pygame.Rect(self.x, self.y, self.h, self.w)
         self.load_sprite(sprite_tux)
         self.solid = False
         self.color = (0, 255, 0)
@@ -676,7 +661,7 @@ class Tux(Actor):
 
         # Attempt to move in the x-axis by xspeed (note xspeed may be 0)
         collisionCheckResult = collisionCheck(
-            pg.Rect(
+            pygame.Rect(
                 self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h
             )
         )
@@ -689,7 +674,7 @@ class Tux(Actor):
 
         # Attempt to move in the y-axis by yspeed
         collisionCheckResult = collisionCheck(
-            pg.Rect(
+            pygame.Rect(
                 self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h
             )
         )
@@ -717,7 +702,7 @@ class Tux(Actor):
         )
 
     def debug(self):
-        pg.draw.rect(
+        pygame.draw.rect(
             window,
             self.color,
             (
@@ -750,7 +735,7 @@ class Soul(Actor):
         self.autocon = False
         self.idle = False
         self.stepCount = 0
-        self.shape = pg.Rect(self.x, self.y, self.h, self.w)
+        self.shape = pygame.Rect(self.x, self.y, self.h, self.w)
         self.load_sprite(sprite_soul, 8, 8)
         print(self.frame)
         self.solid = False
@@ -792,7 +777,7 @@ class Soul(Actor):
 
         # Attempt to move in the x-axis by xspeed (note xspeed may be 0)
         collisionCheckResult = collisionCheck(
-            pg.Rect(
+            pygame.Rect(
                 self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h
             )
         )
@@ -805,7 +790,7 @@ class Soul(Actor):
 
         # Attempt to move in the y-axis by yspeed
         collisionCheckResult = collisionCheck(
-            pg.Rect(
+            pygame.Rect(
                 self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h
             )
         )
@@ -839,7 +824,7 @@ class Soul(Actor):
         )
 
     def debug(self):
-        pg.draw.rect(
+        pygame.draw.rect(
             window,
             self.color,
             (
@@ -870,14 +855,14 @@ class Bullet(Actor):
         self.timer = 0
         self.dist = 0
         self.direction = 0
-        self.shape = pg.Rect(self.x, self.y, self.h, self.w)
+        self.shape = pygame.Rect(self.x, self.y, self.h, self.w)
         self.load_sprite(sprite_bullet, 4, 4)
         if self.arr is not None:
             self.xspeed = self.arr[0][0]
             self.yspeed = self.arr[0][1]
 
     def debug(self):
-        pg.draw.rect(
+        pygame.draw.rect(
             window,
             RED,
             (

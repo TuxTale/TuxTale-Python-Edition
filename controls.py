@@ -1,8 +1,8 @@
-from .gmglobal import *
+from gmglobal import *
 
 
 def getcon(control, state):
-    pass  # This is called by doing: if getcon("up", "press"): Execute code
+    pass # This is called by doing: if getcon("up", "press"): Execute code
 
 
 state = {
@@ -17,14 +17,15 @@ state = {
 
 
 def getcon(_control, _state):
-    state["keys"] = pg.key.get_pressed()
-    # for i in config["key"]:
+    state["keys"] = pygame.key.get_pressed()
+
     for i in config["key"]:
         if state["keys"][config["key"][i]]:
             if state[i]["held"] == False:
                 state[i]["press"] = True
             else:
                 state[i]["press"] = False
+            
             state[i]["held"] = True
         else:
             state[i]["held"] = False
@@ -34,14 +35,15 @@ def getcon(_control, _state):
 
 
 def defControls():
-    state["keys"] = pg.key.get_pressed()
-    # for i in config["key"]:
+    state["keys"] = pygame.key.get_pressed()
+
     for i in config["key"]:
         if state["keys"][config["key"][i]]:
             if state[i]["held"] == False:
                 state[i]["press"] = True
             else:
                 state[i]["press"] = False
+            
             state[i]["held"] = True
         else:
             state[i]["held"] = False
