@@ -57,7 +57,7 @@ class Attack:
     def run(self):
         self.timer += 1
         for i in animation["events"]:
-            if self.timer >= i["start"] and self.timer < i["stop"]:
+            if timer >= i["start"] and timer < i["stop"]:
                 autocon = i["autocon"]
                 anim = i["anim"]
                 spawn = i["spawn"]
