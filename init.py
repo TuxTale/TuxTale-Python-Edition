@@ -6,24 +6,24 @@ class Game:
         self.cam_x = 0
         self.cam_y = 0
         self.map = None
-        self.gm_player = None
+        self.game_player = None
         self.uw = 500
         self.uh = 500
         self.debugMode = False
-        self.actor = dict()
+        self.actor = {"None": []}
         self.unusedActors = {}
         self.attacks = []
         self.health = 100
         self.hurtTimer = 0
-        self.frame = []
 
     def load_sprite(self, _spr):
-        sprite_size = _spr.get_size()
-        sprite_w = int(sprite_size[0])
-        sprite_h = int(sprite_size[1])
+        self.frame = []
+        sprSize = _spr.get_size()
+        sprW = int(sprSize[0])
+        sprH = int(sprSize[1])
 
-        for i in range(0, int(sprite_h / 16)):
-            for j in range(0, int(sprite_w / 16)):
+        for i in range(0, int(sprH / 16)):
+            for j in range(0, int(sprW / 16)):
                 self.frame.append((j * 16, i * 16, 16, 16))
 
         return self.frame
@@ -43,7 +43,7 @@ class Map:
 
 game = Game()
 
-gmMap = Map(1)
+game_map = Map(5)
 
 solid_tiles = [
     18,
@@ -85,9 +85,9 @@ map_dict = [
 
 def new_actor(_type, _x, _y, _arr=None, _layer="None"):
     na = _type(_x, _y, _arr)
-    na.id = gmMap.actlast
+    na.id = game_map.actlast
     game.actor[_layer].append(na)
-    gmMap.actlast += 1
+    game_map.actlast += 1
 
 def run_actors():
     for i in game.actor.values():

@@ -2,7 +2,7 @@ from controls import *
 from init import *
 import math
 
-def gmPlay():
+def game_play():
     if game:
         # 1) UPDATE PHASE
         #
@@ -10,9 +10,9 @@ def gmPlay():
         #   For instance, new actors may be created (maybe spawned by something else or some event)
         #   Each actor must update its current state based on what's going on
         #   Some actors might "die" (be killed or despawn) and be removed from the game
-
+        
         run_actors()
-
+        
         # 2) CAMERA PHASE
         #
         # Determine where the camera is. The camera phase occurs after the update phase, because
@@ -26,10 +26,10 @@ def gmPlay():
         # Cut scenes, boss introductions, or special triggers may require customized control
         # of the camera.
         # Visual effects such as screen-shake may also cause the camera's position to change.
-
-        game.cam_x = game.gm_player.shape.x - (DisplayW / 2) + game.gm_player.w / 2
-        game.cam_y = game.gm_player.shape.y - (DisplayH / 2) + game.gm_player.h / 2
-
+        
+        game.cam_x = game.game_player.shape.x - (display_w / 2) + game.game_player.w / 2
+        game.cam_y = game.game_player.shape.y - (display_H / 2) + game.game_player.h / 2
+        
         # 3) RENDER PHASE
         #
         # Render each actor and whatever else (e.g. particle effects, etc) needs to be rendered.
@@ -47,11 +47,11 @@ def gmPlay():
         # after the large sprite.
         # (Note that the order in which objects are rendered does not necessarily need to be the same order
         # in which we invoke the run() method.)
+        
+        # render_actors()
 
-        # renderActors()
 
-
-def startBattle():
+def start_battle():
     game.unusedActors = game.actor
     game.actor = {
         "solid": [],
@@ -61,25 +61,21 @@ def startBattle():
         "FG": [],
         "attacks": [],
     }
-    
-    game.cam_x = DisplayW / 2 + game.gm_player.w / 2
-    game.cam_y = DisplayH / 2 + game.gm_player.h / 2
-    game.game_mode = battleMode
-
-    new_actor(Soul, DisplayW / 2, DisplayH / 2, None, "actorlayer")
-
+    game.cam_x = display_w / 2 + game.game_player.w / 2
+    game.cam_y = display_H / 2 + game.game_player.h / 2
+    game.game_mode = battle_mode
+    new_actor(Soul, display_w / 2, display_H / 2, None, "actorlayer")
     c = Attack(Slime)
     game.attacks.append(c)
+    c.construct_attack(0, 100, 0, 20, 60, 10, 10, (2, -0.5))
+    c.construct_attack(400, 100, 0, 20, 60, 10, 10, (-2, -0.5))
+    c.construct_attack(0, 100, 0, 20, 120, 10, 10, (2, -0.5))
+    c.construct_attack(400, 100, 0, 20, 120, 10, 10, (-2, -0.5))
+    c.construct_attack(0, 100, 0, 20, 180, 10, 10, (2, -0.5))
+    c.construct_attack(400, 100, 0, 20, 180, 10, 10, (-2, -0.5))
 
-    c.constructAttack(0, 100, 0, 20, 60, 10, 10, (2, -0.5))
-    c.constructAttack(400, 100, 0, 20, 60, 10, 10, (-2, -0.5))
-    c.constructAttack(0, 100, 0, 20, 120, 10, 10, (2, -0.5))
-    c.constructAttack(400, 100, 0, 20, 120, 10, 10, (-2, -0.5))
-    c.constructAttack(0, 100, 0, 20, 180, 10, 10, (2, -0.5))
-    c.constructAttack(400, 100, 0, 20, 180, 10, 10, (-2, -0.5))
 
-
-def battleMode():
+def battle_mode():
     run_actors()
 
     game.cam_x = 0
@@ -89,41 +85,45 @@ def battleMode():
         i.run()
 
 
-def startPlay():
+def start_play():
     pass
 
 
-def saveGame():
+def save_game():
     pass
 
 
-def quitGame():
+def quit_game():
     pass
 
 
 class gMap:
     def __init__(self, _map):
         self.mapdata = json_read(_map)
-
+    
     def draw_tiles(self):
+                            
         for i in self.mapdata["layers"]:
             game.actor[i["name"]] = []
-
+                            
             if i["type"] == "tilelayer":
-                dataIterator = 0
-
+                data_iterator = 0
+                            
                 for y in range(0, i["height"]):
                     for x in range(0, i["width"]):
-                        tileID = i["data"][dataIterator]
-
-                        if tileID > 0:
-                            tileset = self.getTileset(tileID)
-                            if i["name"] == "BG"or i["name"] == "FG"or i["name"] == "MG":
+                        tile_id = i["data"][data_iterator]
+                            
+                        if tile_id > 0:
+                            tileset = self.get_tileset(tile_id)
+                            
+                            # Spawn different things depending on the layer?
+                            
+                            if i["name"] == "BG" or i["name"] == "FG" or i["name"] == "MG":
                                 new_actor(
                                     Sprite,
                                     x * 16,
                                     y * 16,
-                                    [tileset[0], tileID - tileset[1]],
+                                    [tileset[0], tile_id - tileset[1]],
                                     i["name"],
                                 )
                             
@@ -132,22 +132,21 @@ class gMap:
                                     Block,
                                     x * 16,
                                     y * 16,
-                                    [tileID - tileset[1]],
+                                    [tile_id - tileset[1]],
                                     i["name"],
                                 )
-                        dataIterator += 1
+                        data_iterator += 1
 
-    def getTileset(self, tileGID):
+    def get_tileset(self, tileGID):
         for i in range(0, len(self.mapdata["tilesets"])):
             tilesetGID = self.mapdata["tilesets"][i]["firstgid"]
             tilesetTileCount = self.mapdata["tilesets"][i]["tilecount"]
-
-            if tilesetGID <= tileGID < tilesetTileCount + tilesetGID:
+            
+            if tileGID >= tilesetGID and tileGID < tilesetTileCount + tilesetGID:
                 image = self.mapdata["tilesets"][i]["image"]
                 return [pygame.image.load(image.replace("..", "res")).convert(), tilesetGID]
-        
-        return [None, 0]
 
+        return [None, 0]
 
 class Physactor:
     def __init__(self, _x, _y):
@@ -168,59 +167,63 @@ class Physactor:
 class Actor:
     id = 0
 
-    def __init__(self, x, y, arr=None):
-        self.x = x
-        self.y = y
+    def __init__(self, _x, _y, _arr=None):
+        self.x = _x
+        self.y = _y
         self.h = 16
         self.w = 16
         self.xspeed = 0
         self.yspeed = 0
         self.offsx = 0
         self.offsy = 0
-        self.arr = arr
+        self.arr = _arr
         self.anim = None
         self.frame = None
         self.shape = None
         self.color = (100, 149, 237)
-        self.frameIndex = 0
+        self.frame_index = 0
         self.id = Actor.id
         self.frame = []
+
+        # Are we sure pygame.Rect takes height as the 3rd parameter and width as the 4th parameter?
+
         self.shape = pygame.Rect(self.x, self.y, self.w, self.h)
         self.solid = False
-        if self.arr is not None:
+
+        if self.arr != None:
             if len(self.arr) == 1:
-                self.sprite_sheet = self.arr[0]
+                self.spriteSheet = self.arr[0]
 
-    def load_sprite(self, spr, w=16, h=16, offs=(0, 0)):
+    def load_sprite(self, _spr, _w=16, _h=16, _offs=(0, 0)):
         self.frame = []
-        sprite_size = spr.get_size()
-        sprite_w = int(sprite_size[0])
-        sprite_h = int(sprite_size[1])
+        sprSize = _spr.get_size()
+        sprW = int(sprSize[0])
+        sprH = int(sprSize[1])
 
-        if offs == "centered":
-            self.offsx = (w - self.w) / 2
-            self.offsy = (h - self.h) / 2
+        if _offs == "centered":
+            self.offsx = (_w - self.w) / 2
+            self.offsy = (_h - self.h) / 2
         else:
-            self.offsx = offs[0]
-            self.offsy = offs[1]
+            self.offsx = _offs[0]
+            self.offsy = _offs[1]
 
-        for i in range(0, int(sprite_h / h)):
-            for j in range(0, int(sprite_w / w)):
-                self.frame.append((j * w, i * h, w, h))
+        for i in range(0, int(sprH / _h)):
+            for j in range(0, int(sprW / _w)):
+                self.frame.append((j * _w, i * _h, _w, _h))
 
-    def collision(self, direction):
-        for i in gmMap.actor:
-            if i._typeof() == "Block":
+    def collision(self, _direction):
+        for i in game_map.actor:
+            if i.typeof() == "Block":
                 if i.shape.colliderect(self.shape):
-                    if i.solid == True:
-                        if direction == "horizontal":
+                    if i.solid:
+                        if _direction == "horizontal":
                             if self.xspeed > 0:
                                 self.shape.right = i.shape.left
 
                             if self.xspeed < 0:
                                 self.shape.left = i.shape.right
 
-                        if direction == "vertical":
+                        if _direction == "vertical":
                             if self.yspeed > 0:
                                 self.shape.bottom = i.shape.top
 
@@ -244,51 +247,60 @@ class Actor:
 
     def render(self):
         pass
+        # pg.draw.rect(window, (255, 255, 255), (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h))
 
     def destructor(self):
         pass
 
-    def _typeof(self):
+    def typeof(self):
         return "Actor"
 
 
 class Sprite(Actor):
-    def __init__(self, x, y, arr=None):
-        super().__init__(x, y, arr=None)
-        self.x = x
-        self.y = y
+    def __init__(self, _x, _y, _arr=None):
+        super().__init__(_x, _y, _arr=None)
+        self.x = _x
+        self.y = _y
         self.w = 16
         self.h = 16
-        self.arr = arr
+        self.arr = _arr
         self.frame = []
         self.index = None
         if self.arr is not None:
             if len(self.arr) >= 1:
-                self.sprite_sheet = self.arr[0]
-                self.load_sprite(self.sprite_sheet)
+                self.spriteSheet = self.arr[0]
+                self.load_sprite(self.spriteSheet)
             if len(self.arr) >= 2:
                 self.index = self.arr[1]
+            if len(self.arr) >= 3:
+                self.size = self.arr[2]
+                self.load_sprite(self.spriteSheet, self.size[0], self.size[1])
 
     def render(self):
-        drawSprite(
-            self.sprite_sheet,
+        draw_sprite(
+            self.spriteSheet,
             self.frame[self.index],
             self.x - game.cam_x,
             self.y - game.cam_y,
         )
+        # window.blit(self.spriteSheet, (self.x - game.cam_x, self.y - game.cam_y), self.frame[self.index])
 
-    def _typeof(self):
+    def typeof(self):
         return "Sprite"
 
 
+def collision_check(rectangle):
+    return any(i.shape.colliderect(rectangle) and i.solid for i in game.actor["solid"])
+
+
 class Slime(Actor):
-    def __init__(self, x, y, arr=None):
-        super().__init__(x, y, arr)
-        self.x = x
-        self.y = y
+    def __init__(self, _x, _y, _arr=None):
+        super().__init__(_x, _y, _arr=None)
+        self.x = _x
+        self.y = _y
         self.w = 16
         self.h = 16
-        self.arr = arr
+        self.arr = _arr
         self.frame = []
         self.anim = [0]
         self.timer = 0
@@ -313,124 +325,62 @@ class Slime(Actor):
         )
 
     def run(self):
-        if game.gm_player.shape.colliderect(self.shape):
-            startBattle()
+        if game.game_player.shape.colliderect(self.shape):
+            start_battle()
 
-        direction = (pygame.math.Vector2(game.gm_player.shape.topleft) - pygame.math.Vector2(self.shape.topleft)).normalize()
-        self.x += direction.x * 0.5
-        self.y += direction.y * 0.5
-        self.shape.topleft = self.x, self.y
+        self.xspeed, self.yspeed = ((pygame.math.Vector2(game.game_player.shape.topleft) - pygame.math.Vector2(self.shape.topleft)).normalize() * 0.5).xy
 
-        self.frameIndex += 0.1
+        # Attempt to move in the x-axis by xspeed
+
+        if collision_check(pygame.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
+            self.xspeed = 0
+        else:
+            self.x += self.xspeed
+            self.shape.topleft = self.x, self.y
+        
+        # Attempt to move in the y-axis by yspeed
+
+        if collision_check(pygame.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h)):
+            self.yspeed = 0
+        else:
+            self.y += self.yspeed
+            self.shape.topleft = self.x, self.y
+
+        self.frame_index += 0.1
 
     def render(self):
-        # pass
-        drawSprite(
+        draw_sprite(
             sprite_slime,
-            self.frame[
-                int(self.anim[0])
-                + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))
-                ],
+            self.frame[int(self.anim[0]) + math.floor(self.frame_index % (self.anim[-1] - self.anim[0] + 1))],
             self.x - game.cam_x - self.offsx,
             self.y - game.cam_y - self.offsy,
         )
 
-    def _typeof(self):
+    def typeof(self):
         return "Slime"
 
 
-def collisionCheck(rectangle):
-    for i in game.actor["solid"]:
-
-        if i.shape.colliderect(rectangle):
-            if i.solid == True:
-                # If a collision happens, we can resolve the collision by moving in one of
-                # 4 possible directions (and moving until there is no longer any overlap).
-                # The desired direction we want to go is whichever one requires us to move
-                # the fewest number of pixels.
-
-                # amount of pixels we need to move leftward to avoid overlap
-                distanceToLeft = rectangle.right - i.shape.left
-
-                # amount of pixels we need to move rightward to avoid overlap
-                distanceToRight = i.shape.right - rectangle.left
-
-                if distanceToLeft < distanceToRight:
-                    distanceToMoveX = -distanceToLeft
-                else:
-                    distanceToMoveX = distanceToRight
-
-                distanceToTop = rectangle.bottom - i.shape.top
-
-                distanceToBottom = i.shape.bottom - rectangle.top
-
-                if distanceToTop < distanceToBottom:
-                    distanceToMoveY = -distanceToTop
-                else:
-                    distanceToMoveY = distanceToBottom
-
-                if abs(distanceToMoveX) < abs(distanceToMoveY):
-                    return {
-                        "hasCollided": True,
-                        "newRectangle": pygame.Rect(
-                            rectangle.x + distanceToMoveX,
-                            rectangle.y,
-                            rectangle.w,
-                            rectangle.h,
-                        ),
-                    }
-                if abs(distanceToMoveX) > abs(distanceToMoveY):
-                    return {
-                        "hasCollided": True,
-                        "newRectangle": pygame.Rect(
-                            rectangle.x,
-                            rectangle.y + distanceToMoveY,
-                            rectangle.w,
-                            rectangle.h,
-                        ),
-                    }
-                if abs(distanceToMoveX) > abs(distanceToMoveY):
-                    return {
-                        "hasCollided": True,
-                        "newRectangle": pygame.Rect(
-                            rectangle.x + distanceToMoveX,
-                            rectangle.y + distanceToMoveY,
-                            rectangle.w,
-                            rectangle.h,
-                        ),
-                    }
-
-    return {"hasCollided": False}
-
-
-"""def run_actors():
+def render_actors():
     for i in game.actor.values():
         for j in i:
             j.render()
-            if game.debugMode == True:
-                j.debug()
-            j.run()
-            #j.render()"""
 
-
-def renderActors():
-    for i in game.actor.values():
-        for j in i:
-            j.render()
 
 class VerticallyMovingBlock(Actor):
-    def __init__(self, x, y, arr=None):
-        super().__init__(x, y, arr)
-        self.originalY = y
+    def __init__(self, _x, _y, _arr=None):
+        super().__init__(_x, _y, _arr=None)
+        self.originalY = _y
         self.load_sprite(sprite_block)
         self.solid = True
         self.color = (200, 200, 200)
         self.frameCount = 0
+
         if not self.arr:
             return
+        
         if self.arr.len() == 1:
-            self.sprite_sheet = self.arr[0]
-            self.load_sprite(self.sprite_sheet)
+            self.spriteSheet = self.arr[0]
+            self.load_sprite(self.spriteSheet)
 
     def run(self):
         self.frameCount += 1
@@ -441,9 +391,10 @@ class VerticallyMovingBlock(Actor):
         self.shape.y = self.y
 
     def render(self):
-        drawSprite(sprite_block, self.frame[0], self.x - game.cam_x, self.y - game.cam_y)
+        draw_sprite(sprite_block, self.frame[0], self.x - game.cam_x, self.y - game.cam_y)
+        # pg.draw.rect(window, self.color, (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h), 0)
 
-    def _typeof(self):
+    def typeof(self):
         return "Block"
 
     def debug(self):
@@ -461,24 +412,26 @@ class VerticallyMovingBlock(Actor):
 
 
 class HorizontallyMovingBlock(Actor):
-    def __init__(self, x, y, arr=None):
-        super().__init__(x, y, arr)
-        self.originalX = x
-        self.x = x
-        self.y = y
+    def __init__(self, _x, _y, _arr=None):
+        super().__init__(_x, _y, _arr=None)
+        self.originalX = _x
+        self.x = _x
+        self.y = _y
         self.w = 16
         self.h = 16
-        self.arr = arr
+        self.arr = _arr
         self.shape = pygame.Rect(self.x, self.y, self.h, self.w)
         self.load_sprite(sprite_block)
         self.solid = True
         self.color = (200, 200, 200)
         self.frameCount = 0
+        
         if not self.arr:
             return
+        
         if self.arr.len() == 1:
-            self.sprite_sheet = self.arr[0]
-            self.load_sprite(self.sprite_sheet)
+            self.spriteSheet = self.arr[0]
+            self.load_sprite(self.spriteSheet)
 
     def run(self):
         self.frameCount += 1
@@ -489,9 +442,9 @@ class HorizontallyMovingBlock(Actor):
         self.shape.y = self.y
 
     def render(self):
-        drawSprite(sprite_block, self.frame[0], self.x - game.cam_x, self.y - game.cam_y)
+        draw_sprite(sprite_block, self.frame[0], self.x - game.cam_x, self.y - game.cam_y)
 
-    def _typeof(self):
+    def typeof(self):
         return "Block"
 
     def debug(self):
@@ -511,60 +464,64 @@ class HorizontallyMovingBlock(Actor):
 class Block(Actor):
     def __init__(self, x, y, arr=None):
         super().__init__(x, y, arr)
-        self.solidOffsx = 0
-        self.solidOffsy = 0
+        self.solid_offs_x = 0
+        self.solid_offs_y = 0
         self.shape = pygame.Rect(self.x, self.y, self.w, self.h)
-        # self.load_sprite(sprite_block)
         self.solid = True
         self.color = (100, 100, 100)
         self.anim = [0.0, 0.0]
         self.solid = True
         self.sort = 0
-        self.sprite_sheet = sprite_block
+        self.spriteSheet = sprite_block
+
         if self.arr is not None:
             if len(self.arr) >= 1:
                 self.sort = self.arr[0]
+
                 if self.sort == 0:
                     self.shape.w = 16
                     self.shape.h = 16
+                
                 if self.sort == 1:
                     self.shape.w = 16
                     self.shape.h = 8
+                
                 if self.sort == 2:
-                    self.solidOffsx = 0
-                    self.solidOffsy = 8
+                    self.solid_offs_x = 0
+                    self.solid_offs_y = 8
                     self.shape.w = 16
                     self.shape.h = 8
+                
                 if self.sort == 3:
-                    self.solidOffsx = 0
-                    self.solidOffsy = 0
+                    self.solid_offs_x = 0
+                    self.solid_offs_y = 0
                     self.shape.w = 8
                     self.shape.h = 16
+                
                 if self.sort == 4:
-                    self.solidOffsx = 8
-                    self.solidOffsy = 0
+                    self.solid_offs_x = 8
+                    self.solid_offs_y = 0
                     self.shape.w = 8
                     self.shape.h = 16
-
+            
             if len(self.arr) >= 2:
                 self.sort = self.arr[1]
+            
             if len(self.arr) >= 3:
                 self.solid = self.arr[2]
+
                 if not self.solid:
                     self.color = (200, 200, 200, 90)
 
     def run(self):
-        self.shape.x = self.x + self.solidOffsx
-        self.shape.y = self.y + self.solidOffsy
-        self.frameIndex += 0.14
+        self.shape.x = self.x + self.solid_offs_x
+        self.shape.y = self.y + self.solid_offs_y
+        self.frame_index += 0.14
 
     def render(self):
         pass
-        # if self.arr:
-        # drawSprite(self.sprite_sheet, self.frame[int(self.anim[0]) + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))], self.x - game.cam_x, self.y - game.cam_y)
-        # pygame.draw.rect(window, self.color, (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h), 0)
 
-    def _typeof(self):
+    def typeof(self):
         return "Block"
 
     def debug(self):
@@ -585,118 +542,100 @@ class Tux(Actor):
     def __init__(self, x, y, arr=None):
         super().__init__(x, y, arr)
         self.frame = []
-        self.walkRight = [0.0, 3.0]
-        self.walkUp = [4.0, 7.0]
-        self.walkDown = [8.0, 11.0]
-        self.walkLeft = [12.0, 15.0]
-        self.standRight = [0]
-        self.standLeft = [12]
-        self.standUp = [4]
-        self.standDown = [8]
-        self.anim = self.walkRight
-        self.standStillAnim = self.standRight
+        self.walk_right = [0.0, 3.0]
+        self.walk_up = [4.0, 7.0]
+        self.walk_down = [8.0, 11.0]
+        self.walk_left = [12.0, 15.0]
+        self.stand_right = [0]
+        self.stand_left = [12]
+        self.stand_up = [4]
+        self.stand_down = [8]
+        self.anim = self.walk_right
+        self.stand_still = self.stand_right
         self.xspeed = 0
         self.yspeed = 0
         self.autocon = False
         self.idle = False
-        self.stepCount = 0
+        self.step_count = 0
         self.shape = pygame.Rect(self.x, self.y, self.h, self.w)
         self.load_sprite(sprite_tux)
         self.solid = False
         self.color = (0, 255, 0)
-        game.gm_player = self
-        print(game.gm_player)
+
+        game.game_player = self
+        print(game.game_player)
+        
         if not arr:
             return
 
     def run(self):
 
-        if not getcon("right", "held") or not getcon("left", "held"):
+        if not keyboard.is_held(RIGHT) or not keyboard.is_held(LEFT):
             self.xspeed = 0
 
-        if not getcon("up", "held") or not getcon("down", "held"):
+        if not keyboard.is_held(UP) or not keyboard.is_held(DOWN):
             self.yspeed = 0
 
-        if getcon("right", "held"):
+        if keyboard.is_held(RIGHT):
             self.xspeed = 1
-            self.anim = self.walkRight
-            self.standStillAnim = self.standRight
+            self.anim = self.walk_right
+            self.stand_still = self.stand_right
 
-        if getcon("left", "held"):
+        if keyboard.is_held(LEFT):
             self.xspeed = -1
-            self.anim = self.walkLeft
-            self.standStillAnim = self.standLeft
+            self.anim = self.walk_left
+            self.stand_still = self.stand_left
 
-        if getcon("up", "held"):
+        if keyboard.is_held(UP):
             self.yspeed = -1
-            self.anim = self.walkUp
-            self.standStillAnim = self.standUp
+            self.anim = self.walk_up
+            self.stand_still = self.stand_up
 
-        if getcon("down", "held"):
+        if keyboard.is_held(DOWN):
             self.yspeed = 1
-            self.anim = self.walkDown
-            self.standStillAnim = self.standDown
+            self.anim = self.walk_down
+            self.stand_still = self.stand_down
 
         if (
-                getcon("right", "press")
-                or getcon("left", "press")
-                or getcon("up", "press")
-                or getcon("down", "press")
+            keyboard.is_pressed(RIGHT)
+            or keyboard.is_pressed(LEFT)
+            or keyboard.is_pressed(UP)
+            or keyboard.is_pressed(DOWN)
         ):
-            self.stepCount += 1
-            if self.stepCount % 2 == 0:
-                self.frameIndex = 1
+            self.step_count += 1
+            if self.step_count % 2 == 0:
+                self.frame_index = 1
             else:
-                self.frameIndex = 3
+                self.frame_index = 3
 
-        # hasSuccessfullyMoved is true only if Tux managed to move in a desired direction
-        # without bumping into a wall.
-        #
-        # So if a vertical wall is to the immediate right of Tux, and Tux is moving rightward,
-        # Tux hasn't successfully moved.
-        #
-        # In contrast, if Tux is moving both up and to the right, then Tux has successfully moved
-        # even though the wall is impeding Tux's rightward movement (since Tux is still moving upward).
-        hasSuccessfullyMoved = False
-
-        # Attempt to move in the x-axis by xspeed (note xspeed may be 0)
-        collisionCheckResult = collisionCheck(
-            pygame.Rect(
-                self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h
-            )
-        )
-        if collisionCheckResult["hasCollided"]:
-            self.shape = collisionCheckResult["newRectangle"]
+        # Attempt to move in the x-axis by xspeed
+        
+        if collision_check(pygame.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
+            self.xspeed = 0
         else:
-            self.shape.x += self.xspeed
             self.x += self.xspeed
-            hasSuccessfullyMoved = hasSuccessfullyMoved or (self.xspeed != 0)
-
+            self.shape.topleft = self.x, self.y
+        
         # Attempt to move in the y-axis by yspeed
-        collisionCheckResult = collisionCheck(
-            pygame.Rect(
-                self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h
-            )
-        )
-        if collisionCheckResult["hasCollided"]:
-            self.shape = collisionCheckResult["newRectangle"]
+        
+        if collision_check(pygame.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h)):
+            self.yspeed = 0
         else:
-            self.shape.y += self.yspeed
             self.y += self.yspeed
-            hasSuccessfullyMoved = hasSuccessfullyMoved or (self.yspeed != 0)
+            self.shape.topleft = self.x, self.y
 
-        if not hasSuccessfullyMoved or (self.xspeed == 0 and self.yspeed == 0):
-            self.anim = self.standStillAnim
+        if self.xspeed == self.yspeed == 0:
+            self.anim = self.stand_still
 
-        self.frameIndex += 0.14
+        self.frame_index += 0.14
 
     def render(self):
-        drawSprite(
+        draw_sprite(
             sprite_tux,
             self.frame[
                 int(self.anim[0])
-                + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))
-                ],
+                + math.floor(self.frame_index % (self.anim[-1] - self.anim[0] + 1))
+            ],
             self.shape.x - game.cam_x,
             self.shape.y - game.cam_y,
         )
@@ -714,18 +653,18 @@ class Tux(Actor):
             0,
         )
 
-    def _typeof(self):
+    def typeof(self):
         return "Tux"
 
 
 class Soul(Actor):
-    def __init__(self, x, y, arr=None):
-        super().__init__(x, y, arr)
-        self.x = x
-        self.y = y
+    def __init__(self, _x, _y, _arr=None):
+        super().__init__(_x, _y, _arr=None)
+        self.x = _x
+        self.y = _y
         self.w = 8
         self.h = 8
-        self.arr = arr
+        self.arr = _arr
         self.frame = []
         self.visible = [0]
         self.invisible = [0, 1]
@@ -734,91 +673,70 @@ class Soul(Actor):
         self.yspeed = 0
         self.autocon = False
         self.idle = False
-        self.stepCount = 0
+        self.step_count = 0
         self.shape = pygame.Rect(self.x, self.y, self.h, self.w)
         self.load_sprite(sprite_soul, 8, 8)
+
         print(self.frame)
+
         self.solid = False
         self.color = (0, 255, 0)
-        game.gm_player = self
-        print(game.gm_player)
-        if not arr:
+        game.game_player = self
+
+        print(game.game_player)
+
+        if not _arr:
             return
 
     def run(self):
-
-        if not getcon("right", "held") or not getcon("left", "held"):
+        if not get_control("right", "held") or not get_control("left", "held"):
             self.xspeed = 0
 
-        if not getcon("up", "held") or not getcon("down", "held"):
+        if not get_control("up", "held") or not get_control("down", "held"):
             self.yspeed = 0
 
-        if getcon("right", "held"):
+        if get_control("right", "held"):
             self.xspeed = 1
 
-        if getcon("left", "held"):
+        if get_control("left", "held"):
             self.xspeed = -1
 
-        if getcon("up", "held"):
+        if get_control("up", "held"):
             self.yspeed = -1
 
-        if getcon("down", "held"):
+        if get_control("down", "held"):
             self.yspeed = 1
 
-        # hasSuccessfullyMoved is true only if Tux managed to move in a desired direction
-        # without bumping into a wall.
-        #
-        # So if a vertical wall is to the immediate right of Tux, and Tux is moving rightward,
-        # Tux hasn't successfully moved.
-        #
-        # In contrast, if Tux is moving both up and to the right, then Tux has successfully moved
-        # even though the wall is impeding Tux's rightward movement (since Tux is still moving upward).
-        hasSuccessfullyMoved = False
+        # Attempt to move in the x-axis by xspeed
 
-        # Attempt to move in the x-axis by xspeed (note xspeed may be 0)
-        collisionCheckResult = collisionCheck(
-            pygame.Rect(
-                self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h
-            )
-        )
-        if collisionCheckResult["hasCollided"]:
-            self.shape = collisionCheckResult["newRectangle"]
+        if collision_check(pygame.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
+            self.xspeed = 0
         else:
-            self.shape.x += self.xspeed
             self.x += self.xspeed
-            hasSuccessfullyMoved = hasSuccessfullyMoved or (self.xspeed != 0)
-
+            self.shape.topleft = self.x, self.y
+        
         # Attempt to move in the y-axis by yspeed
-        collisionCheckResult = collisionCheck(
-            pygame.Rect(
-                self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h
-            )
-        )
-        if collisionCheckResult["hasCollided"]:
-            self.shape = collisionCheckResult["newRectangle"]
-        else:
-            self.shape.y += self.yspeed
-            self.y += self.yspeed
-            hasSuccessfullyMoved = hasSuccessfullyMoved or (self.yspeed != 0)
 
-        if not hasSuccessfullyMoved or (self.xspeed == 0 and self.yspeed == 0):
-            pass
-            # self.anim = self.standStillAnim
+        if collision_check(pygame.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h)):
+            self.yspeed = 0
+        else:
+            self.y += self.yspeed
+            self.shape.topleft = self.x, self.y
 
         if game.hurtTimer > 0:
             self.anim = self.invisible
         else:
             self.anim = self.visible
 
-        self.frameIndex += 0.14
+        self.frame_index += 0.14
 
     def render(self):
-        drawSprite(
+        draw_sprite(
             sprite_soul,
             self.frame[
                 int(self.anim[0])
-                + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))
-                ],
+                + math.floor(self.frame_index % (self.anim[-1] - self.anim[0] + 1))
+            ],
             self.shape.x - game.cam_x,
             self.shape.y - game.cam_y,
         )
@@ -836,18 +754,18 @@ class Soul(Actor):
             0,
         )
 
-    def _typeof(self):
+    def typeof(self):
         return "Soul"
 
 
 class Bullet(Actor):
-    def __init__(self, x, y, arr=None):
-        super().__init__(x, y, arr)
-        self.x = x
-        self.y = y
+    def __init__(self, _x, _y, _arr=None):
+        super().__init__(_x, _y, _arr=None)
+        self.x = _x
+        self.y = _y
         self.w = 4
         self.h = 4
-        self.arr = arr
+        self.arr = _arr
         self.frame = []
         self.anim = [0]
         self.xspeed = 0
@@ -856,7 +774,9 @@ class Bullet(Actor):
         self.dist = 0
         self.direction = 0
         self.shape = pygame.Rect(self.x, self.y, self.h, self.w)
+
         self.load_sprite(sprite_bullet, 4, 4)
+
         if self.arr is not None:
             self.xspeed = self.arr[0][0]
             self.yspeed = self.arr[0][1]
@@ -874,15 +794,14 @@ class Bullet(Actor):
         )
 
     def run(self):
-        self.frameIndex += 0.1
+        self.frame_index += 0.1
 
-        if game.gm_player.shape.colliderect(self.shape):
-            # print("hurt")
+        if game.game_player.shape.colliderect(self.shape):
             if game.hurtTimer == 0:
                 game.health -= 1
                 game.hurtTimer = 60
                 print(game.health)
-        # print(self.xspeed)
+        
         self.x += self.xspeed
         self.y += self.yspeed
         self.shape.x = self.x
@@ -890,17 +809,17 @@ class Bullet(Actor):
 
     def render(self):
         # pass
-        drawSprite(
+        draw_sprite(
             sprite_bullet,
             self.frame[
                 int(self.anim[0])
-                + math.floor(self.frameIndex % (self.anim[-1] - self.anim[0] + 1))
-                ],
+                + math.floor(self.frame_index % (self.anim[-1] - self.anim[0] + 1))
+            ],
             self.x - game.cam_x,
             self.y - game.cam_y,
         )
 
-    def _typeof(self):
+    def typeof(self):
         return "Bullet"
 
 
@@ -915,20 +834,15 @@ class Attack:
     def run(self):
         self.timer += 1
         for i in animation["events"]:
-            if self.timer >= i["start"] and self.timer < i["stop"]:
+            if i["start"] <= self.timer < i["stop"]:
                 spawn = i["spawn"]
                 for j in range(0, len(spawn)):
                     entity = spawn[j]["entity"]
-                    object = entity["object"]
-                    x = entity["x"]
-                    y = entity["y"]
-                    arr = entity["arr"]
-                    new_actor(object, x, y, arr, "actorlayer")
+                    new_actor(entity["object"], entity["x"], entity["y"], entity["arr"], "actorlayer")
 
-    def constructAttack(self, _x, _y, _xspace, _yspace, _start, _wait, _number, _speed):
-
+    def construct_attack(self, _x, _y, _xspace, _yspace, _start, _wait, _number, _speed):
         for i in range(0, _number):
-            dict = {
+            dic = {
                 "start": _start + i * _wait,
                 "stop": _start + i * _wait + 1,
                 "function": 0,
@@ -944,25 +858,24 @@ class Attack:
                 ],
             }
 
-            animation["events"].append(dict)
+            animation["events"].append(dic)
 
-    def constructCircleAttack(self, _x, _y, _r, _start, _wait, _number, _speed):
-        for i in range(0, _number):
-            dv = 2 * math.pi / _number
-            dict = {
-                "start": _start + i * _wait,
-                "stop": _start + i * _wait + 1,
+    def construct_circle_attack(self, x, y, r, start, wait, number, speed):
+        for i in range(0, number):
+            dv = 2 * math.pi / number
+            dic = {
+                "start": start + i * wait,
+                "stop": start + i * wait + 1,
                 "function": 0,
                 "spawn": [
                     {
                         "entity": {
                             "object": Bullet,
-                            "x": _x + math.cos(dv * i) * _r,
-                            "y": _y + math.sin(dv * i) * _r,
-                            "arr": [(_speed[0], _speed[1])],
+                            "x": x + math.cos(dv * i) * r,
+                            "y": y + math.sin(dv * i) * r,
+                            "arr": [(speed[0], speed[1])],
                         },
                     }
                 ],
             }
-
-            animation["events"].append(dict)
+            animation["events"].append(dic)
