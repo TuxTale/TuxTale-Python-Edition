@@ -54,7 +54,7 @@ def game_play():
 
 
 def start_battle():
-    game.unusedActors = game.actor
+    game.unused_actors = game.actor
     game.actor = {
         "solid": [],
         "BG": [],
@@ -216,13 +216,13 @@ class Actor:
         if self.arr != None:
 
             if len(self.arr) == 1:
-                self.spriteSheet = self.arr[0]
+                self.sprite_sheet = self.arr[0]
 
     def load_sprite(self, _spr, _w=16, _h=16, _offs=(0, 0)):
         self.frame = []
-        sprSize = _spr.get_size()
-        sprW = int(sprSize[0])
-        sprH = int(sprSize[1])
+        sprite_size = _spr.get_size()
+        sprite_w = int(sprite_size[0])
+        sprite_h = int(sprite_size[1])
 
         if _offs == "centered":
             self.offsx = (_w - self.w) / 2
@@ -231,8 +231,8 @@ class Actor:
             self.offsx = _offs[0]
             self.offsy = _offs[1]
 
-        for i in range(0, int(sprH / _h)):
-            for j in range(0, int(sprW / _w)):
+        for i in range(0, int(sprite_h / _h)):
+            for j in range(0, int(sprite_w / _w)):
                 self.frame.append((j * _w, i * _h, _w, _h))
 
     def collision(self, _direction):
@@ -292,19 +292,19 @@ class Sprite(Actor):
         self.index = None
         if self.arr is not None:
             if len(self.arr) >= 1:
-                self.spriteSheet = self.arr[0]
-                self.load_sprite(self.spriteSheet)
+                self.sprite_sheet = self.arr[0]
+                self.load_sprite(self.sprite_sheet)
             if len(self.arr) >= 2:
                 self.index = self.arr[1]
 
     def render(self):
         draw_sprite(
-            self.spriteSheet,
+            self.sprite_sheet,
             self.frame[self.index],
             self.x - game.cam_x,
             self.y - game.cam_y,
         )
-        # window.blit(self.spriteSheet, (self.x - game.cam_x, self.y - game.cam_y), self.frame[self.index])
+        # window.blit(self.sprite_sheet, (self.x - game.cam_x, self.y - game.cam_y), self.frame[self.index])
 
     def typeof(self):
         return "Sprite"
@@ -396,17 +396,17 @@ class VerticallyMovingBlock(Actor):
         self.load_sprite(sprite_block)
         self.solid = True
         self.color = (200, 200, 200)
-        self.frameCount = 0
+        self.frame_count = 0
         if not self.arr:
             return
         if self.arr.len() == 1:
-            self.spriteSheet = self.arr[0]
-            self.load_sprite(self.spriteSheet)
+            self.sprite_sheet = self.arr[0]
+            self.load_sprite(self.sprite_sheet)
 
     def run(self):
-        self.frameCount += 1
+        self.frame_count += 1
 
-        self.y = self.originalY + math.sin(self.frameCount / 25) * 32
+        self.y = self.originalY + math.sin(self.frame_count / 25) * 32
 
         self.shape.x = self.x
         self.shape.y = self.y
@@ -445,17 +445,17 @@ class HorizontallyMovingBlock(Actor):
         self.load_sprite(sprite_block)
         self.solid = True
         self.color = (200, 200, 200)
-        self.frameCount = 0
+        self.frame_count = 0
         if not self.arr:
             return
         if self.arr.len() == 1:
-            self.spriteSheet = self.arr[0]
-            self.load_sprite(self.spriteSheet)
+            self.sprite_sheet = self.arr[0]
+            self.load_sprite(self.sprite_sheet)
 
     def run(self):
-        self.frameCount += 1
+        self.frame_count += 1
 
-        self.x = self.originalX + math.sin(self.frameCount / 25) * 32
+        self.x = self.originalX + math.sin(self.frame_count / 25) * 32
 
         self.shape.x = self.x
         self.shape.y = self.y
@@ -493,7 +493,7 @@ class Block(Actor):
         self.anim = [0.0, 0.0]
         self.solid = True
         self.sort = 0
-        self.spriteSheet = sprite_block
+        self.sprite_sheet = sprite_block
         if self.arr is not None:
 
             if len(self.arr) >= 1:
@@ -519,7 +519,7 @@ class Block(Actor):
                     self.solid_offs_y = 0
                     self.shape.w = 8
                     self.shape.h = 16
-                # self.spriteSheet = self.arr[0]
+                # self.sprite_sheet = self.arr[0]
                 # self.load_sprite(self.arr[0])
             if len(self.arr) >= 2:
                 self.sort = self.arr[1]
@@ -532,12 +532,12 @@ class Block(Actor):
         self.shape.x = self.x + self.solid_offs_x
         self.shape.y = self.y + self.solid_offs_y
         self.frame_index += 0.14
-        # print(self.spriteSheet)
+        # print(self.sprite_sheet)
 
     def render(self):
         pass
         # if self.arr:
-        # draw_sprite(self.spriteSheet, self.frame[int(self.anim[0]) + math.floor(self.frame_index % (self.anim[-1] - self.anim[0] + 1))], self.x - game.cam_x, self.y - game.cam_y)
+        # draw_sprite(self.sprite_sheet, self.frame[int(self.anim[0]) + math.floor(self.frame_index % (self.anim[-1] - self.anim[0] + 1))], self.x - game.cam_x, self.y - game.cam_y)
         # pg.draw.rect(window, self.color, (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h), 0)
 
     def typeof(self):
@@ -733,7 +733,7 @@ class Soul(Actor):
             self.y += self.yspeed
             self.shape.topleft = self.x, self.y
 
-        if game.hurtTimer > 0:
+        if game.hurt_timer > 0:
             self.anim = self.invisible
         else:
             self.anim = self.visible
@@ -807,9 +807,9 @@ class Bullet(Actor):
 
         if game.game_player.shape.colliderect(self.shape):
             # print("hurt")
-            if game.hurtTimer == 0:
+            if game.hurt_timer == 0:
                 game.health -= 1
-                game.hurtTimer = 60
+                game.hurt_timer = 60
                 print(game.health)
         # print(self.xspeed)
         self.x += self.xspeed

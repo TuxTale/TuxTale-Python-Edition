@@ -3,7 +3,7 @@ import pygame as pg
 import json
 
 
-pg.font.init()
+pg.init()
 
 ############ Sprite Sheets #############
 
@@ -23,14 +23,13 @@ YELLOW = (255, 255, 0)
 ########### Window Properties ###########
 
 display_w, display_H = 400, 240
-Font = pg.font.SysFont("comicsans", 40)
+font = pg.font.SysFont("comicsans", 40)
 pg.display.set_caption("Tuxtale [Python Edition]")
 
 window = pg.display.set_mode((display_w, display_H), pg.RESIZABLE | pg.SCALED)
 FPS = 60
 clock = pg.time.Clock()
 game_mode = None
-
 
 ########## Additional functions ##########
 
