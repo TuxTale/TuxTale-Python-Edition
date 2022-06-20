@@ -7,7 +7,7 @@ from src.init import *
 # new_actor(VerticallyMovingBlock, 100, 100)
 
 game.game_mode = game_play
-p = gMap("res/map/test_for_PGE.json")
+p = GameMap("res/map/test_for_PGE.json")
 p.draw_tiles()
 
 new_actor(Tux, 160, 160, None, "actorlayer")

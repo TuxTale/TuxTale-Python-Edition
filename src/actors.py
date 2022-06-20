@@ -105,7 +105,7 @@ def quit_game():
     pass
 
 
-class gMap:
+class GameMap:
     def __init__(self, _map):
         self.mapdata = json_read(_map)
 
@@ -155,23 +155,22 @@ class gMap:
             #     for j in i["objects"]:
             #         new_actor(Block, j["x"], j["y"] - 16, None, i["name"])
 
-    def get_tileset(self, tileGID):
-        # print(tileGID)
+    def get_tileset(self, tile_GID):
+        # print(tile_GID)
         for i in range(0, len(self.mapdata["tilesets"])):
-            tilesetGID = self.mapdata["tilesets"][i]["firstgid"]
+            tileset_GID = self.mapdata["tilesets"][i]["firstgid"]
             # print(i) #only prints 0, when it should print 1, 2 as well
-            tilesetTileCount = self.mapdata["tilesets"][i]["tilecount"]
-            if tileGID >= tilesetGID and tileGID < tilesetTileCount + tilesetGID:
+            tileset_tile_count = self.mapdata["tilesets"][i]["tilecount"]
+            if tileset_GID <= tile_GID < tileset_tile_count + tileset_GID:
                 image = self.mapdata["tilesets"][i]["image"]
                 # print(image)
                 # print(i)
                 # image.replace('..', 'res')
-                return [pygame.image.load(image.replace("..", "res")).convert(), tilesetGID]
-
+                return [pygame.image.load(image.replace("..", "res")).convert_alpha(), tileset_GID]
         return [None, 0]
 
 
-# p = gMap("res/map/test_for_PGE.json")
+# p = GameMap("res/map/test_for_PGE.json")
 
 
 class Physactor:
