@@ -1,7 +1,6 @@
 from .globals import *
 from .utils import *
 
-
 class Game:
     def __init__(self):
         self.game_mode = None

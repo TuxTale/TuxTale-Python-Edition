@@ -1,7 +1,6 @@
 from .globals import *
 import time
 
-
 state = {
     "keys": {},
     "left": {"press": False, "hold": 0, "held": False},
@@ -11,7 +10,6 @@ state = {
     "pause": {"press": False, "hold": 0, "held": False},
     "accept": {"press": False, "hold": 0, "held": False},
 }
-
 
 def get_control(_control, _state):
     state["keys"] = pygame.key.get_pressed()

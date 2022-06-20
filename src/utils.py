@@ -1,6 +1,5 @@
-import json
-
 from .globals import window
+import json
 
 
 def draw_sprite(spr, frame, x, y):
