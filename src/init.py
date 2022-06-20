@@ -1,5 +1,4 @@
 from .globals import *
-
 from .utils import *
 
 
@@ -34,6 +33,7 @@ class Game:
     def run(self):
         if self.hurt_timer > 0:
             self.hurt_timer -= 1
+        
         draw_text(game_font, 20, 20, str(round(clock.get_fps(), 1)), RED)
 
 
@@ -43,7 +43,6 @@ class Map:
         self.actor = []
         self.actor_empty = {}
         self.a = _a
-
 
 game = Game()
 
@@ -87,19 +86,18 @@ map_dict = [
     [35, 36, 36, 36, 36, 37, 6, 6, 6, 6, 6, 6, 6, 6],
 ]
 
-
 def new_actor(actor_type, x, y, arr=None, layer="None"):
     na = actor_type(x, y, arr)
     na.id = game_map.actlast
     game.actor[layer].append(na)
     game_map.actlast += 1
 
-
 def run_actors():
     for i in game.actor.values():
         for j in i:
             j.render()
+            
             if game.debug_mode:
                 j.debug()
+            
             j.run()
-            # j.render()

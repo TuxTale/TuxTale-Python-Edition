@@ -1,9 +1,7 @@
-import math
-
 from .controls import *
 from .utils import *
 from .init import *
-
+import math
 
 def game_play():
     if game:
@@ -50,12 +48,12 @@ def game_play():
         # after the large sprite.
         # (Note that the order in which objects are rendered does not necessarily need to be the same order
         # in which we invoke the run() method.)
-
         # render_actors()
 
 
 def start_battle():
     game.unused_actors = game.actor
+
     game.actor = {
         "solid": [],
         "BG": [],
@@ -64,33 +62,31 @@ def start_battle():
         "FG": [],
         "attacks": [],
     }
+
     game.cam_x = display_w / 2 + game.game_player.w / 2
     game.cam_y = display_H / 2 + game.game_player.h / 2
     game.game_mode = battle_mode
+
     new_actor(Soul, display_w / 2, display_H / 2, None, "actorlayer")
     c = Attack(Slime)
     game.attacks.append(c)
+    
     c.construct_attack(0, 100, 0, 20, 60, 10, 10, (2, -0.5))
     c.construct_attack(400, 100, 0, 20, 60, 10, 10, (-2, -0.5))
     c.construct_attack(0, 100, 0, 20, 120, 10, 10, (2, -0.5))
     c.construct_attack(400, 100, 0, 20, 120, 10, 10, (-2, -0.5))
     c.construct_attack(0, 100, 0, 20, 180, 10, 10, (2, -0.5))
     c.construct_attack(400, 100, 0, 20, 180, 10, 10, (-2, -0.5))
-    """for i in range(0, 50):
-        c.construct_attack(math.sin(i*10), 100, 0, 20, 180, 10, 10, (math.sin(i), -math.sin(i)))"""
-    # c.construct_circle_attack(game.game_player.x, game.game_player.y, 100, 60, 0, 200, (0, 0))
 
 
 def battle_mode():
     run_actors()
-    # print(game.cam_x)
-    # print(game.cam_y)
+
     game.cam_x = 0
     game.cam_y = 0
+    
     for i in game.attacks:
         i.run()
-    # game.cam_x  = game.game_player.shape.x - (display_w/2) + game.game_player.w/2
-    # game.cam_y = game.game_player.shape.y - (display_H/2) + game.game_player.h/2
 
 
 def start_play():
@@ -109,29 +105,20 @@ class GameMap:
     def __init__(self, _map):
         self.mapdata = json_read(_map)
 
-        # pygame.image.load(self.mapdata["tilesets"][0]["image"]).convert()
-
     def draw_tiles(self):
-        # data_iterator = 0
-
         for i in self.mapdata["layers"]:
-            # print(i["name"])
             game.actor[i["name"]] = []
+                            
             if i["type"] == "tilelayer":
                 data_iterator = 0
                 for y in range(0, i["height"]):
                     for x in range(0, i["width"]):
                         tile_id = i["data"][data_iterator]
-                        # print(data_iterator)
+
                         if tile_id > 0:
                             tileset = self.get_tileset(tile_id)
-                            # frame = game.load_sprite(tileset[0])
-                            # Spawn different things depending on the layer?
-                            if (
-                                i["name"] == "BG"
-                                or i["name"] == "FG"
-                                or i["name"] == "MG"
-                            ):
+
+                            if i["name"] == "BG" or i["name"] == "FG" or i["name"] == "MG":
                                 new_actor(
                                     Sprite,
                                     x * 16,
@@ -139,6 +126,7 @@ class GameMap:
                                     [tileset[0], tile_id - tileset[1]],
                                     i["name"],
                                 )
+                            
                             if i["name"] == "solid":
                                 new_actor(
                                     Block,
@@ -147,31 +135,18 @@ class GameMap:
                                     [tile_id - tileset[1]],
                                     i["name"],
                                 )
-                                # print(tileset[1])
-                            # draw_sprite(tileset[0], frame[tile_id - tileset[1]], x * 16 - game.cam_x, y * 16 - game.cam_y)
                         data_iterator += 1
 
-            # if i["name"] == "solid": #Integrate this with the change made above
-            #     for j in i["objects"]:
-            #         new_actor(Block, j["x"], j["y"] - 16, None, i["name"])
-
     def get_tileset(self, tile_GID):
-        # print(tile_GID)
         for i in range(0, len(self.mapdata["tilesets"])):
             tileset_GID = self.mapdata["tilesets"][i]["firstgid"]
-            # print(i) #only prints 0, when it should print 1, 2 as well
             tileset_tile_count = self.mapdata["tilesets"][i]["tilecount"]
+
             if tileset_GID <= tile_GID < tileset_tile_count + tileset_GID:
                 image = self.mapdata["tilesets"][i]["image"]
-                # print(image)
-                # print(i)
-                # image.replace('..', 'res')
                 return [pygame.image.load(image.replace("..", "res")).convert_alpha(), tileset_GID]
+        
         return [None, 0]
-
-
-# p = GameMap("res/map/test_for_PGE.json")
-
 
 class Physactor:
     def __init__(self, _x, _y):
@@ -187,7 +162,6 @@ class Physactor:
 
     def render(self):
         pass
-
 
 class Actor:
     id = 0
@@ -209,12 +183,13 @@ class Actor:
         self.frame_index = 0
         self.id = Actor.id
         self.frame = []
-        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
         # Are we sure pygame.Rect takes height as the 3rd parameter and width as the 4th parameter?
+        
         self.shape = pygame.Rect(self.x, self.y, self.w, self.h)
         self.solid = False
-        if self.arr != None:
 
+        if self.arr != None:
             if len(self.arr) == 1:
                 self.sprite_sheet = self.arr[0]
 
@@ -271,7 +246,6 @@ class Actor:
 
     def render(self):
         pass
-        # pygame.draw.rect(window, (255, 255, 255), (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h))
 
     def destructor(self):
         pass
@@ -290,12 +264,18 @@ class Sprite(Actor):
         self.arr = _arr
         self.frame = []
         self.index = None
+
         if self.arr is not None:
             if len(self.arr) >= 1:
                 self.sprite_sheet = self.arr[0]
                 self.load_sprite(self.sprite_sheet)
+            
             if len(self.arr) >= 2:
                 self.index = self.arr[1]
+            
+            if len(self.arr) >= 3:
+                self.size = self.arr[2]
+                self.load_sprite(self.spriteSheet, self.size[0], self.size[1])
 
     def render(self):
         draw_sprite(
@@ -304,7 +284,6 @@ class Sprite(Actor):
             self.x - game.cam_x,
             self.y - game.cam_y,
         )
-        # window.blit(self.sprite_sheet, (self.x - game.cam_x, self.y - game.cam_y), self.frame[self.index])
 
     def typeof(self):
         return "Sprite"
@@ -331,7 +310,6 @@ class Slime(Actor):
         self.anim = self.jiggleAnim
         self.shape = pygame.Rect(self.x, self.y, self.h, self.w)
         self.load_sprite(sprite_slime, 32, 32, "centered")
-        # print(self.frame)
 
     def debug(self):
         pygame.draw.rect(
@@ -354,12 +332,15 @@ class Slime(Actor):
         ).normalize() * 0.5).xy
 
         # Attempt to move in the x-axis by xspeed
+
         if collision_check(pygame.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
             self.xspeed = 0
         else:
             self.x += self.xspeed
             self.shape.topleft = self.x, self.y
+        
         # Attempt to move in the y-axis by yspeed
+
         if collision_check(pygame.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h)):
             self.yspeed = 0
         else:
@@ -397,8 +378,10 @@ class VerticallyMovingBlock(Actor):
         self.solid = True
         self.color = (200, 200, 200)
         self.frame_count = 0
+        
         if not self.arr:
             return
+        
         if self.arr.len() == 1:
             self.sprite_sheet = self.arr[0]
             self.load_sprite(self.sprite_sheet)
@@ -413,7 +396,6 @@ class VerticallyMovingBlock(Actor):
 
     def render(self):
         draw_sprite(sprite_block, self.frame[0], self.x - game.cam_x, self.y - game.cam_y)
-        # pygame.draw.rect(window, self.color, (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h), 0)
 
     def typeof(self):
         return "Block"
@@ -446,8 +428,10 @@ class HorizontallyMovingBlock(Actor):
         self.solid = True
         self.color = (200, 200, 200)
         self.frame_count = 0
+        
         if not self.arr:
             return
+        
         if self.arr.len() == 1:
             self.sprite_sheet = self.arr[0]
             self.load_sprite(self.sprite_sheet)
@@ -462,7 +446,6 @@ class HorizontallyMovingBlock(Actor):
 
     def render(self):
         draw_sprite(sprite_block, self.frame[0], self.x - game.cam_x, self.y - game.cam_y)
-        # pygame.draw.rect(window, self.color, (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h), 0)
 
     def typeof(self):
         return "Block"
@@ -487,44 +470,49 @@ class Block(Actor):
         self.solid_offs_x = 0
         self.solid_offs_y = 0
         self.shape = pygame.Rect(self.x, self.y, self.w, self.h)
-        # self.load_sprite(sprite_block)
         self.solid = True
         self.color = (100, 100, 100)
         self.anim = [0.0, 0.0]
         self.solid = True
         self.sort = 0
         self.sprite_sheet = sprite_block
-        if self.arr is not None:
 
+        if self.arr is not None:
             if len(self.arr) >= 1:
                 self.sort = self.arr[0]
+
                 if self.sort == 0:
                     self.shape.w = 16
                     self.shape.h = 16
+                
                 if self.sort == 1:
                     self.shape.w = 16
                     self.shape.h = 8
+                
                 if self.sort == 2:
                     self.solid_offs_x = 0
                     self.solid_offs_y = 8
                     self.shape.w = 16
                     self.shape.h = 8
+                
                 if self.sort == 3:
                     self.solid_offs_x = 0
                     self.solid_offs_y = 0
                     self.shape.w = 8
                     self.shape.h = 16
+                
                 if self.sort == 4:
                     self.solid_offs_x = 8
                     self.solid_offs_y = 0
                     self.shape.w = 8
                     self.shape.h = 16
-                # self.sprite_sheet = self.arr[0]
-                # self.load_sprite(self.arr[0])
+            
             if len(self.arr) >= 2:
                 self.sort = self.arr[1]
+            
             if len(self.arr) >= 3:
                 self.solid = self.arr[2]
+                
                 if not self.solid:
                     self.color = (200, 200, 200, 90)
 
@@ -532,13 +520,9 @@ class Block(Actor):
         self.shape.x = self.x + self.solid_offs_x
         self.shape.y = self.y + self.solid_offs_y
         self.frame_index += 0.14
-        # print(self.sprite_sheet)
 
     def render(self):
         pass
-        # if self.arr:
-        # draw_sprite(self.sprite_sheet, self.frame[int(self.anim[0]) + math.floor(self.frame_index % (self.anim[-1] - self.anim[0] + 1))], self.x - game.cam_x, self.y - game.cam_y)
-        # pygame.draw.rect(window, self.color, (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h), 0)
 
     def typeof(self):
         return "Block"
@@ -581,12 +565,13 @@ class Tux(Actor):
         self.solid = False
         self.color = (0, 255, 0)
         game.game_player = self
+
         print(game.game_player)
+
         if not arr:
             return
 
     def run(self):
-
         if not keyboard.is_held(RIGHT) or not keyboard.is_held(LEFT):
             self.xspeed = 0
 
@@ -613,25 +598,24 @@ class Tux(Actor):
             self.anim = self.walk_down
             self.stand_still = self.stand_down
 
-        if (
-            keyboard.is_pressed(RIGHT)
-            or keyboard.is_pressed(LEFT)
-            or keyboard.is_pressed(UP)
-            or keyboard.is_pressed(DOWN)
-        ):
+        if keyboard.is_pressed(RIGHT) or keyboard.is_pressed(LEFT) or keyboard.is_pressed(UP) or keyboard.is_pressed(DOWN):
             self.step_count += 1
+            
             if self.step_count % 2 == 0:
                 self.frame_index = 1
             else:
                 self.frame_index = 3
 
         # Attempt to move in the x-axis by xspeed
+        
         if collision_check(pygame.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
             self.xspeed = 0
         else:
             self.x += self.xspeed
             self.shape.topleft = self.x, self.y
+        
         # Attempt to move in the y-axis by yspeed
+        
         if collision_check(pygame.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h)):
             self.yspeed = 0
         else:
@@ -692,16 +676,19 @@ class Soul(Actor):
         self.step_count = 0
         self.shape = pygame.Rect(self.x, self.y, self.h, self.w)
         self.load_sprite(sprite_soul, 8, 8)
+
         print(self.frame)
+
         self.solid = False
         self.color = (0, 255, 0)
         game.game_player = self
+        
         print(game.game_player)
+
         if not _arr:
             return
 
     def run(self):
-
         if not get_control("right", "held") or not get_control("left", "held"):
             self.xspeed = 0
 
@@ -721,12 +708,15 @@ class Soul(Actor):
             self.yspeed = 1
 
         # Attempt to move in the x-axis by xspeed
+        
         if collision_check(pygame.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
             self.xspeed = 0
         else:
             self.x += self.xspeed
             self.shape.topleft = self.x, self.y
+        
         # Attempt to move in the y-axis by yspeed
+
         if collision_check(pygame.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h)):
             self.yspeed = 0
         else:
@@ -785,10 +775,10 @@ class Bullet(Actor):
         self.direction = 0
         self.shape = pygame.Rect(self.x, self.y, self.h, self.w)
         self.load_sprite(sprite_bullet, 4, 4)
+        
         if self.arr is not None:
             self.xspeed = self.arr[0][0]
             self.yspeed = self.arr[0][1]
-        # print(self.frame)
 
     def debug(self):
         pygame.draw.rect(
@@ -806,12 +796,12 @@ class Bullet(Actor):
         self.frame_index += 0.1
 
         if game.game_player.shape.colliderect(self.shape):
-            # print("hurt")
             if game.hurt_timer == 0:
                 game.health -= 1
                 game.hurt_timer = 60
+                
                 print(game.health)
-        # print(self.xspeed)
+        
         self.x += self.xspeed
         self.y += self.yspeed
         self.shape.x = self.x
@@ -819,6 +809,7 @@ class Bullet(Actor):
 
     def render(self):
         # pass
+
         draw_sprite(
             sprite_bullet,
             self.frame[
@@ -832,9 +823,7 @@ class Bullet(Actor):
     def typeof(self):
         return "Bullet"
 
-
 animation = {"events": []}
-
 
 class Attack:
     def __init__(self, _opponent, _timer=0):
