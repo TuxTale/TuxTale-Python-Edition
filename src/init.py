@@ -1,4 +1,4 @@
-from gmglobal import *
+from .gmglobal import *
 
 class Game:
     def __init__(self):

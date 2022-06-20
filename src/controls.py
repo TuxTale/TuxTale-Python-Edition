@@ -1,6 +1,5 @@
+from .gmglobal import *
 import time
-
-from gmglobal import *
 
 
 state = {

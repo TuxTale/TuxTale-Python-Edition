@@ -1,5 +1,5 @@
-from controls import *
-from init import *
+from .controls import *
+from .init import *
 import math
 
 def game_play():
