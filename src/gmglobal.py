@@ -23,7 +23,7 @@ YELLOW = (255, 255, 0)
 ########### Window Properties ###########
 
 display_w, display_H = 400, 240
-font = pygame.font.SysFont("comicsans", 40)
+game_font = pygame.font.SysFont("comicsans", 40)
 pygame.display.set_caption("Tuxtale [Python Edition]")
 
 window = pygame.display.set_mode((display_w, display_H), pygame.RESIZABLE | pygame.SCALED)
@@ -34,21 +34,16 @@ game_mode = None
 ########## Additional functions ##########
 
 
-def draw_text(_font, _x, _y, text):
-    text = _font.render(text, 1, RED)
-    window.blit(text, (_x, _y))
+def draw_text(font, x, y, text):
+    window.blit(font.render(text, True, RED), (x, y))
 
 
 def json_write(path, data):
-    with open(path, "w") as fp:
-        json.dump(data, fp)
+    json.dump(data, open(path, "w"))
 
 
 def json_read(path):
-    f = open(path, "r")
-    Data = f.read()
-    f.close()
-    return json.loads(Data)
+    return json.loads(open(path, "r").read())
 
 
 #################### Configurations ######################

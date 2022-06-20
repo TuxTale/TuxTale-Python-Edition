@@ -32,7 +32,7 @@ class Game:
     def run(self):
         if self.hurt_timer > 0:
             self.hurt_timer -= 1
-        draw_text(font, 20, 20, str(round(clock.get_fps(), 1)))
+        draw_text(game_font, 20, 20, str(round(clock.get_fps(), 1)))
 
 
 class Map:
