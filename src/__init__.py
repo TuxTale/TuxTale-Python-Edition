@@ -23,7 +23,6 @@ def start_game():
 
     while running:
         clock.tick(FPS)
-
         for event in pygame.event.get():
             keyboard.handle_event(event)
             if event.type == pygame.QUIT:
@@ -32,5 +31,5 @@ def start_game():
         window.fill(BLACK)
         game.game_mode()
         game.run()
-
+        my_font.render(window, "Why do they call it oven, when you of in the cold food of out hot food eat the food?", (200, 200))
         pygame.display.update()
