@@ -39,6 +39,8 @@ def start_game():
                 running = False
 
         window.fill(BLACK)
+
+        pygame.mouse.set_visible(False)
         
         game.game_mode()
         game.run()
