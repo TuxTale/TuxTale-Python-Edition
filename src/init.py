@@ -1,4 +1,6 @@
-from .gmglobal import *
+from .globals import *
+from .utils import *
+
 
 class Game:
     def __init__(self):
@@ -9,30 +11,31 @@ class Game:
         self.game_player = None
         self.uw = 500
         self.uh = 500
-        self.debugMode = False
+        self.debug_mode = False
         self.actor = {"None": []}
-        self.unusedActors = {}
+        self.unused_actors = {}
         self.attacks = []
         self.health = 100
-        self.hurtTimer = 0
-
-    def load_sprite(self, _spr):
+        self.hurt_timer = 0
         self.frame = []
-        sprSize = _spr.get_size()
-        sprW = int(sprSize[0])
-        sprH = int(sprSize[1])
 
-        for i in range(0, int(sprH / 16)):
-            for j in range(0, int(sprW / 16)):
+    def load_sprite(self, sprite):
+        sprite_size = sprite.get_size()
+        sprite_w = int(sprite_size[0])
+        sprite_h = int(sprite_size[1])
+
+        for i in range(0, int(sprite_h / 16)):
+            for j in range(0, int(sprite_w / 16)):
                 self.frame.append((j * 16, i * 16, 16, 16))
 
         return self.frame
 
     def run(self):
-        if self.hurtTimer > 0:
-            self.hurtTimer -= 1
+        if self.hurt_timer > 0:
+            self.hurt_timer -= 1
         
-        draw_text(Font, 20, 20, str(round(clock.get_fps(), 1)))
+        draw_text(game_font, 20, 20, str(round(clock.get_fps(), 1)), RED)
+
 
 class Map:
     def __init__(self, _a):
@@ -83,18 +86,18 @@ map_dict = [
     [35, 36, 36, 36, 36, 37, 6, 6, 6, 6, 6, 6, 6, 6],
 ]
 
-def new_actor(_type, _x, _y, _arr=None, _layer="None"):
-    na = _type(_x, _y, _arr)
+def new_actor(actor_type, x, y, arr=None, layer="None"):
+    na = actor_type(x, y, arr)
     na.id = game_map.actlast
-    game.actor[_layer].append(na)
+    game.actor[layer].append(na)
     game_map.actlast += 1
 
 def run_actors():
     for i in game.actor.values():
         for j in i:
             j.render()
-
-            if game.debugMode:
+            
+            if game.debug_mode:
                 j.debug()
             
             j.run()

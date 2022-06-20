@@ -1,4 +1,4 @@
-from .gmglobal import *
+from .globals import *
 import time
 
 
@@ -57,6 +57,7 @@ class Keyboard:
 
     def is_held(self, key: int) -> bool:
         """check if the key is currently pressed"""
+
         return key in self.keys and self.keys[key]
 
     def is_pressed(self, key: int) -> bool:
@@ -67,12 +68,14 @@ class Keyboard:
 
     def press_time(self, key: int) -> [float]:
         """check the time the held key was pressed"""
+
         if key not in self.keys or not self.keys[key]:
             return
         return self.keys[key]
 
     def hold_time(self, key: int) -> float:
         """"check for how long held key is pressed"""
+								
         if key in self.keys:
             return time.time() - self.keys[key]
 

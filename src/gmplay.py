@@ -1,5 +1,6 @@
 from .init import *
 
+
 def game_play():
     if game:
         # 1) UPDATE PHASE
@@ -50,7 +51,7 @@ def game_play():
 
 
 def start_battle():
-    game.unusedActors = game.actor
+    game.unused_actors = game.actor
     game.actor = {"solid": [], "BG": [], "MG": [], "actorlayer": [], "FG": []}
 
 
