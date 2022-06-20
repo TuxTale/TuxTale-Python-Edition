@@ -15,7 +15,7 @@ state = {
 
 
 def get_control(_control, _state):
-    state["keys"] = pg.key.get_pressed()
+    state["keys"] = pygame.key.get_pressed()
     # for i in config["key"]:
     for i in config["key"]:
         if state["keys"][config["key"][i]]:
@@ -32,7 +32,7 @@ def get_control(_control, _state):
 
 
 def def_controls():
-    state["keys"] = pg.key.get_pressed()
+    state["keys"] = pygame.key.get_pressed()
     for i in config["key"]:
         if state["keys"][config["key"][i]]:
             if not state[i]["held"]:
@@ -48,10 +48,10 @@ class Keyboard:
     def __init__(self):
         self.keys = {}
 
-    def handle_event(self, event: pg.event) -> None:
-        if event.type == pg.KEYDOWN:
+    def handle_event(self, event: pygame.event) -> None:
+        if event.type == pygame.KEYDOWN:
             self.keys[event.key] = time.time()
-        elif event.type == pg.KEYUP:
+        elif event.type == pygame.KEYUP:
             self.keys[event.key] = False
 
     def is_held(self, key: int) -> bool:

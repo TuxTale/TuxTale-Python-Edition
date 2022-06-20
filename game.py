@@ -31,13 +31,13 @@ running = True
 while running:
     clock.tick(FPS)
 
-    for event in pg.event.get():
+    for event in pygame.event.get():
         keyboard.handle_event(event)
-        if event.type == pg.QUIT:
+        if event.type == pygame.QUIT:
             running = False
 
     window.fill(BLACK)
     game.game_mode()
     game.run()
 
-    pg.display.update()
+    pygame.display.update()

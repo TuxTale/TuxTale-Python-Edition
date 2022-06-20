@@ -108,7 +108,7 @@ class gMap:
     def __init__(self, _map):
         self.mapdata = json_read(_map)
 
-        # pg.image.load(self.mapdata["tilesets"][0]["image"]).convert()
+        # pygame.image.load(self.mapdata["tilesets"][0]["image"]).convert()
 
     def draw_tiles(self):
         # data_iterator = 0
@@ -165,7 +165,7 @@ class gMap:
                 # print(image)
                 # print(i)
                 # image.replace('..', 'res')
-                return [pg.image.load(image.replace("..", "res")).convert(), tilesetGID]
+                return [pygame.image.load(image.replace("..", "res")).convert(), tilesetGID]
 
         return [None, 0]
 
@@ -210,8 +210,8 @@ class Actor:
         self.id = Actor.id
         self.frame = []
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        # Are we sure pg.Rect takes height as the 3rd parameter and width as the 4th parameter?
-        self.shape = pg.Rect(self.x, self.y, self.w, self.h)
+        # Are we sure pygame.Rect takes height as the 3rd parameter and width as the 4th parameter?
+        self.shape = pygame.Rect(self.x, self.y, self.w, self.h)
         self.solid = False
         if self.arr != None:
 
@@ -255,7 +255,7 @@ class Actor:
                                 self.shape.top = i.shape.bottom
 
     def debug(self):
-        pg.draw.rect(
+        pygame.draw.rect(
             window,
             self.color,
             (
@@ -271,7 +271,7 @@ class Actor:
 
     def render(self):
         pass
-        # pg.draw.rect(window, (255, 255, 255), (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h))
+        # pygame.draw.rect(window, (255, 255, 255), (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h))
 
     def destructor(self):
         pass
@@ -329,12 +329,12 @@ class Slime(Actor):
         self.jiggleAnim = [0, 3]
         self.direction = 0
         self.anim = self.jiggleAnim
-        self.shape = pg.Rect(self.x, self.y, self.h, self.w)
+        self.shape = pygame.Rect(self.x, self.y, self.h, self.w)
         self.load_sprite(sprite_slime, 32, 32, "centered")
         # print(self.frame)
 
     def debug(self):
-        pg.draw.rect(
+        pygame.draw.rect(
             window,
             RED,
             (
@@ -350,17 +350,17 @@ class Slime(Actor):
             start_battle()
 
         self.xspeed, self.yspeed = ((
-                    pg.math.Vector2(game.game_player.shape.topleft) - pg.math.Vector2(self.shape.topleft)
+                    pygame.math.Vector2(game.game_player.shape.topleft) - pygame.math.Vector2(self.shape.topleft)
         ).normalize() * 0.5).xy
 
         # Attempt to move in the x-axis by xspeed
-        if collision_check(pg.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
+        if collision_check(pygame.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
             self.xspeed = 0
         else:
             self.x += self.xspeed
             self.shape.topleft = self.x, self.y
         # Attempt to move in the y-axis by yspeed
-        if collision_check(pg.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h)):
+        if collision_check(pygame.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h)):
             self.yspeed = 0
         else:
             self.y += self.yspeed
@@ -413,13 +413,13 @@ class VerticallyMovingBlock(Actor):
 
     def render(self):
         draw_sprite(sprite_block, self.frame[0], self.x - game.cam_x, self.y - game.cam_y)
-        # pg.draw.rect(window, self.color, (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h), 0)
+        # pygame.draw.rect(window, self.color, (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h), 0)
 
     def typeof(self):
         return "Block"
 
     def debug(self):
-        pg.draw.rect(
+        pygame.draw.rect(
             window,
             self.color,
             (
@@ -441,7 +441,7 @@ class HorizontallyMovingBlock(Actor):
         self.w = 16
         self.h = 16
         self.arr = _arr
-        self.shape = pg.Rect(self.x, self.y, self.h, self.w)
+        self.shape = pygame.Rect(self.x, self.y, self.h, self.w)
         self.load_sprite(sprite_block)
         self.solid = True
         self.color = (200, 200, 200)
@@ -462,13 +462,13 @@ class HorizontallyMovingBlock(Actor):
 
     def render(self):
         draw_sprite(sprite_block, self.frame[0], self.x - game.cam_x, self.y - game.cam_y)
-        # pg.draw.rect(window, self.color, (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h), 0)
+        # pygame.draw.rect(window, self.color, (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h), 0)
 
     def typeof(self):
         return "Block"
 
     def debug(self):
-        pg.draw.rect(
+        pygame.draw.rect(
             window,
             self.color,
             (
@@ -486,7 +486,7 @@ class Block(Actor):
         super().__init__(x, y, arr)
         self.solid_offs_x = 0
         self.solid_offs_y = 0
-        self.shape = pg.Rect(self.x, self.y, self.w, self.h)
+        self.shape = pygame.Rect(self.x, self.y, self.w, self.h)
         # self.load_sprite(sprite_block)
         self.solid = True
         self.color = (100, 100, 100)
@@ -538,13 +538,13 @@ class Block(Actor):
         pass
         # if self.arr:
         # draw_sprite(self.sprite_sheet, self.frame[int(self.anim[0]) + math.floor(self.frame_index % (self.anim[-1] - self.anim[0] + 1))], self.x - game.cam_x, self.y - game.cam_y)
-        # pg.draw.rect(window, self.color, (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h), 0)
+        # pygame.draw.rect(window, self.color, (self.shape.x -  game.cam_x, self.shape.y - game.cam_y, self.shape.w, self.shape.h), 0)
 
     def typeof(self):
         return "Block"
 
     def debug(self):
-        pg.draw.rect(
+        pygame.draw.rect(
             window,
             self.color,
             (
@@ -576,7 +576,7 @@ class Tux(Actor):
         self.autocon = False
         self.idle = False
         self.step_count = 0
-        self.shape = pg.Rect(self.x, self.y, self.h, self.w)
+        self.shape = pygame.Rect(self.x, self.y, self.h, self.w)
         self.load_sprite(sprite_tux)
         self.solid = False
         self.color = (0, 255, 0)
@@ -626,13 +626,13 @@ class Tux(Actor):
                 self.frame_index = 3
 
         # Attempt to move in the x-axis by xspeed
-        if collision_check(pg.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
+        if collision_check(pygame.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
             self.xspeed = 0
         else:
             self.x += self.xspeed
             self.shape.topleft = self.x, self.y
         # Attempt to move in the y-axis by yspeed
-        if collision_check(pg.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h)):
+        if collision_check(pygame.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h)):
             self.yspeed = 0
         else:
             self.y += self.yspeed
@@ -657,7 +657,7 @@ class Tux(Actor):
         )
 
     def debug(self):
-        pg.draw.rect(
+        pygame.draw.rect(
             window,
             self.color,
             (
@@ -690,7 +690,7 @@ class Soul(Actor):
         self.autocon = False
         self.idle = False
         self.step_count = 0
-        self.shape = pg.Rect(self.x, self.y, self.h, self.w)
+        self.shape = pygame.Rect(self.x, self.y, self.h, self.w)
         self.load_sprite(sprite_soul, 8, 8)
         print(self.frame)
         self.solid = False
@@ -721,13 +721,13 @@ class Soul(Actor):
             self.yspeed = 1
 
         # Attempt to move in the x-axis by xspeed
-        if collision_check(pg.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
+        if collision_check(pygame.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
             self.xspeed = 0
         else:
             self.x += self.xspeed
             self.shape.topleft = self.x, self.y
         # Attempt to move in the y-axis by yspeed
-        if collision_check(pg.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h)):
+        if collision_check(pygame.Rect(self.shape.x, self.shape.y + self.yspeed, self.shape.w, self.shape.h)):
             self.yspeed = 0
         else:
             self.y += self.yspeed
@@ -752,7 +752,7 @@ class Soul(Actor):
         )
 
     def debug(self):
-        pg.draw.rect(
+        pygame.draw.rect(
             window,
             self.color,
             (
@@ -783,7 +783,7 @@ class Bullet(Actor):
         self.timer = 0
         self.dist = 0
         self.direction = 0
-        self.shape = pg.Rect(self.x, self.y, self.h, self.w)
+        self.shape = pygame.Rect(self.x, self.y, self.h, self.w)
         self.load_sprite(sprite_bullet, 4, 4)
         if self.arr is not None:
             self.xspeed = self.arr[0][0]
@@ -791,7 +791,7 @@ class Bullet(Actor):
         # print(self.frame)
 
     def debug(self):
-        pg.draw.rect(
+        pygame.draw.rect(
             window,
             RED,
             (
