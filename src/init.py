@@ -81,7 +81,7 @@ class TheFont:
                 x_offset += self.space_width + self.spacing
             
 
-my_font = TheFont('res/gfx/engine/small_font.png')
+my_font = TheFont('res/gfx/engine/uj font 2.png')
 
 #my_font.render(window, "Hello World", (20, 20))
 

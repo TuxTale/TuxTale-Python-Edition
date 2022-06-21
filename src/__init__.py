@@ -43,14 +43,15 @@ def start_game():
         
         game.game_mode()
         game.run()
-
+        
         if game.game_mode == battle_mode:
             gui_screen.widgets[0].x = (window.get_width() // 2) - gui_screen.widgets[0].image.get_rect().size[0]
             gui_screen.widgets[0].y = (window.get_height() // 2) - gui_screen.widgets[0].image.get_rect().size[1]
 
             gui_screen.run(window)
         
-        my_font.render(window, "Why do they call it oven, when you of in the cold food of out hot food eat the food?", (200, 200))
+        my_font.render(window, "The quick brown fox, jumped over the lazy dog", (0, 200))
+        my_font.render(window, "My favourite song is Bohemian Rhapsody by Queen.", (0, 220))
         
         pygame.display.update()
         frame += 1

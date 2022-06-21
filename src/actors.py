@@ -622,8 +622,6 @@ class Tux(Actor):
             self.y += self.yspeed
             self.shape.topleft = self.x, self.y
 
-        self.frame_index += 0.1
-
         if self.xspeed == self.yspeed == 0:
             self.anim = self.stand_still
 
