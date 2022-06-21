@@ -28,8 +28,8 @@ def game_play():
         # of the camera.
         # Visual effects such as screen-shake may also cause the camera's position to change.
 
-        game.cam_x = game.game_player.shape.x - (display_w / 2) + game.game_player.w / 2
-        game.cam_y = game.game_player.shape.y - (display_H / 2) + game.game_player.h / 2
+        game.cam_x = game.game_player.shape.center[0] - (display_w / 2)
+        game.cam_y = game.game_player.shape.center[1] - (display_H / 2)
 
         # 3) RENDER PHASE
         #
@@ -136,6 +136,13 @@ class GameMap:
                                     i["name"],
                                 )
                         data_iterator += 1
+            if i["type"] == "objectgroup":
+                for j in i["objects"]: 
+                    n = j["gid"] - self.get_actorsheet()[1]
+                    if n == 0:
+                        new_actor(Tux, j["x"], j["y"], None, i["name"])
+                    if n == 1:
+                        new_actor(Slime, j["x"], j["y"], None, i["name"])
 
     def get_tileset(self, tile_GID):
         for i in range(0, len(self.mapdata["tilesets"])):
@@ -147,6 +154,11 @@ class GameMap:
                 return [pygame.image.load(image.replace("..", "res")).convert_alpha(), tileset_GID]
         
         return [None, 0]
+    
+    def get_actorsheet(self):
+        for i in self.mapdata["tilesets"]:
+            if i["name"] == "actorsheet":
+                return (i["image"], i["firstgid"])
 
 class Physactor:
     def __init__(self, _x, _y):

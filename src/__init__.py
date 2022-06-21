@@ -11,13 +11,14 @@ def start_game():
 
     p = GameMap("res/map/test_for_PGE.json")
     p.draw_tiles()
+    game.game_mode = game_play
 
-    new_actor(Tux, 160, 160, None, "actorlayer")
+    #new_actor(Tux, 160, 160, None, "actorlayer")
 
-    game.cam_x = display_w / 2 - 16
-    game.cam_y = display_H / 2 - 16
+    #game.cam_x = display_w / 2 - 16
+    #game.cam_y = display_H / 2 - 16
 
-    new_actor(Slime, 300, 250, None, "actorlayer")
+    #new_actor(Slime, 300, 250, None, "actorlayer")
 
     ############### Testing ###############
 
@@ -50,8 +51,7 @@ def start_game():
 
             gui_screen.run(window)
         
-        my_font.render(window, "The quick brown fox, jumped over the lazy dog", (0, 200))
-        my_font.render(window, "My favourite song is Bohemian Rhapsody by Queen.", (0, 220))
+        my_font.render(window, "I have left on vacation and won't come back. Ever.", (20, 200))
         
         pygame.display.update()
         frame += 1
