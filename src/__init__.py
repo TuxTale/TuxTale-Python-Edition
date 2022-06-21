@@ -8,8 +8,8 @@ def start_game():
 
     #new_actor(Tux, 160, 160, None, "actorlayer")
 
-    game.cam_x = display_w / 2 - 16
-    game.cam_y = display_H / 2 - 16
+    #game.cam_x = display_w / 2 - 16
+    #game.cam_y = display_H / 2 - 16
 
     #new_actor(Slime, 300, 250, None, "actorlayer")
 
