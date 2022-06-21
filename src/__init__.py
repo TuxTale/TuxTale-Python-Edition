@@ -2,16 +2,16 @@ from .actors import *
 from .init import *
 
 def start_game():
-    game.game_mode = game_play
     p = GameMap("res/map/test_for_PGE.json")
     p.draw_tiles()
+    game.game_mode = game_play
 
-    new_actor(Tux, 160, 160, None, "actorlayer")
+    #new_actor(Tux, 160, 160, None, "actorlayer")
 
     game.cam_x = display_w / 2 - 16
     game.cam_y = display_H / 2 - 16
 
-    new_actor(Slime, 300, 250, None, "actorlayer")
+    #new_actor(Slime, 300, 250, None, "actorlayer")
 
     # new_actor(Slime, 500, 400, None, "actorlayer")
 
@@ -31,6 +31,6 @@ def start_game():
         window.fill(BLACK)
         game.game_mode()
         game.run()
-        my_font.render(window, "The quick brown fox, jumped over the lazy dog", (0, 200))
-        my_font.render(window, "My favourite song is Bohemian Rhapsody by Queen.", (0, 220))
+        my_font.render(window, "I have left on vacation and won't come back. Ever.", (20, 200))
+        #my_font.render(window, "My favourite song is Bohemian Rhapsody by Queen.", (0, 220))
         pygame.display.update()
