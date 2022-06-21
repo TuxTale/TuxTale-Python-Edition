@@ -69,7 +69,8 @@ class TheFont:
                 current_char_width = 0
             else:
                 current_char_width += 1
-        self.space_width = self.characters['A'].get_width()
+        self.space_width = self.characters['_'].get_width()
+        #self.space_width = 3
         
     def render(self, surf, text, loc):
         x_offset = 0
