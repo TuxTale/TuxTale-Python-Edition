@@ -28,8 +28,8 @@ def game_play():
         # of the camera.
         # Visual effects such as screen-shake may also cause the camera's position to change.
 
-        game.cam_x = game.game_player.shape.x - (display_w / 2) + game.game_player.w / 2
-        game.cam_y = game.game_player.shape.y - (display_H / 2) + game.game_player.h / 2
+        game.cam_x = game.game_player.shape.center[0] - (display_w / 2)
+        game.cam_y = game.game_player.shape.center[1] - (display_H / 2)
 
         # 3) RENDER PHASE
         #

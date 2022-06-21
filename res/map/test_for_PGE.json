@@ -42,42 +42,6 @@
                  "width":16,
                  "x":608,
                  "y":992
-                }, 
-                {
-                 "gid":111,
-                 "height":16,
-                 "id":338,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":656,
-                 "y":1024
-                }, 
-                {
-                 "gid":111,
-                 "height":16,
-                 "id":339,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":656,
-                 "y":1072
-                }, 
-                {
-                 "gid":111,
-                 "height":16,
-                 "id":340,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":656,
-                 "y":1120
                 }],
          "opacity":1,
          "type":"objectgroup",
