@@ -31,5 +31,6 @@ def start_game():
         window.fill(BLACK)
         game.game_mode()
         game.run()
-        my_font.render(window, "Why do they call it oven, when you of in the cold food of out hot food eat the food?", (200, 200))
+        my_font.render(window, "The quick brown fox, jumped over the lazy dog", (0, 200))
+        my_font.render(window, "2 + 2 = 4, (This is just to showcase the rest of the characters!)", (0, 220))
         pygame.display.update()
