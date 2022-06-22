@@ -123,7 +123,7 @@ class GameMap:
                                     Sprite,
                                     x * 16,
                                     y * 16,
-                                    [tileset[0], tile_id - tileset[1]],
+                                    [tileset[0], tile_id - tileset[1], (tileset[2], tileset[3])],
                                     i["name"],
                                 )
                             
@@ -132,7 +132,7 @@ class GameMap:
                                     Block,
                                     x * 16,
                                     y * 16,
-                                    [tile_id - tileset[1]],
+                                    [tile_id - tileset[1], tileset[0], tile_id - tileset[1]],
                                     i["name"],
                                 )
                         data_iterator += 1
@@ -151,7 +151,9 @@ class GameMap:
 
             if tileset_GID <= tile_GID < tileset_tile_count + tileset_GID:
                 image = self.mapdata["tilesets"][i]["image"]
-                return [pygame.image.load(image.replace("..", "res")).convert_alpha(), tileset_GID]
+                tilewidth = self.mapdata["tilesets"][i]["tilewidth"]
+                tileheight = self.mapdata["tilesets"][i]["tileheight"]
+                return [pygame.image.load(image.replace("..", "res")).convert_alpha(), tileset_GID, tilewidth, tileheight]
         
         return [None, 0]
     
@@ -242,16 +244,7 @@ class Actor:
                                 self.shape.top = i.shape.bottom
 
     def debug(self):
-        pygame.draw.rect(
-            window,
-            self.color,
-            (
-                self.shape.x - game.cam_x,
-                self.shape.y - game.cam_y,
-                self.shape.w,
-                self.shape.h,
-            ),
-        )
+        pass
 
     def run(self):
         pass
@@ -287,7 +280,7 @@ class Sprite(Actor):
             
             if len(self.arr) >= 3:
                 self.size = self.arr[2]
-                self.load_sprite(self.spriteSheet, self.size[0], self.size[1])
+                self.load_sprite(self.sprite_sheet, self.size[0], self.size[1])
 
     def render(self):
         draw_sprite(
@@ -520,37 +513,36 @@ class Block(Actor):
                     self.shape.h = 16
             
             if len(self.arr) >= 2:
-                self.sort = self.arr[1]
+                self.sprite_sheet = self.arr[1]
+                self.load_sprite(self.sprite_sheet)
             
             if len(self.arr) >= 3:
-                self.solid = self.arr[2]
+                self.frame_index = self.arr[2]
+            
+            if len(self.arr) >= 4:
+                self.solid = self.arr[3]
                 
                 if not self.solid:
                     self.color = (200, 200, 200, 90)
+                    
 
     def run(self):
         self.shape.x = self.x + self.solid_offs_x
         self.shape.y = self.y + self.solid_offs_y
-        self.frame_index += 0.14
 
     def render(self):
         pass
+    
+    def debug(self):
+        draw_sprite(
+            self.sprite_sheet,
+            self.frame[self.frame_index],
+            self.x - game.cam_x,
+            self.y - game.cam_y,
+        )
 
     def typeof(self):
         return "Block"
-
-    def debug(self):
-        pygame.draw.rect(
-            window,
-            self.color,
-            (
-                self.shape.x - game.cam_x,
-                self.shape.y - game.cam_y,
-                self.shape.w,
-                self.shape.h,
-            ),
-            0,
-        )
 
 
 class Tux(Actor):
@@ -578,12 +570,11 @@ class Tux(Actor):
         self.color = (0, 255, 0)
         game.game_player = self
 
-        print(game.game_player)
-
         if not arr:
             return
 
     def run(self):
+
         if not keyboard.is_held(RIGHT) or not keyboard.is_held(LEFT):
             self.xspeed = 0
 
@@ -692,29 +683,27 @@ class Soul(Actor):
         self.solid = False
         self.color = (0, 255, 0)
         game.game_player = self
-        
-        print(game.game_player)
 
         if not _arr:
             return
 
     def run(self):
-        if not get_control("right", "held") or not get_control("left", "held"):
+        if not keyboard.is_held(RIGHT) or not keyboard.is_held(LEFT):
             self.xspeed = 0
 
-        if not get_control("up", "held") or not get_control("down", "held"):
+        if not keyboard.is_held(UP) or not keyboard.is_held(DOWN):
             self.yspeed = 0
 
-        if get_control("right", "held"):
+        if keyboard.is_held(RIGHT):
             self.xspeed = 1
 
-        if get_control("left", "held"):
+        if keyboard.is_held(LEFT):
             self.xspeed = -1
 
-        if get_control("up", "held"):
+        if keyboard.is_held(UP):
             self.yspeed = -1
 
-        if get_control("down", "held"):
+        if keyboard.is_held(DOWN):
             self.yspeed = 1
 
         # Attempt to move in the x-axis by xspeed

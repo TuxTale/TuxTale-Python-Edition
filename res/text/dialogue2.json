@@ -1,0 +1,51 @@
+{
+    "Oven":{
+        "speaker": "Old man",
+        "dialogue":{
+            "0":{
+                "type": "text",
+                "text": "Random text. What do you think?"
+            },
+            "1":{
+                "type": "text",
+                "text": "And more random text! Omg!"
+            },
+            "2":{
+                "type": "question",
+                "question": "Why is Windows so bad?",
+                "answers":{
+                    "0":{
+                        "text": "Because closed source",
+                        "$":"1"
+                    },
+                    "1":{
+                        "text": "I dunno",
+                        "$":"2"
+                    },
+                    "2":{
+                        "text": "hi there! ;)",
+                        "$":"3"
+                    }
+                }
+            }
+        }
+    },
+
+    "Color":{
+        "speaker": "Tux",
+        "dialogue":{
+            "0":{
+                "text":"I like purple"
+            },
+            "1":{
+                "text":"It's like pink but better."
+            },
+            "2":{
+                "text":"I am gonna say that beatiful word startingn with f."
+            },
+            "3":{
+                "text":"fork"
+            }
+        }
+    }
+}

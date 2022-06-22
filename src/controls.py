@@ -1,50 +1,6 @@
 from .globals import *
 import time
 
-
-state = {
-    "keys": {},
-    "left": {"press": False, "hold": 0, "held": False},
-    "right": {"press": False, "hold": 0, "held": False},
-    "up": {"press": False, "hold": 0, "held": False},
-    "down": {"press": False, "hold": 0, "held": False},
-    "pause": {"press": False, "hold": 0, "held": False},
-    "accept": {"press": False, "hold": 0, "held": False},
-}
-
-
-def get_control(_control, _state):
-    state["keys"] = pygame.key.get_pressed()
-    for i in config["key"]:
-        if state["keys"][config["key"][i]]:
-            if not state[i]["held"]:
-                state[i]["press"] = True
-            else:
-                state[i]["press"] = False
-            
-            state[i]["held"] = True
-        else:
-            state[i]["held"] = False
-
-    if state[_control][_state]:
-        return True
-
-
-def def_controls():
-    state["keys"] = pygame.key.get_pressed()
-
-    for i in config["key"]:
-        if state["keys"][config["key"][i]]:
-            if not state[i]["held"]:
-                state[i]["press"] = True
-            else:
-                state[i]["press"] = False
-            
-            state[i]["held"] = True
-        else:
-            state[i]["held"] = False
-
-
 class Keyboard:
     def __init__(self):
         self.keys = {}

@@ -31,6 +31,6 @@ def start_game():
         window.fill(BLACK)
         game.game_mode()
         game.run()
-        my_font.render(window, "I have left on vacation and won't come back. Ever.", (20, 200))
+        textbox.load_dialogue()
         #my_font.render(window, "My favourite song is Bohemian Rhapsody by Queen.", (0, 220))
         pygame.display.update()
