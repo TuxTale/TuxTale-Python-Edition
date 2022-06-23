@@ -1,7 +1,14 @@
 from .actors import *
 from .init import *
+from .gui import *
 
 def start_game():
+    gui_screen = GUIScreen()
+
+    gui_screen.widgets.append(Button(0, 0, sprite_button_fight, sprite_button_fight_dark))
+
+    game.game_mode = game_play
+
     p = GameMap("res/map/test_for_PGE.json")
     p.draw_tiles()
     game.game_mode = game_play
@@ -14,24 +21,38 @@ def start_game():
     new_actor(Sprite, 700, 1050, [sprite_tree, 0, (46, 59)], "actorlayer")
     #new_actor(Slime, 300, 250, None, "actorlayer")
 
-    # new_actor(Slime, 500, 400, None, "actorlayer")
-
     ############### Testing ###############
 
     ############ Main game loop ##############
 
     running = True
+    frame = 0
 
     while running:
         clock.tick(FPS)
         for event in pygame.event.get():
             keyboard.handle_event(event)
+
+            if gui_screen.handle_event(window, frame, event):
+                continue
+
             if event.type == pygame.QUIT:
                 running = False
 
         window.fill(BLACK)
+
+        pygame.mouse.set_visible(False)
+        
         game.game_mode()
         game.run()
+        
+        if game.game_mode == battle_mode:
+            gui_screen.widgets[0].x = (window.get_width() // 2) - gui_screen.widgets[0].image.get_rect().size[0]
+            gui_screen.widgets[0].y = (window.get_height() // 2) - gui_screen.widgets[0].image.get_rect().size[1]
+
+            gui_screen.run(window)
+        
         textbox.load_dialogue()
-        #my_font.render(window, "My favourite song is Bohemian Rhapsody by Queen.", (0, 220))
+        
         pygame.display.update()
+        frame += 1

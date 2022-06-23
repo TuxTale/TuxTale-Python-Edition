@@ -1,7 +1,6 @@
-import json
-import pygame
-
 from .globals import window
+import pygame
+import json
 
 
 def draw_sprite(spr, frame, x, y):

@@ -1,8 +1,6 @@
 import pygame
 
-
 pygame.init()
-
 
 ################ Colors #################
 
@@ -22,27 +20,6 @@ window = pygame.display.set_mode((display_w, display_H), pygame.RESIZABLE | pyga
 FPS = 60
 clock = pygame.time.Clock()
 game_mode = None
-
-# ############ Sprite Sheets #############
-#
-#
-# def draw_sprite(spr, frame, x, y):
-#     window.blit(spr, (x, y), frame)
-#
-# ########## Additional functions ##########
-#
-#
-# def draw_text(font, x, y, text):
-#     window.blit(font.render(text, True, RED), (x, y))
-#
-#
-# def json_write(path, data):
-#     json.dump(data, open(path, "w"))
-#
-#
-# def json_read(path):
-#     return json.loads(open(path, "r").read())
-
 
 #################### Configurations ######################
 
@@ -77,3 +54,18 @@ sprite_slime = pygame.image.load("res/gfx/tiles/slimes sheet.png").convert_alpha
 sprite_soul = pygame.image.load("res/gfx/Soul/soul.png").convert_alpha()
 sprite_bullet = pygame.image.load("res/gfx/Soul/bullet.png").convert_alpha()
 sprite_tree = pygame.image.load("res/gfx/tiles/big tree.png").convert_alpha()
+
+######################## GUI Sprites ########################
+
+sprite_cursor = pygame.image.load("res/gfx/engine/cursor.png").convert_alpha()
+sprite_button_defend = pygame.image.load("res/gfx/Battle/button-defend.png").convert_alpha()
+sprite_button_defend_dark = pygame.image.load("res/gfx/Battle/button-defend-dark.png").convert_alpha()
+sprite_button_fight = pygame.image.load("res/gfx/Battle/button-fight.png").convert_alpha()
+sprite_button_fight_dark = pygame.image.load("res/gfx/Battle/button-fight-dark.png").convert_alpha()
+sprite_button_end = pygame.image.load("res/gfx/Battle/button-end.png").convert_alpha()
+sprite_button_end_dark = pygame.image.load("res/gfx/Battle/button-end-dark.png").convert_alpha()
+
+######################## GUI Sounds ########################
+
+# TODO: This sound is a placeholder (and I disabled it), replace it with something else
+#sound_menu_select = pygame.mixer.Sound("res/sfx/menu-select.ogg")
