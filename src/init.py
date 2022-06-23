@@ -1,5 +1,6 @@
 from .globals import *
 from .utils import *
+from .controls import*
 
 class Game:
     def __init__(self):
@@ -33,7 +34,7 @@ class Game:
         if self.hurt_timer > 0:
             self.hurt_timer -= 1
         
-        draw_text(game_font, 20, 20, str(round(clock.get_fps(), 1)), RED)
+        #draw_text(game_font, 20, 20, str(round(clock.get_fps(), 1)), RED)
 
 
 class Map:
@@ -55,7 +56,6 @@ class TheFont:
         self.spacing = 1
         self.character_order = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','.','-',',',':','+','\'','!','?','0','1','2','3','4','5','6','7','8','9','(',')','/','_','=','\\','[',']','*','"','<','>',';']
         font_img = pygame.image.load(path).convert()
-        print(font_img)
         current_char_width = 0
         self.characters = {}
         character_count = 0
@@ -63,7 +63,6 @@ class TheFont:
             c = font_img.get_at((x,0))
             if c[0] == 127:
                 char_img = clip(font_img, x - current_char_width, 0, current_char_width, font_img.get_height())
-                print(char_img)
                 self.characters[self.character_order[character_count]] = char_img.copy()
                 character_count += 1
                 current_char_width = 0
@@ -80,9 +79,62 @@ class TheFont:
                 x_offset += self.characters[char].get_width() + self.spacing
             else:
                 x_offset += self.space_width + self.spacing
-            
 
 my_font = TheFont('res/gfx/engine/uj font 2.png')
+
+class TextBox:
+    def __init__(self, _x, _y, _file, _dialogue):
+        self.x = _x
+        self.y = _y
+        self.file = json_read(_file)
+        self.dialogue = _dialogue
+        self.speaker = None
+        self.current_text = None
+        self.menu_x = 0
+        self.menu_y = 0
+        self.arrow = 0
+    def load_dialogue(self): #This function can load dialogues from .json files. Not sure if we need to do it in multiple functions.
+        dialogue_iterator = 2
+        for c, d in self.file.items():
+            if c == self.dialogue:
+                if d["dialogue"][str(dialogue_iterator)]["type"] == "text":
+                    my_font.render(window, d["speaker"] + ": " + d["dialogue"][str(dialogue_iterator)]["text"], (self.x, self.y))
+                if d["dialogue"][str(dialogue_iterator)]["type"] == "question":
+                    self.menu(d["dialogue"][str(dialogue_iterator)])
+                    #my_font.render(window, d["dialogue"][str(dialogue_iterator)]["question"], (self.x, self.y))
+                    #for i, (j, k) in enumerate(d["dialogue"][str(dialogue_iterator)]["answers"].items()):
+                    #    my_font.render(window, k["text"], (self.x + 16, self.y + 16*(i + 1)))
+
+    def menu(self, _question):
+        my_font.render(window, _question["question"], (self.x, self.y))
+        for i, (a, b) in enumerate(_question["answers"].items()):
+            length = len(_question["answers"])
+            my_font.render(window, b["text"], (self.x + 16, self.y + 16*(i + 1)))
+            if self.arrow == i:
+                
+                my_font.render(window, ">", (self.x, self.y + 16*(i + 1)))
+        if keyboard.is_pressed(DOWN):
+            if self.arrow == length-1:
+                self.arrow = 0
+            else:
+                self.arrow += 1
+        if keyboard.is_pressed(UP):
+            if self.arrow == 0:
+                self.arrow = length-1
+            else:
+                self.arrow -=1
+        if keyboard.is_pressed(ACCEPT):
+            print(_question["answers"][str(self.arrow)]["$"])
+    
+    def end_convo(self):
+        pass
+    def next_convo(self):
+        pass
+        
+                
+
+
+textbox = TextBox(10, 10, 'res/text/dialogue2.json', "Oven")
 
 #my_font.render(window, "Hello World", (20, 20))
 

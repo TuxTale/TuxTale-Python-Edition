@@ -17,7 +17,8 @@ def start_game():
 
     #game.cam_x = display_w / 2 - 16
     #game.cam_y = display_H / 2 - 16
-
+    new_actor(Sprite, 600, 1100, [sprite_tree, 0, (46, 59)], "actorlayer")
+    new_actor(Sprite, 700, 1050, [sprite_tree, 0, (46, 59)], "actorlayer")
     #new_actor(Slime, 300, 250, None, "actorlayer")
 
     ############### Testing ###############
@@ -51,7 +52,7 @@ def start_game():
 
             gui_screen.run(window)
         
-        my_font.render(window, "I have left on vacation and won't come back. Ever.", (20, 200))
+        textbox.load_dialogue()
         
         pygame.display.update()
         frame += 1

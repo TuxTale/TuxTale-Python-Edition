@@ -1,0 +1,51 @@
+{
+    "Oven":{
+        "speaker": "Jon",
+        "dialogue":{
+            "0":{
+                "type": "text",
+                "text": "Why do they call it oven"
+            },
+            "1":{
+                "type": "text",
+                "text": "when you of in the cold food"
+            },
+            "2":{
+                "type": "question",
+                "question": "of out the hot food eat the food?",
+                "answers":{
+                    "0":{
+                        "text": "What?",
+                        "$":"1"
+                    },
+                    "1":{
+                        "text": "So true.",
+                        "$":"2"
+                    },
+                    "2":{
+                        "text": "hi there! ;)",
+                        "$":"3"
+                    }
+                }
+            }
+        }
+    },
+
+    "Color":{
+        "speaker": "Tux",
+        "dialogue":{
+            "0":{
+                "text":"I like purple"
+            },
+            "1":{
+                "text":"It's like pink but better."
+            },
+            "2":{
+                "text":"I am gonna say that beatiful word startingn with f."
+            },
+            "3":{
+                "text":"fork"
+            }
+        }
+    }
+}
