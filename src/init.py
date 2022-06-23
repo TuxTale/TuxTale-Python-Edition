@@ -115,13 +115,22 @@ class TextBox:
                 
                 my_font.render(window, ">", (self.x, self.y + 16*(i + 1)))
         if keyboard.is_pressed(DOWN):
-            self.arrow += 1
-            if self.arrow == length:
+            if self.arrow == length-1:
                 self.arrow = 0
+            else:
+                self.arrow += 1
         if keyboard.is_pressed(UP):
             if self.arrow == 0:
-                self.arrow = length
-            self.arrow -=1
+                self.arrow = length-1
+            else:
+                self.arrow -=1
+        if keyboard.is_pressed(ACCEPT):
+            print(_question["answers"][str(self.arrow)]["$"])
+    
+    def end_convo(self):
+        pass
+    def next_convo(self):
+        pass
         
                 
 

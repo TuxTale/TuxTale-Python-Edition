@@ -10,7 +10,8 @@ def start_game():
 
     #game.cam_x = display_w / 2 - 16
     #game.cam_y = display_H / 2 - 16
-
+    new_actor(Sprite, 600, 1100, [sprite_tree, 0, (46, 59)], "actorlayer")
+    new_actor(Sprite, 700, 1050, [sprite_tree, 0, (46, 59)], "actorlayer")
     #new_actor(Slime, 300, 250, None, "actorlayer")
 
     # new_actor(Slime, 500, 400, None, "actorlayer")

@@ -1,25 +1,25 @@
 {
     "Oven":{
-        "speaker": "Old man",
+        "speaker": "Jon",
         "dialogue":{
             "0":{
                 "type": "text",
-                "text": "Random text. What do you think?"
+                "text": "Why do they call it oven"
             },
             "1":{
                 "type": "text",
-                "text": "And more random text! Omg!"
+                "text": "when you of in the cold food"
             },
             "2":{
                 "type": "question",
-                "question": "Why is Windows so bad?",
+                "question": "of out the hot food eat the food?",
                 "answers":{
                     "0":{
-                        "text": "Because closed source",
+                        "text": "What?",
                         "$":"1"
                     },
                     "1":{
-                        "text": "I dunno",
+                        "text": "So true.",
                         "$":"2"
                     },
                     "2":{
