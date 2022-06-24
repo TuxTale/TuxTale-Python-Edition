@@ -12,6 +12,7 @@ def start_game():
     #game.cam_y = display_H / 2 - 16
     new_actor(Sprite, 600, 1100, [sprite_tree, 0, (46, 59)], "actorlayer")
     new_actor(Sprite, 700, 1050, [sprite_tree, 0, (46, 59)], "actorlayer")
+    new_actor(NPC, 500, 500, [sprite_old_man], "actorlayer")
     #new_actor(Slime, 300, 250, None, "actorlayer")
 
     # new_actor(Slime, 500, 400, None, "actorlayer")
@@ -32,6 +33,7 @@ def start_game():
         window.fill(BLACK)
         game.game_mode()
         game.run()
-        textbox.load_dialogue()
+        for i in textboxes:
+            i.load_dialogue()
         #my_font.render(window, "My favourite song is Bohemian Rhapsody by Queen.", (0, 220))
         pygame.display.update()

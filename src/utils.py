@@ -55,3 +55,6 @@ def ninepatch(surface: pygame.Surface, rect: tuple):
     result.blit(c3, (rect.w - subsurf_w, rect.h - subsurf_h))
 
     return result
+
+################### Effects #########################
+

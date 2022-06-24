@@ -83,6 +83,8 @@ class TheFont:
 
 my_font = TheFont('res/gfx/engine/uj font 2.png')
 
+textboxes = []
+
 class TextBox:
     def __init__(self, _x, _y, _file, _dialogue):
         self.x = _x
@@ -94,17 +96,30 @@ class TextBox:
         self.menu_x = 0
         self.menu_y = 0
         self.arrow = 0
+        self.dialogue_iterator = -1
     def load_dialogue(self): #This function can load dialogues from .json files. Not sure if we need to do it in multiple functions.
-        dialogue_iterator = 2
         for c, d in self.file.items():
             if c == self.dialogue:
-                if d["dialogue"][str(dialogue_iterator)]["type"] == "text":
-                    my_font.render(window, d["speaker"] + ": " + d["dialogue"][str(dialogue_iterator)]["text"], (self.x, self.y))
-                if d["dialogue"][str(dialogue_iterator)]["type"] == "question":
-                    self.menu(d["dialogue"][str(dialogue_iterator)])
-                    #my_font.render(window, d["dialogue"][str(dialogue_iterator)]["question"], (self.x, self.y))
-                    #for i, (j, k) in enumerate(d["dialogue"][str(dialogue_iterator)]["answers"].items()):
-                    #    my_font.render(window, k["text"], (self.x + 16, self.y + 16*(i + 1)))
+                if self.dialogue_iterator != -1 and self.dialogue_iterator != len(self.dialogue) -1:
+                    if d["dialogue"][str(self.dialogue_iterator)]["type"] == "text":
+                        my_font.render(window, d["speaker"] + ": " + d["dialogue"][str(self.dialogue_iterator)]["text"], (self.x, self.y))
+                    if d["dialogue"][str(self.dialogue_iterator)]["type"] == "question":
+                        self.menu(d["dialogue"][str(self.dialogue_iterator)])
+                        #my_font.render(window, d["dialogue"][str(dialogue_iterator)]["question"], (self.x, self.y))
+                        #for i, (j, k) in enumerate(d["dialogue"][str(dialogue_iterator)]["answers"].items()):
+                        #    my_font.render(window, k["text"], (self.x + 16, self.y + 16*(i + 1)))
+                
+                if keyboard.is_pressed(ACCEPT):
+                    if self.dialogue_iterator != -1:
+                        print(d["dialogue"][str(self.dialogue_iterator)])
+                        if d["dialogue"][str(self.dialogue_iterator)] == d["dialogue"][str(len(d["dialogue"])-1)]:
+                            print("delete textbox")
+                            textboxes.remove(self)
+                    self.dialogue_iterator += 1
+                    print(self.dialogue_iterator)
+        
+        #print(textboxes)
+                    
 
     def menu(self, _question):
         my_font.render(window, _question["question"], (self.x, self.y))
@@ -135,7 +150,7 @@ class TextBox:
                 
 
 
-textbox = TextBox(10, 10, 'res/text/dialogue2.json', "Oven")
+#textboxes.append(TextBox(10, 10, 'res/text/dialogue2.json', "Oven"))
 
 #my_font.render(window, "Hello World", (20, 20))
 
@@ -196,3 +211,12 @@ def run_actors():
                 j.debug()
             
             j.run()
+
+################### Effects #########################
+
+def new_textbox(file, dialogue):
+    textboxes.append(TextBox(10, 10, file, dialogue))
+
+events = {
+    "new_textbox": new_textbox
+    }

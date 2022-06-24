@@ -1,3 +1,4 @@
+from cgitb import text
 from .controls import *
 from .utils import *
 from .init import *
@@ -678,8 +679,6 @@ class Soul(Actor):
         self.shape = pygame.Rect(self.x, self.y, self.h, self.w)
         self.load_sprite(sprite_soul, 8, 8)
 
-        print(self.frame)
-
         self.solid = False
         self.color = (0, 255, 0)
         game.game_player = self
@@ -799,7 +798,6 @@ class Bullet(Actor):
                 game.health -= 1
                 game.hurt_timer = 60
                 
-                print(game.health)
         
         self.x += self.xspeed
         self.y += self.yspeed
@@ -877,3 +875,36 @@ class Attack:
                 ],
             }
             animation["events"].append(dic)
+
+class NPC(Actor):
+    def __init__(self, _x, _y, _arr = None):
+        super().__init__(_x, _y, _arr = None)
+        self.x = _x
+        self.y = _y
+        self.arr = _arr
+        if self.arr is not None:
+            if len(self.arr) >= 1:
+                self.sprite_sheet = self.arr[0]
+                self.load_sprite(self.sprite_sheet)
+            if len(self.arr) >= 2:
+                self.dialogue = self.arr[1]
+        
+    def run(self):
+        player_vec = pygame.math.Vector2(game.game_player.x, game.game_player.y)
+        NPC_vec = pygame.math.Vector2(self.x, self.y)
+        distance = (player_vec - NPC_vec).magnitude()
+        if distance <= 16 and textboxes == []:
+            if(keyboard.is_pressed(ACCEPT)):
+                textboxes.append(TextBox(10, 10, 'res/text/dialogue2.json', "Oven"))
+        #print(textboxes)
+    def render(self):
+        # pass
+
+        draw_sprite(
+            self.sprite_sheet,
+            self.frame[
+                0
+            ],
+            self.x - game.cam_x,
+            self.y - game.cam_y,
+        )

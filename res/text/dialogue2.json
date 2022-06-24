@@ -16,7 +16,7 @@
                 "answers":{
                     "0":{
                         "text": "What?",
-                        "$":"1"
+                        "$":"new_textbox"
                     },
                     "1":{
                         "text": "So true.",

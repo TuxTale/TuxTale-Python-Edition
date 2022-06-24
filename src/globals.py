@@ -77,3 +77,4 @@ sprite_slime = pygame.image.load("res/gfx/tiles/slimes sheet.png").convert_alpha
 sprite_soul = pygame.image.load("res/gfx/Soul/soul.png").convert_alpha()
 sprite_bullet = pygame.image.load("res/gfx/Soul/bullet.png").convert_alpha()
 sprite_tree = pygame.image.load("res/gfx/tiles/big tree.png").convert_alpha()
+sprite_old_man = pygame.image.load("res/gfx/tiles/old_man.png").convert_alpha()
