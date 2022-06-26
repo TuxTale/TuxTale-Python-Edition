@@ -4,27 +4,27 @@
         "dialogue":{
             "0":{
                 "type": "text",
-                "text": "Why do they call it oven"
+                "text": "Hello."
             },
             "1":{
                 "type": "text",
-                "text": "when you of in the cold food"
+                "text": "You seem like you need some items."
             },
             "2":{
                 "type": "question",
-                "question": "of out the hot food eat the food?",
+                "question": "What item would you like?",
                 "answers":{
                     "0":{
-                        "text": "What?",
-                        "$":"new_textbox"
+                        "text": "Potato",
+                        "$":"I would like to have code here representing the player being given the item"
                     },
                     "1":{
-                        "text": "So true.",
-                        "$":"2"
+                        "text": "Bean",
+                        "$":"I would like to have code here representing the player being given the item"
                     },
                     "2":{
-                        "text": "hi there! ;)",
-                        "$":"3"
+                        "text": "Frog pet",
+                        "$":"I would like to have code here representing the player being given the item"
                     }
                 }
             }

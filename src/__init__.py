@@ -13,6 +13,8 @@ def start_game():
     new_actor(Sprite, 600, 1100, [sprite_tree, 0, (46, 59)], "actorlayer")
     new_actor(Sprite, 700, 1050, [sprite_tree, 0, (46, 59)], "actorlayer")
     new_actor(NPC, 500, 500, [sprite_old_man], "actorlayer")
+    new_actor(Sprite, 500, 500, [sprite_house, 0, (82, 121)], "MG")
+
     #new_actor(Slime, 300, 250, None, "actorlayer")
 
     # new_actor(Slime, 500, 400, None, "actorlayer")
