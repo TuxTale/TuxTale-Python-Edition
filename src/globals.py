@@ -70,7 +70,7 @@ game_data = dict(map=None, posX=64, posY=64, cam_x=0, cam_y=0, dialogResponses={
 
 ############# Sprite Sheets #############
 
-sprite_tux = pygame.image.load("res/gfx/Tux/taletuxCL.png").convert_alpha()
+sprite_tux = pygame.image.load("res/gfx/Tux/taletuxNL.png").convert_alpha()
 sprite_block = pygame.image.load("res/gfx/tiles/block.png").convert_alpha()
 sprite_marbel = pygame.image.load("res/gfx/tiles/blue_marbel 2.5d_v1.0.png").convert_alpha()
 sprite_slime = pygame.image.load("res/gfx/tiles/slimes sheet.png").convert_alpha()
