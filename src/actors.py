@@ -895,7 +895,7 @@ class NPC(Actor):
         distance = (player_vec - NPC_vec).magnitude()
         if distance <= 16 and textboxes == []:
             if(keyboard.is_pressed(ACCEPT)):
-                textboxes.append(TextBox(10, 10, 'res/text/dialogue2.json', "Oven"))
+                textboxes.append(TextBox(10, 10, Dialogue))
         #print(textboxes)
     def render(self):
         # pass

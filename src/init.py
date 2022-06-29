@@ -1,3 +1,4 @@
+from tkinter import Canvas
 from .globals import *
 from .utils import *
 from .controls import*
@@ -85,11 +86,44 @@ my_font = TheFont('res/gfx/engine/uj font 2.png')
 
 textboxes = []
 
+Dialogue = {
+    "0":{
+        "speaker": "Jon",
+        "type": "text",
+        "text": "Hello."
+    },
+    "1":{
+        "speaker": "Jon",
+        "type": "text",
+        "text": "You seem like you need some items."
+    },
+    "2":{
+        "speaker": "Jon",
+        "type": "question",
+        "question": "What item would you like?",
+        "answers":{
+            "0":{
+                "text": "Potato",
+                "$": lambda _: print("lambda!")
+            },
+            "1":{
+                "text": "Bean",
+                "$":"I would like to have code here representing the player being given the item"
+            },
+            "2":{
+                "text": "Frog pet",
+                "$":"I would like to have code here representing the player being given the item"
+            }
+        }
+        
+    }
+}
+
 class TextBox:
-    def __init__(self, _x, _y, _file, _dialogue):
+    def __init__(self, _x, _y, _dialogue):
         self.x = _x
         self.y = _y
-        self.file = json_read(_file)
+        #self.file = _file
         self.dialogue = _dialogue
         self.speaker = None
         self.current_text = None
@@ -97,31 +131,49 @@ class TextBox:
         self.menu_y = 0
         self.arrow = 0
         self.dialogue_iterator = -1
-    def load_dialogue(self): #This function can load dialogues from .json files. Not sure if we need to do it in multiple functions.
-        for c, d in self.file.items():
-            if c == self.dialogue:
-                if self.dialogue_iterator != -1 and self.dialogue_iterator != len(self.dialogue) -1:
-                    if d["dialogue"][str(self.dialogue_iterator)]["type"] == "text":
-                        my_font.render(window, d["speaker"] + ": " + d["dialogue"][str(self.dialogue_iterator)]["text"], (self.x, self.y))
-                    if d["dialogue"][str(self.dialogue_iterator)]["type"] == "question":
-                        self.menu(d["dialogue"][str(self.dialogue_iterator)])
-                        #my_font.render(window, d["dialogue"][str(dialogue_iterator)]["question"], (self.x, self.y))
-                        #for i, (j, k) in enumerate(d["dialogue"][str(dialogue_iterator)]["answers"].items()):
-                        #    my_font.render(window, k["text"], (self.x + 16, self.y + 16*(i + 1)))
+
+
+    def load_dialogue(self):
+        if self.dialogue_iterator != -1 and self.dialogue_iterator != len(self.dialogue) -1:
+            if self.dialogue[str(self.dialogue_iterator)]["type"] == "text":
+                my_font.render(window, self.dialogue[str(self.dialogue_iterator)]["text"], (self.x, self.y))
+            print(self.dialogue[str(self.dialogue_iterator)]["type"])
+            if self.dialogue[str(self.dialogue_iterator)]["type"] == "question":
+                print("question")
+                self.textbox_menu(self.dialogue[str(self.dialogue_iterator)])
+        if keyboard.is_pressed(ACCEPT):
+            if self.dialogue_iterator != -1:
+                if self.dialogue[str(self.dialogue_iterator)] == self.dialogue[str(len(self.dialogue)-1)]:
+                    textboxes.remove(self)
+            self.dialogue_iterator += 1
+    
+    def textbox_menu(self, _question):
+        my_font.render(window, _question["question"], (self.x, self.y))
+        print("sweet")
+        for i, (a, b) in enumerate(_question["answers"].items()):
+            length = len(_question["answers"])
+            my_font.render(window, b["text"], (self.x + 16, self.y + 16*(i + 1)))
+            if self.arrow == i:
                 
-                if keyboard.is_pressed(ACCEPT):
-                    if self.dialogue_iterator != -1:
-                        print(d["dialogue"][str(self.dialogue_iterator)])
-                        if d["dialogue"][str(self.dialogue_iterator)] == d["dialogue"][str(len(d["dialogue"])-1)]:
-                            print("delete textbox")
-                            textboxes.remove(self)
-                    self.dialogue_iterator += 1
-                    print(self.dialogue_iterator)
+                my_font.render(window, ">", (self.x, self.y + 16*(i + 1)))
+        if keyboard.is_pressed(DOWN):
+            if self.arrow == length-1:
+                self.arrow = 0
+            else:
+                self.arrow += 1
+        if keyboard.is_pressed(UP):
+            if self.arrow == 0:
+                self.arrow = length-1
+            else:
+                self.arrow -=1
+        if keyboard.is_pressed(ACCEPT):
+            print(_question["answers"][str(self.arrow)]["$"]())
+
         
         #print(textboxes)
                     
 
-    def menu(self, _question):
+    """def menu(self, _question):
         my_font.render(window, _question["question"], (self.x, self.y))
         for i, (a, b) in enumerate(_question["answers"].items()):
             length = len(_question["answers"])
@@ -140,7 +192,7 @@ class TextBox:
             else:
                 self.arrow -=1
         if keyboard.is_pressed(ACCEPT):
-            print(_question["answers"][str(self.arrow)]["$"])
+            print(_question["answers"][str(self.arrow)]["$"])"""
     
     def end_convo(self):
         pass
