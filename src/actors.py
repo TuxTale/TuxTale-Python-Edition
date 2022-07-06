@@ -591,16 +591,18 @@ class Tux(Actor):
         if not keyboard.is_held(UP) or not keyboard.is_held(DOWN):
             self.yspeed = 0
         
-        if keyboard.is_released(UP) or keyboard.is_released(DOWN):
-            self.animations.remove("v")
-        if keyboard.is_released(RIGHT) or keyboard.is_released(LEFT):
-            self.animations.remove("h")
+        if len(self.animations) > 0:
+            if keyboard.is_released(UP) or keyboard.is_released(DOWN):
+                self.animations.remove("v")
+            if keyboard.is_released(RIGHT) or keyboard.is_released(LEFT):
+                self.animations.remove("h")
         
-        if keyboard.is_pressed(UP) or keyboard.is_pressed(DOWN):
-            self.animations.append("v")
+        if len(self.animations) < 2:
+            if keyboard.is_pressed(UP) or keyboard.is_pressed(DOWN):
+                self.animations.append("v")
 
-        if keyboard.is_pressed(RIGHT) or keyboard.is_pressed(LEFT):
-            self.animations.append("h")
+            if keyboard.is_pressed(RIGHT) or keyboard.is_pressed(LEFT):
+                self.animations.append("h")
 
         if keyboard.is_held(RIGHT):
             self.xspeed = 1
