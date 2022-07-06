@@ -35,7 +35,13 @@ def start_game():
         window.fill(BLACK)
         game.game_mode()
         game.run()
-        for i in textboxes:
-            i.load_dialogue()
+
+        if keyboard.is_released(UP):
+            print("up")
+
+        for i in game.text_boxes:
+            i.box_function()
+            print(i.dialogue_iterator)
+        #print(game.text_boxes)
         #my_font.render(window, "My favourite song is Bohemian Rhapsody by Queen.", (0, 220))
         pygame.display.update()

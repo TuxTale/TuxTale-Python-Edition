@@ -1,3 +1,4 @@
+from msilib.schema import Dialog
 from tkinter import Canvas
 from .globals import *
 from .utils import *
@@ -20,6 +21,7 @@ class Game:
         self.health = 100
         self.hurt_timer = 0
         self.frame = []
+        self.text_boxes = []
 
     def load_sprite(self, sprite):
         sprite_size = sprite.get_size()
@@ -84,8 +86,6 @@ class TheFont:
 
 my_font = TheFont('res/gfx/engine/uj font 2.png')
 
-textboxes = []
-
 Dialogue = {
     "0":{
         "speaker": "Jon",
@@ -104,11 +104,11 @@ Dialogue = {
         "answers":{
             "0":{
                 "text": "Potato",
-                "$": lambda _: print("lambda!")
+                "$":lambda _: print("lambda!")
             },
             "1":{
                 "text": "Bean",
-                "$":"I would like to have code here representing the player being given the item"
+                "$":lambda _: new_textbox(20, 20, Dialogue)
             },
             "2":{
                 "text": "Frog pet",
@@ -131,27 +131,24 @@ class TextBox:
         self.menu_y = 0
         self.arrow = 0
         self.dialogue_iterator = -1
-
-
+        self.box_function = self.load_dialogue
+    
     def load_dialogue(self):
-        if self.dialogue_iterator != -1 and self.dialogue_iterator != len(self.dialogue) -1:
+        if self.dialogue_iterator != -1 and self.dialogue_iterator != len(self.dialogue):
             if self.dialogue[str(self.dialogue_iterator)]["type"] == "text":
                 my_font.render(window, self.dialogue[str(self.dialogue_iterator)]["text"], (self.x, self.y))
-            print(self.dialogue[str(self.dialogue_iterator)]["type"])
             if self.dialogue[str(self.dialogue_iterator)]["type"] == "question":
-                print("question")
-                self.textbox_menu(self.dialogue[str(self.dialogue_iterator)])
+                self.box_function = self.textbox_menu
         if keyboard.is_pressed(ACCEPT):
             if self.dialogue_iterator != -1:
                 if self.dialogue[str(self.dialogue_iterator)] == self.dialogue[str(len(self.dialogue)-1)]:
-                    textboxes.remove(self)
+                    game.text_boxes.remove(self)
             self.dialogue_iterator += 1
     
-    def textbox_menu(self, _question):
-        my_font.render(window, _question["question"], (self.x, self.y))
-        print("sweet")
-        for i, (a, b) in enumerate(_question["answers"].items()):
-            length = len(_question["answers"])
+    def textbox_menu(self):
+        my_font.render(window, self.dialogue[str(self.dialogue_iterator)]["question"], (self.x, self.y))
+        for i, (a, b) in enumerate(self.dialogue[str(self.dialogue_iterator)]["answers"].items()):
+            length = len(self.dialogue[str(self.dialogue_iterator)]["answers"])
             my_font.render(window, b["text"], (self.x + 16, self.y + 16*(i + 1)))
             if self.arrow == i:
                 
@@ -167,44 +164,18 @@ class TextBox:
             else:
                 self.arrow -=1
         if keyboard.is_pressed(ACCEPT):
-            print(_question["answers"][str(self.arrow)]["$"]())
-
-        
-        #print(textboxes)
-                    
-
-    """def menu(self, _question):
-        my_font.render(window, _question["question"], (self.x, self.y))
-        for i, (a, b) in enumerate(_question["answers"].items()):
-            length = len(_question["answers"])
-            my_font.render(window, b["text"], (self.x + 16, self.y + 16*(i + 1)))
-            if self.arrow == i:
-                
-                my_font.render(window, ">", (self.x, self.y + 16*(i + 1)))
-        if keyboard.is_pressed(DOWN):
-            if self.arrow == length-1:
-                self.arrow = 0
-            else:
-                self.arrow += 1
-        if keyboard.is_pressed(UP):
-            if self.arrow == 0:
-                self.arrow = length-1
-            else:
-                self.arrow -=1
-        if keyboard.is_pressed(ACCEPT):
-            print(_question["answers"][str(self.arrow)]["$"])"""
+            self.dialogue[str(self.dialogue_iterator)]["answers"][str(self.arrow)]["$"](self)
     
     def end_convo(self):
         pass
     def next_convo(self):
         pass
-        
-                
 
-
-#textboxes.append(TextBox(10, 10, 'res/text/dialogue2.json', "Oven"))
-
-#my_font.render(window, "Hello World", (20, 20))
+def new_textbox(_x, _y, _dialogue):
+    game.text_boxes = []
+    game.text_boxes.append(TextBox(_x, _y, _dialogue))
+    game.text_boxes[-1].dialogue_iterator = 0
+    print(game.text_boxes)
 
 game = Game()
 
@@ -265,10 +236,3 @@ def run_actors():
             j.run()
 
 ################### Effects #########################
-
-def new_textbox(file, dialogue):
-    textboxes.append(TextBox(10, 10, file, dialogue))
-
-events = {
-    "new_textbox": new_textbox
-    }

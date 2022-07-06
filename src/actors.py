@@ -570,36 +570,62 @@ class Tux(Actor):
         self.solid = False
         self.color = (0, 255, 0)
         game.game_player = self
+        self.animations = []
 
         if not arr:
             return
 
     def run(self):
+        """if (keyboard.is_pressed(RIGHT) or keyboard.is_pressed(LEFT)) and (keyboard.is_pressed(UP) or keyboard.is_pressed(DOWN)):
+            if keyboard.is_pressed(RIGHT):
+                self.anim = self.walk_right
+                self.stand_still = self.stand_right
+            if keyboard.is_pressed(LEFT):
+                self.anim = self.walk_left
+                self.stand_still = self.stand_left"""
+
 
         if not keyboard.is_held(RIGHT) or not keyboard.is_held(LEFT):
             self.xspeed = 0
 
         if not keyboard.is_held(UP) or not keyboard.is_held(DOWN):
             self.yspeed = 0
+        
+        if keyboard.is_released(UP) or keyboard.is_released(DOWN):
+            self.animations.remove("v")
+        if keyboard.is_released(RIGHT) or keyboard.is_released(LEFT):
+            self.animations.remove("h")
+        
+        if keyboard.is_pressed(UP) or keyboard.is_pressed(DOWN):
+            self.animations.append("v")
+
+        if keyboard.is_pressed(RIGHT) or keyboard.is_pressed(LEFT):
+            self.animations.append("h")
 
         if keyboard.is_held(RIGHT):
             self.xspeed = 1
-            self.anim = self.walk_right
+            if self.animations[0] != "v":
+                self.anim = self.walk_right
             self.stand_still = self.stand_right
 
         if keyboard.is_held(LEFT):
             self.xspeed = -1
-            self.anim = self.walk_left
+            if self.animations[0] != "v":
+                self.anim = self.walk_left
             self.stand_still = self.stand_left
 
         if keyboard.is_held(UP):
             self.yspeed = -1
-            self.anim = self.walk_up
+            if self.animations[0] != "h":
+                self.anim = self.walk_up
+            
             self.stand_still = self.stand_up
 
         if keyboard.is_held(DOWN):
             self.yspeed = 1
-            self.anim = self.walk_down
+            if self.animations[0] != "h":
+                self.anim = self.walk_down
+            
             self.stand_still = self.stand_down
 
         if keyboard.is_pressed(RIGHT) or keyboard.is_pressed(LEFT) or keyboard.is_pressed(UP) or keyboard.is_pressed(DOWN):
@@ -893,10 +919,10 @@ class NPC(Actor):
         player_vec = pygame.math.Vector2(game.game_player.x, game.game_player.y)
         NPC_vec = pygame.math.Vector2(self.x, self.y)
         distance = (player_vec - NPC_vec).magnitude()
-        if distance <= 16 and textboxes == []:
+        if distance <= 16 and game.text_boxes == []:
             if(keyboard.is_pressed(ACCEPT)):
-                textboxes.append(TextBox(10, 10, Dialogue))
-        #print(textboxes)
+                game.text_boxes.append(TextBox(10, 10, Dialogue))
+                
     def render(self):
         # pass
 
