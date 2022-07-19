@@ -621,14 +621,14 @@ class Tux(Actor):
             if len(self.animations) != 0:
                 if self.animations[0] == "right":
                     self.anim = self.walk_right
-            self.stand_still = self.stand_right
+                    self.stand_still = self.stand_right
 
         if keyboard.is_held(LEFT):
             self.xspeed = -1
             if len(self.animations) != 0:
                 if self.animations[0] == "left":
                     self.anim = self.walk_left
-            self.stand_still = self.stand_left
+                    self.stand_still = self.stand_left
 
         if keyboard.is_held(UP):
             self.yspeed = -1
@@ -636,7 +636,7 @@ class Tux(Actor):
                 if self.animations[0] == "up":
                     self.anim = self.walk_up
             
-            self.stand_still = self.stand_up
+                    self.stand_still = self.stand_up
 
         if keyboard.is_held(DOWN):
             self.yspeed = 1
@@ -644,7 +644,7 @@ class Tux(Actor):
                 if self.animations[0] == "down":
                     self.anim = self.walk_down
                 
-            self.stand_still = self.stand_down
+                    self.stand_still = self.stand_down
 
         #print(self.animations)
 
