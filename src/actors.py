@@ -591,44 +591,68 @@ class Tux(Actor):
         if not keyboard.is_held(UP) or not keyboard.is_held(DOWN):
             self.yspeed = 0
         
-        if len(self.animations) > 0:
-            if keyboard.is_released(UP) or keyboard.is_released(DOWN):
-                self.animations.remove("v")
-            if keyboard.is_released(RIGHT) or keyboard.is_released(LEFT):
-                self.animations.remove("h")
         
-        if len(self.animations) < 2:
-            if keyboard.is_pressed(UP) or keyboard.is_pressed(DOWN):
-                self.animations.append("v")
+        if keyboard.is_pressed(RIGHT):
+            self.animations.append("right")
+        if keyboard.is_pressed(LEFT):
+            self.animations.append("left")
+        if keyboard.is_pressed(UP):
+            self.animations.append("up")
+        if keyboard.is_pressed(DOWN):
+            self.animations.append("down")
+        
+        if keyboard.is_released(RIGHT):
+            if "right" in self.animations:
+                self.animations.remove("right")
+        if keyboard.is_released(LEFT):
+            if "left" in self.animations:
+                self.animations.remove("left")
+        if keyboard.is_released(UP):
+            if "up" in self.animations:
+                self.animations.remove("up")
+        if keyboard.is_released(DOWN):
+            if "down" in self.animations:
+                self.animations.remove("down")
 
-            if keyboard.is_pressed(RIGHT) or keyboard.is_pressed(LEFT):
-                self.animations.append("h")
-
+        print(self.animations)
+        
         if keyboard.is_held(RIGHT):
             self.xspeed = 1
-            if self.animations[0] != "v":
-                self.anim = self.walk_right
+            if len(self.animations) != 0:
+                if self.animations[0] == "right":
+                    self.anim = self.walk_right
             self.stand_still = self.stand_right
 
         if keyboard.is_held(LEFT):
             self.xspeed = -1
-            if self.animations[0] != "v":
-                self.anim = self.walk_left
+            if len(self.animations) != 0:
+                if self.animations[0] == "left":
+                    self.anim = self.walk_left
             self.stand_still = self.stand_left
 
         if keyboard.is_held(UP):
             self.yspeed = -1
-            if self.animations[0] != "h":
-                self.anim = self.walk_up
+            if len(self.animations) != 0:
+                if self.animations[0] == "up":
+                    self.anim = self.walk_up
             
             self.stand_still = self.stand_up
 
         if keyboard.is_held(DOWN):
             self.yspeed = 1
-            if self.animations[0] != "h":
-                self.anim = self.walk_down
-            
+            if len(self.animations) != 0:
+                if self.animations[0] == "down":
+                    self.anim = self.walk_down
+                
             self.stand_still = self.stand_down
+
+        #print(self.animations)
+
+        if keyboard.is_held(UP) and keyboard.is_held(DOWN):
+            self.yspeed = 0
+        
+        if keyboard.is_held(RIGHT) and keyboard.is_held(LEFT):
+            self.xspeed = 0
 
         if keyboard.is_pressed(RIGHT) or keyboard.is_pressed(LEFT) or keyboard.is_pressed(UP) or keyboard.is_pressed(DOWN):
             self.step_count += 1
@@ -638,6 +662,7 @@ class Tux(Actor):
             else:
                 self.frame_index = 3
 
+        #print(self.animations)
         # Attempt to move in the x-axis by xspeed
         
         if collision_check(pygame.Rect(self.shape.x + self.xspeed, self.shape.y, self.shape.w, self.shape.h)):
@@ -658,6 +683,8 @@ class Tux(Actor):
             self.anim = self.stand_still
 
         self.frame_index += 0.14
+
+        #print(self.animations)
 
     def render(self):
         draw_sprite(
