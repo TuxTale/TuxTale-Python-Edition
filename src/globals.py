@@ -67,7 +67,7 @@ ACCEPT = config["key"]["accept"]
 
 ######################## Game Data ########################
 
-game_data = dict(map=None, posX=64, posY=64, cam_x=0, cam_y=0, dialogResponses={})
+game_data = dict(map=None, posX=64, posY=64, cam_x=0, cam_y=0)
 
 ############# Sprite Sheets #############
 

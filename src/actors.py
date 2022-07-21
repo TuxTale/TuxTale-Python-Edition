@@ -3,6 +3,7 @@ from .controls import *
 from .utils import *
 from .init import *
 import math
+from .textboxes import TextBox, Dialogue
 
 def game_play():
     if game:
